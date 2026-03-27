@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marketing HQ — Studio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg: #F4F6FA;
+  --sidebar-bg: #1E1E2D;
+  --sidebar-text: #9899AC;
+  --sidebar-active: #ffffff;
+  --white: #ffffff;
+  --text: #1A1A2E;
+  --text-muted: #8F9BB3;
+  --border: #E8ECF4;
+  --blue: #4361EE;
+  --blue-light: #EEF1FF;
+  --pink: #F72585;
+  --pink-light: #FFF0F7;
+  --green: #2EC4B6;
+  --green-light: #EDFAFA;
+  --orange: #FF9F43;
+  --orange-light: #FFF5EB;
+  --purple: #7B2FBE;
+  --purple-light: #F3EAFF;
+  --red: #EE4266;
+  --yellow: #FFD60A;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); display:flex; min-height:100vh; font-size:14px; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px; min-height:100vh; background:var(--sidebar-bg);
+  display:flex; flex-direction:column; position:fixed; left:0; top:0; bottom:0; z-index:100;
+  flex-shrink:0;
+}
+.sidebar-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo h2 {
+  font-family:'Manrope',sans-serif; font-size:17px; font-weight:800;
+  color:#fff; letter-spacing:0.5px;
+}
+.sidebar-logo p { font-size:11px; color:var(--sidebar-text); margin-top:3px; }
+
+.sidebar-section { padding:20px 16px 8px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.25); }
+
+.nav-item {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 16px; margin:2px 8px; border-radius:var(--radius-sm);
+  cursor:pointer; transition:all .2s; color:var(--sidebar-text); font-size:13px; font-weight:500;
+  text-decoration:none;
+}
+.nav-item:hover { background:rgba(255,255,255,0.06); color:#fff; }
+.nav-item.active { background:linear-gradient(135deg,#4361EE,#7B2FBE); color:#fff; }
+.nav-item .nav-icon { width:18px; text-align:center; font-size:15px; flex-shrink:0; }
+.nav-item .nav-badge {
+  margin-left:auto; background:var(--pink); color:#fff;
+  font-size:10px; font-weight:700; padding:2px 7px; border-radius:10px;
+}
+.nav-item .nav-badge.green { background:var(--green); }
+
+.sidebar-bottom {
+  margin-top:auto; padding:16px; border-top:1px solid rgba(255,255,255,0.06);
+}
+.user-block { display:flex; align-items:center; gap:10px; padding:8px; border-radius:var(--radius-sm); cursor:pointer; }
+.user-block:hover { background:rgba(255,255,255,0.06); }
+.user-avatar {
+  width:34px; height:34px; border-radius:50%;
+  background:linear-gradient(135deg,#4361EE,#F72585);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; color:#fff; flex-shrink:0;
+}
+.user-name { font-size:13px; font-weight:600; color:#fff; }
+.user-role { font-size:11px; color:var(--sidebar-text); }
+
+/* ── MAIN ── */
+.main { margin-left:240px; flex:1; display:flex; flex-direction:column; min-height:100vh; }
+
+.topbar {
+  background:var(--white); border-bottom:1px solid var(--border);
+  padding:0 32px; height:64px; display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:50;
+}
+.topbar-title { font-family:'Manrope',sans-serif; font-size:18px; font-weight:700; color:var(--text); }
+.topbar-title span { color:var(--text-muted); font-weight:400; font-size:14px; margin-left:8px; }
+.topbar-right { display:flex; gap:12px; align-items:center; }
+.topbar-btn {
+  display:flex; align-items:center; gap:6px;
+  background:var(--blue); color:#fff;
+  padding:8px 16px; border-radius:var(--radius-sm); border:none;
+  font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif;
+  transition:all .2s;
+}
+.topbar-btn:hover { opacity:.9; transform:translateY(-1px); }
+.topbar-btn.outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); }
+.notif-btn {
+  width:38px; height:38px; border-radius:var(--radius-sm);
+  background:var(--bg); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  font-size:16px; position:relative;
+}
+.notif-dot {
+  position:absolute; top:8px; right:8px;
+  width:7px; height:7px; border-radius:50%; background:var(--pink);
+  border:2px solid var(--white);
+}
+.slack-pill {
+  display:flex; align-items:center; gap:6px;
+  background:#4A154B; color:#ECB22E; padding:6px 12px; border-radius:20px;
+  font-size:11px; font-weight:600; cursor:pointer;
+}
+
+.content { padding:28px 32px; flex:1; }
+
+/* ── SECTIONS ── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── KPI CARDS ── */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-bottom:28px; }
+.kpi-card {
+  background:var(--white); border-radius:var(--radius); padding:22px 24px;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+  display:flex; align-items:center; gap:18px;
+}
+.kpi-icon {
+  width:52px; height:52px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;
+}
+.kpi-icon.blue { background:var(--blue-light); }
+.kpi-icon.pink { background:var(--pink-light); }
+.kpi-icon.green { background:var(--green-light); }
+.kpi-icon.orange { background:var(--orange-light); }
+.kpi-label { font-size:11px; color:var(--text-muted); font-weight:500; letter-spacing:.5px; text-transform:uppercase; margin-bottom:4px; }
+.kpi-value { font-family:'Manrope',sans-serif; font-size:26px; font-weight:800; color:var(--text); line-height:1; }
+.kpi-change { font-size:11px; margin-top:4px; font-weight:600; display:flex; align-items:center; gap:4px; }
+.kpi-change.up { color:#2EC4B6; }
+.kpi-change.down { color:var(--red); }
+
+/* ── CARDS ── */
+.card { background:var(--white); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); border:1px solid var(--border); }
+.card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.card-title { font-family:'Manrope',sans-serif; font-size:15px; font-weight:700; color:var(--text); }
+.card-sub { font-size:12px; color:var(--text-muted); margin-top:2px; }
+.card-action {
+  font-size:12px; font-weight:600; color:var(--blue); cursor:pointer;
+  background:var(--blue-light); padding:5px 12px; border-radius:20px; border:none;
+  font-family:'Inter',sans-serif; transition:all .2s;
+}
+.card-action:hover { background:var(--blue); color:#fff; }
+
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-bottom:20px; }
+.mb20 { margin-bottom:20px; }
+
+/* ── AGENTS ── */
+.agents-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.agent-card {
+  background:var(--white); border-radius:var(--radius); padding:20px;
+  box-shadow:var(--shadow); border:1px solid var(--border);
+  cursor:pointer; transition:all .2s; position:relative; overflow:hidden;
+}
+.agent-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--blue); }
+.agent-card .agent-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; }
+.agent-emoji { font-size:28px; }
+.agent-status-dot {
+  width:9px; height:9px; border-radius:50%;
+  border:2px solid var(--white); flex-shrink:0;
+}
+.asd-active { background:#2EC4B6; box-shadow:0 0 0 3px rgba(46,196,182,0.2); }
+.asd-busy { background:#FF9F43; }
+.asd-idle { background:#8F9BB3; }
+.agent-name { font-size:13px; font-weight:700; color:var(--text); margin-bottom:2px; }
+.agent-role { font-size:11px; color:var(--text-muted); font-weight:500; margin-bottom:12px; }
+.agent-activity {
+  font-size:11px; color:var(--text); line-height:1.5;
+  background:var(--bg); border-radius:var(--radius-sm); padding:8px 10px;
+  border-left:3px solid;
+}
+.agent-activity.blue { border-color:var(--blue); }
+.agent-activity.pink { border-color:var(--pink); }
+.agent-activity.green { border-color:var(--green); }
+.agent-activity.orange { border-color:var(--orange); }
+.agent-activity.purple { border-color:var(--purple); }
+.agent-activity-label {
+  font-size:9px; letter-spacing:1.5px; text-transform:uppercase; font-weight:600;
+  margin-bottom:3px;
+}
+.agent-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+.agent-last { font-size:10px; color:var(--text-muted); }
+.agent-edit-btn {
+  font-size:10px; font-weight:600; color:var(--blue);
+  background:var(--blue-light); padding:3px 10px; border-radius:20px;
+  border:none; cursor:pointer; font-family:'Inter',sans-serif;
+}
+
+/* ── CAMPAIGNS TABLE ── */
+.campaign-table { width:100%; border-collapse:collapse; }
+.campaign-table th {
+  text-align:left; padding:10px 14px;
+  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text-muted); font-weight:600; border-bottom:1px solid var(--border);
+}
+.campaign-table td { padding:14px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.campaign-table tr:last-child td { border-bottom:none; }
+.campaign-table tr:hover td { background:var(--bg); }
+
+.ch-pill {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:12px; font-weight:600; padding:5px 12px; border-radius:20px;
+}
+.ch-ig { background:#FFF0F7; color:#E1306C; }
+.ch-fb { background:#E8F0FE; color:#1877F2; }
+.ch-meta { background:#F3EAFF; color:#7B2FBE; }
+.ch-email { background:#FFF5EB; color:#FF9F43; }
+.ch-seo { background:#EDFAFA; color:#2EC4B6; }
+
+.status-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px;
+}
+.sb-pending { background:#FFF5EB; color:#FF9F43; }
+.sb-active { background:#EDFAFA; color:#2EC4B6; }
+.sb-draft { background:#EEF1FF; color:#4361EE; }
+.sb-rejected { background:#FFE8EC; color:#EE4266; }
+.status-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+.progress-wrap { display:flex; align-items:center; gap:10px; }
+.progress-bg { flex:1; height:5px; background:var(--border); border-radius:3px; overflow:hidden; min-width:80px; }
+.progress-fg { height:100%; border-radius:3px; }
+.pf-blue { background:linear-gradient(90deg,#4361EE,#7B2FBE); }
+.pf-green { background:linear-gradient(90deg,#2EC4B6,#38ef7d); }
+.pf-orange { background:linear-gradient(90deg,#FF9F43,#FFD60A); }
+.pf-pink { background:linear-gradient(90deg,#F72585,#E1306C); }
+.progress-pct { font-size:11px; font-weight:600; color:var(--text-muted); width:28px; text-align:right; }
+
+.btn-approve, .btn-reject, .btn-view {
+  padding:5px 12px; border-radius:var(--radius-sm); font-size:11px; font-weight:600;
+  cursor:pointer; border:none; font-family:'Inter',sans-serif; transition:all .2s;
+}
+.btn-approve { background:#EDFAFA; color:#2EC4B6; }
+.btn-approve:hover { background:#2EC4B6; color:#fff; }
+.btn-reject { background:#FFE8EC; color:#EE4266; }
+.btn-reject:hover { background:#EE4266; color:#fff; }
+.btn-view { background:var(--blue-light); color:var(--blue); }
+.btn-view:hover { background:var(--blue); color:#fff; }
+
+/* ── CHART ── */
+.chart-bar-wrap { display:flex; gap:8px; align-items:flex-end; height:120px; margin-top:8px; }
+.chart-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.chart-bar { width:100%; border-radius:6px 6px 0 0; transition:opacity .2s; cursor:pointer; }
+.chart-bar:hover { opacity:.8; }
+.chart-label { font-size:10px; color:var(--text-muted); text-align:center; }
+.chart-legend { display:flex; gap:16px; margin-top:16px; }
+.legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted); }
+.legend-dot { width:8px; height:8px; border-radius:50%; }
+
+/* ── FUNNEL ── */
+.funnel-row {
+  display:flex; align-items:center; gap:12px; margin-bottom:12px;
+}
+.funnel-label { font-size:12px; color:var(--text-muted); width:100px; flex-shrink:0; }
+.funnel-bar-bg { flex:1; height:28px; background:var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+.funnel-bar-fill { height:100%; border-radius:var(--radius-sm); display:flex; align-items:center; padding-left:10px; font-size:11px; font-weight:600; color:#fff; }
+.funnel-val { font-size:12px; font-weight:700; color:var(--text); width:40px; text-align:right; }
+
+/* ── AGENT MODAL ── */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200; align-items:center; justify-content:center; backdrop-filter:blur(3px); }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--white); border-radius:20px; padding:0; width:640px; max-width:95vw; max-height:88vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow-lg); }
+.modal-header { padding:24px 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:14px; }
+.modal-agent-emoji { font-size:36px; }
+.modal-agent-info h3 { font-family:'Manrope',sans-serif; font-size:18px; font-weight:700; }
+.modal-agent-info p { font-size:12px; color:var(--text-muted); margin-top:2px; }
+.modal-close { margin-left:auto; background:var(--bg); border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+.modal-close:hover { background:var(--border); }
+.modal-body { padding:24px 28px; overflow-y:auto; flex:1; }
+.modal-section { margin-bottom:20px; }
+.modal-section-title { font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); font-weight:600; margin-bottom:8px; }
+.modal-log { background:var(--bg); border-radius:var(--radius-sm); padding:14px; font-size:12px; line-height:2; border:1px solid var(--border); }
+.modal-log-item { display:flex; gap:10px; }
+.log-time { color:var(--text-muted); width:55px; flex-shrink:0; }
+.log-text { color:var(--text); }
+.instruction-textarea {
+  width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--radius-sm);
+  padding:14px; font-family:'Inter',sans-serif; font-size:13px; color:var(--text);
+  resize:vertical; min-height:120px; line-height:1.6;
+}
+.instruction-textarea:focus { outline:none; border-color:var(--blue); }
+.modal-footer { padding:16px 28px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:10px; }
+.modal-btn-save {
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  color:#fff; border:none; padding:10px 22px; border-radius:var(--radius-sm);
+  font-size:13px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif;
+}
+.modal-btn-cancel { background:var(--bg); color:var(--text-muted); border:1px solid var(--border); padding:10px 22px; border-radius:var(--radius-sm); font-size:13px; cursor:pointer; font-family:'Inter',sans-serif; }
+
+/* ── CRM PIPELINE ── */
+.pipeline { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+.pipeline-col { }
+.pipeline-col-header {
+  font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:700;
+  padding:8px 12px; border-radius:var(--radius-sm); margin-bottom:10px; text-align:center;
+}
+.pch-new { background:#EEF1FF; color:var(--blue); }
+.pch-contact { background:#FFF5EB; color:var(--orange); }
+.pch-consult { background:#F3EAFF; color:var(--purple); }
+.pch-offer { background:#EDFAFA; color:var(--green); }
+.pch-won { background:#EDFAFA; color:#27ae60; }
+.pipeline-card {
+  background:var(--white); border-radius:var(--radius-sm); padding:12px;
+  box-shadow:var(--shadow); border:1px solid var(--border); margin-bottom:8px;
+  border-left:3px solid;
+}
+.pc-name { font-size:13px; font-weight:600; color:var(--text); }
+.pc-val { font-size:12px; color:var(--orange); font-weight:600; margin-top:2px; }
+.pc-src { font-size:10px; color:var(--text-muted); margin-top:4px; }
+
+/* ── SLACK SECTION ── */
+.slack-card { background:linear-gradient(135deg,#1E1E2D,#2D1B3D); border-radius:var(--radius); padding:24px; color:#fff; }
+.slack-channels { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+.slack-ch { background:rgba(255,255,255,0.07); border-radius:var(--radius-sm); padding:14px; border:1px solid rgba(255,255,255,0.1); }
+.slack-ch-name { font-size:13px; font-weight:600; color:#ECB22E; margin-bottom:6px; }
+.slack-ch-preview { font-size:11px; color:rgba(255,255,255,0.6); line-height:1.6; }
+.slack-msg-btn { background:#4A154B; border:1px solid #ECB22E; color:#ECB22E; padding:8px 16px; border-radius:var(--radius-sm); font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; margin-top:14px; }
+
+/* ── BIBLIOTEKA KREACJI ── */
+.format-tab {
+  padding:9px 18px; border:1.5px solid var(--border); background:#fff;
+  border-radius:30px; font-size:13px; font-weight:600; cursor:pointer;
+  color:var(--text-muted); font-family:'Inter',sans-serif; transition:all .2s;
+}
+.format-tab:hover { border-color:var(--blue); color:var(--blue); }
+.format-tab.active-tab { background:var(--blue); color:#fff; border-color:var(--blue); }
+.brief-card { padding:18px; transition:box-shadow .2s; }
+.brief-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.10); }
+.brief-row { display:flex; gap:8px; font-size:12px; }
+.brief-label { min-width:110px; color:var(--text-muted); font-weight:500; flex-shrink:0; }
+.brief-val { color:var(--text); line-height:1.5; }
+
+/* ── TOAST ── */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--text); color:#fff; padding:12px 18px; border-radius:var(--radius-sm); font-size:13px; opacity:0; transform:translateY(8px); transition:all .3s; z-index:500; pointer-events:none; box-shadow:var(--shadow-lg); }
+.toast.show { opacity:1; transform:translateY(0); }
+.toast.success { background:var(--green); }
+.toast.error { background:var(--red); }
+
+/* ── TAGS ── */
+.tag { display:inline-block; font-size:10px; font-weight:600; padding:3px 8px; border-radius:20px; letter-spacing:.5px; }
+.tag-blue { background:var(--blue-light); color:var(--blue); }
+.tag-green { background:var(--green-light); color:var(--green); }
+.tag-orange { background:var(--orange-light); color:var(--orange); }
+.tag-pink { background:var(--pink-light); color:var(--pink); }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.refreshing #refresh-btn { animation: spin 1s linear infinite; }
+#refresh-btn:disabled { cursor: wait; }
+#refresh-btn { transition: all 0.3s; }
+#refresh-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(46,196,182,0.3); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>Marketing HQ</h2>
+    <p>Studio · Architektura Wnętrz</p>
+  </div>
+  <div class="sidebar-section">Główne</div>
+  <a class="nav-item active" onclick="showPage('overview',this)">
+    <span class="nav-icon">📊</span> Przegląd
+  </a>
+  <a class="nav-item" onclick="showPage('campaigns',this)">
+    <span class="nav-icon">🎯</span> Kampanie
+    <span class="nav-badge">3</span>
+  </a>
+  <a class="nav-item" onclick="showPage('agents',this)">
+    <span class="nav-icon">🤖</span> Agenci AI
+    <span class="nav-badge green">12</span>
+  </a>
+  <a class="nav-item" onclick="showPage('crm',this)">
+    <span class="nav-icon">👥</span> CRM Pipeline
+  </a>
+  <div class="sidebar-section">Kanały</div>
+  <a class="nav-item" onclick="showPage('meta',this)">
+    <span class="nav-icon">📘</span> Meta Ads
+  </a>
+  <a class="nav-item" onclick="showPage('seo',this)">
+    <span class="nav-icon">🌿</span> SEO & Content
+  </a>
+  <a class="nav-item" onclick="showPage('slack',this)">
+    <span class="nav-icon">💬</span> Slack CEO
+  </a>
+  <div class="sidebar-section">Narzędzia</div>
+  <a class="nav-item" onclick="showPage('prompts',this)">
+    <span class="nav-icon">✨</span> Prompty Gemini
+  </a>
+  <a class="nav-item" onclick="showPage('copy',this)">
+    <span class="nav-icon">✍️</span> Copywriting
+  </a>
+  <a class="nav-item" onclick="showPage('library',this)">
+    <span class="nav-icon">🖼️</span> Biblioteka Kreacji
+  </a>
+  <a class="nav-item" onclick="showPage('creatives',this)">
+    <span class="nav-icon">🎨</span> Kreacje
+  </a>
+  <a class="nav-item" onclick="showPage('settings',this)">
+    <span class="nav-icon">⚙️</span> Ustawienia
+  </a>
+  <div class="sidebar-bottom">
+    <div class="user-block">
+      <div class="user-avatar">P</div>
+      <div>
+        <div class="user-name">Piotr</div>
+        <div class="user-role">Marketing CEO</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title">Przegląd <span id="page-sub">Dashboard · Kwiecień 2026</span></div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" onclick="refreshWindsorData()" id="refresh-btn" style="background:var(--green)">
+  🔄 Odśwież dane
+</button>
+<div id="data-source-indicator" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;background:var(--green-light);color:var(--green)">
+  <span id="source-dot">🟢</span> <span id="source-label">Gotowy</span>
+</div>
+<div id="last-refresh" style="font-size:10px;color:var(--text-muted)"></div>
+      <div class="slack-pill" onclick="showPage('slack',document.querySelector('.nav-item:nth-child(10)'))">
+        💬 Slack CEO
+      </div>
+      <div class="notif-btn" onclick="showToast('3 kampanie oczekują na Twoją akceptację','')">
+        🔔 <div class="notif-dot"></div>
+      </div>
+      <button class="topbar-btn" onclick="showPage('campaigns',document.querySelector('.nav-item:nth-child(5)'))">+ Nowa kampania</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ════ OVERVIEW ════ -->
+    <div id="page-overview" class="page active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon blue">📘</div>
+          <div>
+            <div class="kpi-label">Budżet Meta / mies.</div>
+            <div class="kpi-value">1 000 <span style="font-size:14px;color:var(--text-muted)">PLN</span></div>
+            <div class="kpi-change up">▲ Kwiecień 2026</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon pink">🔥</div>
+          <div>
+            <div class="kpi-label">Aktywne Leady</div>
+            <div class="kpi-value">5</div>
+            <div class="kpi-change up">▲ +2 ten tydzień</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon green">📈</div>
+          <div>
+            <div class="kpi-label">Cel CPL</div>
+            <div class="kpi-value">&lt;85 <span style="font-size:14px;color:var(--text-muted)">PLN</span></div>
+            <div class="kpi-change up">▲ Benchmark Meta</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon orange">🤖</div>
+          <div>
+            <div class="kpi-label">Agenci aktywni</div>
+            <div class="kpi-value">12</div>
+            <div class="kpi-change up">▲ 8 online teraz</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Kampanie — status</div>
+              <div class="card-sub">Kwiecień 2026 · Meta Ads Focus</div>
+            </div>
+            <button class="card-action" onclick="showPage('campaigns',document.querySelector('.nav-item:nth-child(5)'))">Zobacz wszystkie</button>
+          </div>
+          <!-- mini campaigns list -->
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="ch-pill ch-ig">📸 IG Reels</span>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:500;margin-bottom:4px">Lead Gen · 500 PLN</div>
+                <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
+              </div>
+              <span class="status-badge sb-pending">Oczekuje</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="ch-pill ch-fb">💙 FB Retarg.</span>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:500;margin-bottom:4px">Retargeting · 250 PLN</div>
+                <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
+              </div>
+              <span class="status-badge sb-pending">Oczekuje</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="ch-pill ch-ig">✨ IG Stories</span>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:500;margin-bottom:4px">Awareness · 150 PLN</div>
+                <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
+              </div>
+              <span class="status-badge sb-pending">Oczekuje</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span class="ch-pill ch-ig">📸 IG Feed</span>
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:500;margin-bottom:4px">Moodboard Wiosna · organiczny</div>
+                <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-green" style="width:65%"></div></div><span class="progress-pct">65%</span></div>
+              </div>
+              <span class="status-badge sb-active">Aktywna</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Podział budżetu</div>
+              <div class="card-sub">1 000 PLN / miesiąc</div>
+            </div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">IG Reels</div>
+            <div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:50%;background:linear-gradient(90deg,#F72585,#E1306C)">500 PLN</div></div>
+            <div class="funnel-val">50%</div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">FB Retarg.</div>
+            <div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:25%;background:linear-gradient(90deg,#1877F2,#42A5F5)">250 PLN</div></div>
+            <div class="funnel-val">25%</div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">IG Stories</div>
+            <div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:15%;background:linear-gradient(90deg,#F72585,#fd7e5c)">150 PLN</div></div>
+            <div class="funnel-val">15%</div>
+          </div>
+          <div class="funnel-row">
+            <div class="funnel-label">Lookalike</div>
+            <div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:10%;background:linear-gradient(90deg,#7B2FBE,#4361EE)">100 PLN</div></div>
+            <div class="funnel-val">10%</div>
+          </div>
+          <div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:var(--radius-sm)">
+            <div style="font-size:11px;color:var(--text-muted)">Windsor.ai · Facebook Ads</div>
+            <div style="font-size:12px;color:var(--green);font-weight:600;margin-top:2px">✓ Połączony — dane synchronizowane</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb20">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Agenci AI — status na żywo</div>
+            <div class="card-sub">Kliknij agenta aby edytować instrukcje</div>
+          </div>
+          <button class="card-action" onclick="showPage('agents',document.querySelector('.nav-item:nth-child(6)'))">Wszyscy agenci</button>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+          <div class="agent-card" onclick="openAgent('meta')">
+            <div class="agent-top"><span class="agent-emoji">📘</span><div class="agent-status-dot asd-active"></div></div>
+            <div class="agent-name">Meta Ads Specialist</div>
+            <div class="agent-role">Facebook & Instagram</div>
+            <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Teraz</div>Konfiguruje kampanię IG Reels Lead Gen · czeka na akceptację CEO</div>
+          </div>
+          <div class="agent-card" onclick="openAgent('creative')">
+            <div class="agent-top"><span class="agent-emoji">🎨</span><div class="agent-status-dot asd-busy"></div></div>
+            <div class="agent-name">Creative Director</div>
+            <div class="agent-role">Gemini / Veo</div>
+            <div class="agent-activity orange"><div class="agent-activity-label" style="color:var(--orange)">Teraz</div>Przygotowuje brief Reel #1 — wizualizacja salonu</div>
+          </div>
+          <div class="agent-card" onclick="openAgent('copy')">
+            <div class="agent-top"><span class="agent-emoji">✍️</span><div class="agent-status-dot asd-busy"></div></div>
+            <div class="agent-name">Copywriter AI</div>
+            <div class="agent-role">Premium Storytelling</div>
+            <div class="agent-activity pink"><div class="agent-activity-label" style="color:var(--pink)">Teraz</div>Pisze sekwencję 5 emaili dla Lead Nurturing</div>
+          </div>
+          <div class="agent-card" onclick="openAgent('data')">
+            <div class="agent-top"><span class="agent-emoji">📊</span><div class="agent-status-dot asd-active"></div></div>
+            <div class="agent-name">Data Scientist AI</div>
+            <div class="agent-role">Analytics & Attribution</div>
+            <div class="agent-activity green"><div class="agent-activity-label" style="color:var(--green)">Ostatnia aktywność</div>Skonfigurował Windsor.ai sync · czeka na dane po starcie kampanii</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ CAMPAIGNS ════ -->
+    <div id="page-campaigns" class="page">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon pink">⏳</div><div><div class="kpi-label">Oczekują akceptacji</div><div class="kpi-value">3</div><div class="kpi-change" style="color:var(--orange)">Wymagają decyzji</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon green">✅</div><div><div class="kpi-label">Aktywne</div><div class="kpi-value">1</div><div class="kpi-change up">▲ IG Feed organiczny</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon blue">📝</div><div><div class="kpi-label">Szkice</div><div class="kpi-value">2</div><div class="kpi-change" style="color:var(--text-muted)">W przygotowaniu</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon orange">💰</div><div><div class="kpi-label">Budżet miesięczny</div><div class="kpi-value">1 000 <span style="font-size:13px">PLN</span></div><div class="kpi-change up">▲ Meta Ads</div></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title">Wszystkie kampanie</div><div class="card-sub">Kliknij Podgląd aby zatwierdzić lub odrzucić</div></div>
+          <div style="display:flex;gap:8px">
+            <button class="card-action" onclick="filterTable('all',this)" style="background:var(--blue);color:#fff">Wszystkie</button>
+            <button class="card-action" onclick="filterTable('pending',this)">Oczekujące</button>
+            <button class="card-action" onclick="filterTable('active',this)">Aktywne</button>
+          </div>
+        </div>
+        <table class="campaign-table">
+          <thead>
+            <tr>
+              <th>Kanał</th>
+              <th>Kampania</th>
+              <th>Status</th>
+              <th>Budżet</th>
+              <th>Postęp</th>
+              <th>Data startu</th>
+              <th>Akcje</th>
+            </tr>
+          </thead>
+          <tbody id="campaigns-tbody">
+            <tr data-status="pending" id="tr-1">
+              <td><span class="ch-pill ch-ig">📸 Instagram</span></td>
+              <td><div style="font-size:13px;font-weight:600">Reels · Lead Gen</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
+              <td><span class="status-badge sb-pending" id="sb-1">Oczekuje</span></td>
+              <td><div style="font-weight:600">500 PLN</div><div style="font-size:11px;color:var(--text-muted)">~17 PLN/dzień</div></td>
+              <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-1"></div></div><span class="progress-pct">0%</span></div></td>
+              <td style="font-size:12px;color:var(--text-muted)">1 kwi 2026</td>
+              <td><div style="display:flex;gap:6px"><button class="btn-view" onclick="openCampaignModal(1)">Podgląd</button><button class="btn-approve" onclick="approveCampaign(1)">✓</button><button class="btn-reject" onclick="rejectCampaign(1)">✕</button></div></td>
+            </tr>
+            <tr data-status="pending" id="tr-2">
+              <td><span class="ch-pill ch-fb">💙 Facebook</span></td>
+              <td><div style="font-size:13px;font-weight:600">Retargeting</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
+              <td><span class="status-badge sb-pending" id="sb-2">Oczekuje</span></td>
+              <td><div style="font-weight:600">250 PLN</div><div style="font-size:11px;color:var(--text-muted)">~8 PLN/dzień</div></td>
+              <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:0%" id="pb-2"></div></div><span class="progress-pct">0%</span></div></td>
+              <td style="font-size:12px;color:var(--text-muted)">3 kwi 2026</td>
+              <td><div style="display:flex;gap:6px"><button class="btn-view" onclick="openCampaignModal(2)">Podgląd</button><button class="btn-approve" onclick="approveCampaign(2)">✓</button><button class="btn-reject" onclick="rejectCampaign(2)">✕</button></div></td>
+            </tr>
+            <tr data-status="pending" id="tr-3">
+              <td><span class="ch-pill ch-ig">✨ Instagram</span></td>
+              <td><div style="font-size:13px;font-weight:600">Stories · Awareness</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
+              <td><span class="status-badge sb-pending" id="sb-3">Oczekuje</span></td>
+              <td><div style="font-weight:600">150 PLN</div><div style="font-size:11px;color:var(--text-muted)">~5 PLN/dzień</div></td>
+              <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-3"></div></div><span class="progress-pct">0%</span></div></td>
+              <td style="font-size:12px;color:var(--text-muted)">5 kwi 2026</td>
+              <td><div style="display:flex;gap:6px"><button class="btn-view" onclick="openCampaignModal(3)">Podgląd</button><button class="btn-approve" onclick="approveCampaign(3)">✓</button><button class="btn-reject" onclick="rejectCampaign(3)">✕</button></div></td>
+            </tr>
+            <tr data-status="draft" id="tr-4">
+              <td><span class="ch-pill ch-meta">🎯 Meta</span></td>
+              <td><div style="font-size:13px;font-weight:600">Lookalike 1%</div><div style="font-size:11px;color:var(--text-muted)">Wymaga listy emaili klientów</div></td>
+              <td><span class="status-badge sb-draft" id="sb-4">Szkic</span></td>
+              <td><div style="font-weight:600">100 PLN</div><div style="font-size:11px;color:var(--text-muted)">~3 PLN/dzień</div></td>
+              <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:20%" id="pb-4"></div></div><span class="progress-pct">20%</span></div></td>
+              <td style="font-size:12px;color:var(--text-muted)">14 kwi 2026</td>
+              <td><button class="btn-view" onclick="openCampaignModal(4)">Podgląd</button></td>
+            </tr>
+            <tr data-status="active" id="tr-5">
+              <td><span class="ch-pill ch-ig">📸 Instagram</span></td>
+              <td><div style="font-size:13px;font-weight:600">Moodboard Wiosna · Feed</div><div style="font-size:11px;color:var(--text-muted)">Social Media Manager</div></td>
+              <td><span class="status-badge sb-active" id="sb-5">Aktywna</span></td>
+              <td><div style="font-weight:600">0 PLN</div><div style="font-size:11px;color:var(--text-muted)">Organiczny</div></td>
+              <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-green" style="width:65%" id="pb-5"></div></div><span class="progress-pct">65%</span></div></td>
+              <td style="font-size:12px;color:var(--text-muted)">25 mar 2026</td>
+              <td><button class="btn-view" onclick="openCampaignModal(5)">Podgląd</button></td>
+            </tr>
+            <tr data-status="draft" id="tr-6">
+              <td><span class="ch-pill ch-email">✉️ Email</span></td>
+              <td><div style="font-size:13px;font-weight:600">Sekwencja nurturing</div><div style="font-size:11px;color:var(--text-muted)">Lead Nurturing AI + Copywriter</div></td>
+              <td><span class="status-badge sb-draft" id="sb-6">Szkic</span></td>
+              <td><div style="font-weight:600">0 PLN</div><div style="font-size:11px;color:var(--text-muted)">Automatyczny</div></td>
+              <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-orange" style="width:40%" id="pb-6"></div></div><span class="progress-pct">40%</span></div></td>
+              <td style="font-size:12px;color:var(--text-muted)">10 kwi 2026</td>
+              <td><button class="btn-view" onclick="openCampaignModal(6)">Podgląd</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ AGENTS ════ -->
+    <div id="page-agents" class="page">
+      <div style="margin-bottom:20px;font-size:13px;color:var(--text-muted)">Kliknij dowolnego agenta aby zobaczyć jego aktywność i edytować instrukcje.</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Rdzeń agencji</div>
+      <div class="agents-grid" style="margin-bottom:24px">
+        <div class="agent-card" onclick="openAgent('ceo')">
+          <div class="agent-top"><span class="agent-emoji">👑</span><div class="agent-status-dot asd-active"></div></div>
+          <div class="agent-name">Marketing CEO</div>
+          <div class="agent-role">Lider Strategii</div>
+          <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Teraz</div>Monitoruje kampanie · odpowiada na Slack CEO</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('ceo')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('social')">
+          <div class="agent-top"><span class="agent-emoji">📱</span><div class="agent-status-dot asd-active"></div></div>
+          <div class="agent-name">Social Media Mgr</div>
+          <div class="agent-role">Instagram & TikTok</div>
+          <div class="agent-activity pink"><div class="agent-activity-label" style="color:var(--pink)">Ostatnie</div>Post #7 Moodboard wiosna — zaplanowany na dziś 18:00</div>
+          <div class="agent-footer"><span class="agent-last">2 min temu</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('social')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('meta')">
+          <div class="agent-top"><span class="agent-emoji">📘</span><div class="agent-status-dot asd-busy"></div></div>
+          <div class="agent-name">Meta Ads Specialist</div>
+          <div class="agent-role">Facebook & Instagram</div>
+          <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Teraz</div>Konfiguracja kampanii IG Reels Lead Gen · czeka na akceptację</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('meta')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('creative')">
+          <div class="agent-top"><span class="agent-emoji">🎨</span><div class="agent-status-dot asd-busy"></div></div>
+          <div class="agent-name">Creative Director</div>
+          <div class="agent-role">Gemini / Veo</div>
+          <div class="agent-activity orange"><div class="agent-activity-label" style="color:var(--orange)">Teraz</div>Brief Reel #1 gotowy · czeka na wizualizacje z Google Drive</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('creative')">Edytuj</button></div>
+        </div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">Specjaliści rozszerzeni</div>
+      <div class="agents-grid">
+        <div class="agent-card" onclick="openAgent('data')">
+          <div class="agent-top"><span class="agent-emoji">📊</span><div class="agent-status-dot asd-active"></div></div>
+          <div class="agent-name">Data Scientist AI</div>
+          <div class="agent-role">Analytics & Attribution</div>
+          <div class="agent-activity green"><div class="agent-activity-label" style="color:var(--green)">Ostatnie</div>Windsor.ai sync skonfigurowany · oczekuje na dane</div>
+          <div class="agent-footer"><span class="agent-last">15 min temu</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('data')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('seo')">
+          <div class="agent-top"><span class="agent-emoji">🌿</span><div class="agent-status-dot asd-busy"></div></div>
+          <div class="agent-name">SEO Architect AI</div>
+          <div class="agent-role">Organic Growth</div>
+          <div class="agent-activity green"><div class="agent-activity-label" style="color:var(--green)">Teraz</div>Przygotowuje artykuł #1 klastra — „Ile kosztuje projekt wnętrza 2026"</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('seo')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('persona')">
+          <div class="agent-top"><span class="agent-emoji">🧠</span><div class="agent-status-dot asd-idle"></div></div>
+          <div class="agent-name">Persona Psychologist</div>
+          <div class="agent-role">Consumer Behavior AI</div>
+          <div class="agent-activity purple"><div class="agent-activity-label" style="color:var(--purple)">Ostatnie</div>3 persony zakupowe gotowe · wsad emocjonalny wysłany do Creative</div>
+          <div class="agent-footer"><span class="agent-last">1 godz. temu</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('persona')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('nurturing')">
+          <div class="agent-top"><span class="agent-emoji">⚡</span><div class="agent-status-dot asd-busy"></div></div>
+          <div class="agent-name">Lead Nurturing AI</div>
+          <div class="agent-role">Funnel & Automation</div>
+          <div class="agent-activity orange"><div class="agent-activity-label" style="color:var(--orange)">Teraz</div>Sekwencja 5 emaili w trakcie pisania przez Copywritera</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('nurturing')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('copy')">
+          <div class="agent-top"><span class="agent-emoji">✍️</span><div class="agent-status-dot asd-busy"></div></div>
+          <div class="agent-name">Copywriter AI</div>
+          <div class="agent-role">Premium Storytelling</div>
+          <div class="agent-activity pink"><div class="agent-activity-label" style="color:var(--pink)">Teraz</div>Email #2 z portfolio — styl minimalistyczny · wersja A/B</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('copy')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('content')">
+          <div class="agent-top"><span class="agent-emoji">🔍</span><div class="agent-status-dot asd-idle"></div></div>
+          <div class="agent-name">SEO & Content Strat.</div>
+          <div class="agent-role">Visibility & Authority</div>
+          <div class="agent-activity green"><div class="agent-activity-label" style="color:var(--green)">Ostatnie</div>Plan 4 artykułów na kwiecień zatwierdzony · czeka na brief SEO</div>
+          <div class="agent-footer"><span class="agent-last">2 godz. temu</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('content')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('crm')">
+          <div class="agent-top"><span class="agent-emoji">🗃️</span><div class="agent-status-dot asd-active"></div></div>
+          <div class="agent-name">CRM Specialist AI</div>
+          <div class="agent-role">Pipeline & Data</div>
+          <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Teraz</div>5 leadów w pipeline · Joanna S. — umowa podpisana ✓</div>
+          <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('crm')">Edytuj</button></div>
+        </div>
+        <div class="agent-card" onclick="openAgent('trends')">
+          <div class="agent-top"><span class="agent-emoji">📡</span><div class="agent-status-dot asd-active"></div></div>
+          <div class="agent-name">Trend & Competition</div>
+          <div class="agent-role">Konkurencja & Trendy</div>
+          <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Ostatnie</div>Raport tygodniowy: Reelsy before/after = 3x engagement · nowa kampania Decoroom</div>
+          <div class="agent-footer"><span class="agent-last">30 min temu</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('trends')">Edytuj</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ CRM ════ -->
+    <div id="page-crm" class="page">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon blue">📥</div><div><div class="kpi-label">Nowe leady</div><div class="kpi-value">2</div><div class="kpi-change up">▲ ten tydzień</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon orange">📞</div><div><div class="kpi-label">W kontakcie</div><div class="kpi-value">2</div><div class="kpi-change up">▲ email + konsultacja</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon green">✅</div><div><div class="kpi-label">Podpisana umowa</div><div class="kpi-value">1</div><div class="kpi-change up">▲ 22 000 PLN</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon pink">💰</div><div><div class="kpi-label">Pipeline value</div><div class="kpi-value">192K</div><div class="kpi-change up">▲ PLN łącznie</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Pipeline leadów</div><div class="card-sub">CRM Specialist AI · aktualizowany na bieżąco</div></div>
+        <div class="pipeline">
+          <div class="pipeline-col">
+            <div class="pipeline-col-header pch-new">Nowy Lead</div>
+            <div class="pipeline-card" style="border-color:var(--blue)"><div class="pc-name">Anna K.</div><div class="pc-val">~25 000 PLN</div><div class="pc-src">📸 IG Reel · 2 dni temu</div></div>
+            <div class="pipeline-card" style="border-color:var(--blue)"><div class="pc-name">Marek W.</div><div class="pc-val">~15 000 PLN</div><div class="pc-src">💙 FB Retarg. · wczoraj</div></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header pch-contact">Kontakt</div>
+            <div class="pipeline-card" style="border-color:var(--orange)"><div class="pc-name">Katarzyna B.</div><div class="pc-val">~40 000 PLN</div><div class="pc-src">✉️ Email #2 wysłany</div></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header pch-consult">Konsultacja</div>
+            <div class="pipeline-card" style="border-color:var(--purple)"><div class="pc-name">Piotr & Ewa N.</div><div class="pc-val">~60 000 PLN</div><div class="pc-src">📅 Spotkanie 5.04</div></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header pch-offer">Oferta</div>
+            <div class="pipeline-card" style="border-color:var(--green)"><div class="pc-name">Michał D.</div><div class="pc-val">~30 000 PLN</div><div class="pc-src">📄 Oferta wysłana 1.04</div></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header pch-won">Umowa ✓</div>
+            <div class="pipeline-card" style="border-color:#27ae60"><div class="pc-name">Joanna S.</div><div class="pc-val">22 000 PLN ✅</div><div class="pc-src">🚀 Start projektu 3.04</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ META ════ -->
+    <div id="page-meta" class="page">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon blue">💰</div><div><div class="kpi-label">Budżet / mies.</div><div class="kpi-value">1 000 PLN</div><div class="kpi-change up">▲ Meta Ads</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon pink">🎯</div><div><div class="kpi-label">Cel CPL</div><div class="kpi-value">&lt;85 PLN</div><div class="kpi-change up">▲ Lead Gen Form</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon green">📊</div><div><div class="kpi-label">Windsor.ai</div><div class="kpi-value" style="font-size:20px;color:var(--green)">✓ Online</div><div class="kpi-change up">▲ Facebook Ads sync</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon orange">👥</div><div><div class="kpi-label">Publiczności</div><div class="kpi-value">3</div><div class="kpi-change up">▲ Zimna · Ciepła · LAL</div></div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Podział budżetu</div></div>
+          <div class="funnel-row"><div class="funnel-label">IG Reels LG</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:50%;background:linear-gradient(90deg,#F72585,#E1306C)">500 PLN</div></div><div class="funnel-val">50%</div></div>
+          <div class="funnel-row"><div class="funnel-label">FB Retarg.</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:25%;background:linear-gradient(90deg,#1877F2,#42A5F5)">250 PLN</div></div><div class="funnel-val">25%</div></div>
+          <div class="funnel-row"><div class="funnel-label">IG Stories</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:15%;background:linear-gradient(90deg,#F72585,#fd7e5c)">150 PLN</div></div><div class="funnel-val">15%</div></div>
+          <div class="funnel-row"><div class="funnel-label">Lookalike</div><div class="funnel-bar-bg"><div class="funnel-bar-fill" style="width:10%;background:linear-gradient(90deg,#7B2FBE,#4361EE)">100 PLN</div></div><div class="funnel-val">10%</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Formaty reklam</div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm)"><span style="font-size:22px">🎬</span><div><div style="font-size:13px;font-weight:600">Reel Ad · 9:16 · 15s</div><div style="font-size:11px;color:var(--text-muted)">Najwyższy zasięg · Lead Form</div></div><span class="tag tag-pink" style="margin-left:auto">Instagram</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm)"><span style="font-size:22px">📋</span><div><div style="font-size:13px;font-weight:600">Lead Gen Form</div><div style="font-size:11px;color:var(--text-muted)">Natywny formularz Meta</div></div><span class="tag tag-blue" style="margin-left:auto">IG + FB</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm)"><span style="font-size:22px">⚡</span><div><div style="font-size:13px;font-weight:600">Story Ad · 9:16 · 10s</div><div style="font-size:11px;color:var(--text-muted)">Swipe up → formularz</div></div><span class="tag tag-pink" style="margin-left:auto">Instagram</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:var(--radius-sm)"><span style="font-size:22px">🖼️</span><div><div style="font-size:13px;font-weight:600">Carousel · 3–5 slajdów</div><div style="font-size:11px;color:var(--text-muted)">Portfolio realizacji</div></div><span class="tag tag-blue" style="margin-left:auto">Facebook</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ SEO ════ -->
+    <div id="page-seo" class="page">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon green">🎯</div><div><div class="kpi-label">Cel frazy TOP 10</div><div class="kpi-value">12</div><div class="kpi-change up">▲ w 90 dni</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon blue">📝</div><div><div class="kpi-label">Artykuły / kwartał</div><div class="kpi-value">8</div><div class="kpi-change up">▲ 2 miesięcznie</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon orange">📈</div><div><div class="kpi-label">Organic traffic cel</div><div class="kpi-value">2K</div><div class="kpi-change up">▲ sesji / mies. Q3</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon pink">🔗</div><div><div class="kpi-label">Synergia Meta+SEO</div><div class="kpi-value">+40%</div><div class="kpi-change up">▲ jakość leadów</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Plan publikacji — Kwiecień 2026</div></div>
+        <table class="campaign-table">
+          <thead><tr><th>Data</th><th>Tytuł artykułu</th><th>Klaster</th><th>Intencja</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:12px;font-weight:600">1 kwi</td><td style="font-size:13px">Ile kosztuje projekt wnętrza 2026</td><td><span class="tag tag-blue">Usługi</span></td><td><span class="tag tag-green">BOFU</span></td><td><span class="status-badge sb-draft">W toku</span></td></tr>
+            <tr><td style="font-size:12px;font-weight:600">8 kwi</td><td style="font-size:13px">Styl skandynawski w salonie — poradnik</td><td><span class="tag tag-orange">Salon</span></td><td><span class="tag tag-blue">TOFU</span></td><td><span class="status-badge sb-draft">Zaplanowany</span></td></tr>
+            <tr><td style="font-size:12px;font-weight:600">17 kwi</td><td style="font-size:13px">Jak wybrać architekta wnętrz — 7 pytań</td><td><span class="tag tag-blue">Usługi</span></td><td><span class="tag tag-orange">MOFU</span></td><td><span class="status-badge sb-draft">Zaplanowany</span></td></tr>
+            <tr><td style="font-size:12px;font-weight:600">25 kwi</td><td style="font-size:13px">Sypialnia minimalistyczna — case study</td><td><span class="tag tag-pink">Sypialnia</span></td><td><span class="tag tag-orange">MOFU</span></td><td><span class="status-badge sb-draft">Zaplanowany</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ SLACK ════ -->
+    <div id="page-slack" class="page">
+      <div class="slack-card mb20">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+          <span style="font-size:36px">💬</span>
+          <div>
+            <div style="font-family:'Manrope',sans-serif;font-size:18px;font-weight:700">Slack CEO — aktywny</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px">Workspace: wwgroupworkspace · Bot: Marketing CEO APP</div>
+          </div>
+          <div style="margin-left:auto;background:rgba(46,196,182,0.2);border:1px solid rgba(46,196,182,0.4);color:#2EC4B6;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600">● Połączony</div>
+        </div>
+        <div class="slack-channels">
+          <div class="slack-ch">
+            <div class="slack-ch-name">📣 #kampanie-ceo</div>
+            <div class="slack-ch-preview">Ostatnia wiadomość: „Kreacje Ty tworzysz czy ja? Mogę je umieścić na dysku google żebyś miał dostęp" — Piter</div>
+          </div>
+          <div class="slack-ch">
+            <div class="slack-ch-name">📊 #raporty-meta</div>
+            <div class="slack-ch-preview">Bot aktywny · Raporty dzienne po starcie kampanii</div>
+          </div>
+          <div class="slack-ch">
+            <div class="slack-ch-name">🔥 #nowe-leady</div>
+            <div class="slack-ch-preview">Bot aktywny · Alert w 60s od każdego nowego leada</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Wyślij wiadomość jako Marketing CEO</div></div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <select id="slack-channel-select" style="background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text)">
+            <option value="C0ANZTJB458">#kampanie-ceo</option>
+            <option value="C0APU636KG8">#raporty-meta</option>
+            <option value="C0ANZTMGJTU">#nowe-leady</option>
+          </select>
+          <textarea id="slack-msg-input" style="background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);resize:vertical;min-height:80px;" placeholder="Wpisz wiadomość..."></textarea>
+          <button class="topbar-btn" style="align-self:flex-start" onclick="sendSlackMsg()">Wyślij na Slack →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ PROMPTS ════ -->
+    <div id="page-prompts" class="page">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Prompty Gemini (Nano Banana 2 / Veo)</div><div class="card-sub">Creative Director · kreacje zoptymalizowane pod Meta Ads</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:12px;font-weight:700;color:var(--blue)">🎥 Veo — Instagram Reel Ad (15s · 9:16)</span><button class="card-action" onclick="copyText('pt1')">Kopiuj</button></div>
+            <div id="pt1" style="font-size:12px;color:var(--text);line-height:1.7;font-style:italic">Transform this interior design visualization into a cinematic 15-second Instagram Reel ad. Start with a slow push-in shot from the doorway. Warm golden-hour lighting (3200K). Subtle dust particles in sunlight. Smooth dolly movement revealing key design elements. End with 2-second hold on the hero piece. Aspect ratio 9:16 vertical. Style: luxury Architectural Digest. No text overlays. Cinematic depth of field. First 3 seconds must be visually striking without sound.</div>
+          </div>
+          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:12px;font-weight:700;color:var(--blue)">🖼️ Nano Banana 2 — Facebook Carousel (1:1)</span><button class="card-action" onclick="copyText('pt2')">Kopiuj</button></div>
+            <div id="pt2" style="font-size:12px;color:var(--text);line-height:1.7;font-style:italic">Create a premium carousel ad image at 1080x1080px. Apply warm tone grading (+15 warmth, +10 contrast). Dark vignette 25% on edges. Leave 200px bottom strip with dark overlay for text. Add thin gold frame border (1.5px, #C9A96E). Style: luxury real estate magazine. Aspirational, exclusive. No generated text.</div>
+          </div>
+          <div style="background:var(--bg);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:12px;font-weight:700;color:var(--blue)">⚡ Veo — Instagram Stories Ad (9:16 · 10s)</span><button class="card-action" onclick="copyText('pt3')">Kopiuj</button></div>
+            <div id="pt3" style="font-size:12px;color:var(--text);line-height:1.7;font-style:italic">Create a 5-10 second Instagram Stories ad. Full-screen 9:16. Fast smooth pan (1.5s), slow reveal of key feature (3s), fade to blurred background (2s for CTA overlay). Premium, not rushed. Warm cinematic grade. Leave top 15% and bottom 20% clear (UI safe zones).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ COPY ════ -->
+    <div id="page-copy" class="page">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Copywriting Premium</div><div class="card-sub">Copywriter AI · teksty dla Meta Ads i Email</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="border-radius:var(--radius-sm);padding:16px;border:1.5px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="font-size:13px;font-weight:700">Podpis pod Reelsem — Instagram Lead Gen</span><span class="tag tag-pink">Instagram</span></div>
+            <div style="font-size:13px;color:var(--text);line-height:1.8;background:var(--bg);padding:14px;border-radius:var(--radius-sm);border-left:3px solid var(--pink)">Wchodzisz do pokoju i czujesz — nie widzisz — że coś tu jest wyjątkowego. To nie przypadek.<br><br>Każda linia, każda faktura materiału, każde źródło światła — to decyzja podjęta z myślą o Tobie.<br><br>📩 Bezpłatna konsultacja → kliknij w formularzu poniżej</div>
+          </div>
+          <div style="border-radius:var(--radius-sm);padding:16px;border:1.5px solid var(--border)">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px"><span style="font-size:13px;font-weight:700">Nagłówki Meta Ads — A/B/C test</span><span class="tag tag-blue">Meta Ads</span></div>
+            <div style="font-size:13px;color:var(--text);line-height:2;background:var(--bg);padding:14px;border-radius:var(--radius-sm);border-left:3px solid var(--blue)"><strong style="color:var(--blue)">A:</strong> Twoje mieszkanie mówi kim jesteś — zadbajmy o to razem<br><strong style="color:var(--blue)">B:</strong> Bezpłatna konsultacja z architektem wnętrz — bez zobowiązań<br><strong style="color:var(--blue)">C:</strong> Projekt wnętrza · Twoja nieruchomość zyska 20–35% wartości</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-library" class="page">
+      <!-- Header z inputem Google Drive -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🖼️ Biblioteka Kreacji</div>
+            <div class="card-sub">Creative Director AI · briefingi dla każdego formatu Meta Ads · System Rotacji Promptów</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-top:16px">
+          <input type="text" id="gdrive-link" placeholder="Wklej link do Google Drive z wizualizacjami (np. https://drive.google.com/drive/folders/...)"
+            style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border .2s"
+            onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+          <button onclick="loadDriveLibrary()" style="padding:11px 22px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;white-space:nowrap" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            🔗 Załaduj
+          </button>
+        </div>
+        <div id="drive-preview" style="display:none;margin-top:14px;padding:12px 16px;background:var(--green-light);border-radius:var(--radius-sm);border-left:3px solid var(--green);font-size:13px;color:var(--text)"></div>
+      </div>
+
+      <!-- Rotation System Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px">
+        <div style="display:flex;gap:12px;align-items:center">
+          <button onclick="rotatePrompts()" style="padding:11px 20px;background:linear-gradient(135deg,var(--green),var(--green-light));color:#fff;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            🔄 Generuj nowy zestaw
+          </button>
+          <div style="padding:8px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:var(--text)">
+            Wariant: <span id="variant-badge" style="color:var(--blue);font-weight:700">A</span>
+          </div>
+        </div>
+        <div style="padding:8px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:600;color:var(--text)">
+          Zestaw <span id="set-counter" style="color:var(--orange);font-weight:700">1</span>/3
+        </div>
+      </div>
+
+      <!-- Format tabs -->
+      <div style="display:flex;gap:10px;margin-bottom:20px">
+        <button class="format-tab active-tab" onclick="switchFormat('reels',this)">📹 Reels 9:16</button>
+        <button class="format-tab" onclick="switchFormat('stories',this)">✨ Stories</button>
+        <button class="format-tab" onclick="switchFormat('carousel',this)">🎠 Carousel</button>
+        <button class="format-tab" onclick="switchFormat('feed',this)">🖼️ Feed</button>
+      </div>
+
+      <!-- Reels format container -->
+      <div id="brief-reels" class="brief-section">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:100px" id="reels-grid">
+          <!-- Dynamically populated by renderCurrentBriefs() -->
+        </div>
+      </div>
+
+      <!-- Stories format container -->
+      <div id="brief-stories" class="brief-section" style="display:none">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;min-height:100px" id="stories-grid">
+          <!-- Dynamically populated by renderCurrentBriefs() -->
+        </div>
+      </div>
+
+      <!-- Carousel format container -->
+      <div id="brief-carousel" class="brief-section" style="display:none">
+        <div style="min-height:100px" id="carousel-container">
+          <!-- Dynamically populated by renderCurrentBriefs() -->
+        </div>
+      </div>
+
+      <!-- Feed format container -->
+      <div id="brief-feed" class="brief-section" style="display:none">
+        <div style="min-height:100px" id="feed-container">
+          <!-- Dynamically populated by renderCurrentBriefs() -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ KREACJE ════ -->
+    <div id="page-creatives" class="page">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon blue">🎨</div>
+          <div>
+            <div class="kpi-label">Kreacje łącznie</div>
+            <div class="kpi-value">24</div>
+            <div class="kpi-change up">▲ AI + Zoom</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon orange">🤖</div>
+          <div>
+            <div class="kpi-label">AI Generated</div>
+            <div class="kpi-value">12</div>
+            <div class="kpi-change up">▲ Veo 2 + Gemini</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon pink">📸</div>
+          <div>
+            <div class="kpi-label">Wizualizacje Zoom</div>
+            <div class="kpi-value">12</div>
+            <div class="kpi-change up">▲ Piotra</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon green">✅</div>
+          <div>
+            <div class="kpi-label">Zatwierdzone</div>
+            <div class="kpi-value">18</div>
+            <div class="kpi-change up">▲ ready to use</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🤖 AI Generated</div>
+              <div class="card-sub">Veo 2, Gemini Nano Banana 2</div>
+            </div>
+          </div>
+          <div style="margin-bottom:12px">
+            <a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none;font-size:12px;font-weight:600">📂 Otwórz folder →</a>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="height:120px;background:linear-gradient(135deg,#4361EE,#7B2FBE);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#F72585,#E1306C);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#FF9F43,#FFD60A);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#2EC4B6,#38ef7d);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#9B59B6,#AF7AC5);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#3498DB,#5DADE2);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📸 Wizualizacje Zoom</div>
+              <div class="card-sub">Piotra · Wnętrza premium</div>
+            </div>
+          </div>
+          <div style="margin-bottom:12px">
+            <a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none;font-size:12px;font-weight:600">📂 Otwórz folder →</a>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div style="height:120px;background:linear-gradient(135deg,#E8D5C4,#D7CCC8);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#C5B9A0,#B0A695);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#9C8B7E,#8B7D70);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#F5E6D3,#E8D7C3);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#D4C5B9,#C4B5A9);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+            <div style="height:120px;background:linear-gradient(135deg,#A8998D,#98897D);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 Przypisania kampanii</div>
+          <div class="card-sub">Które kreacje używane w aktywnych kampaniach</div>
+        </div>
+        <table class="campaign-table">
+          <thead>
+            <tr>
+              <th>Kampania</th>
+              <th>Typ kreacji</th>
+              <th>Folder</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-size:12px;font-weight:600">📸 Instagram Reels · Lead Gen</td>
+              <td><span class="tag tag-orange">🤖 AI Generated</span></td>
+              <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
+              <td><span class="status-badge sb-active">Aktywna</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:12px;font-weight:600">💙 Facebook Retargeting</td>
+              <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
+              <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
+              <td><span class="status-badge sb-pending">Oczekuje</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:12px;font-weight:600">✨ Instagram Stories · Awareness</td>
+              <td><span class="tag tag-orange">🤖 AI Generated</span></td>
+              <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
+              <td><span class="status-badge sb-pending">Oczekuje</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:12px;font-weight:600">🎯 Meta Ads · Lookalike 1%</td>
+              <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
+              <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
+              <td><span class="status-badge sb-draft">Szkic</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:12px;font-weight:600">📸 Instagram Feed · Moodboard Wiosna</td>
+              <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
+              <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
+              <td><span class="status-badge sb-active">Aktywna</span></td>
+            </tr>
+            <tr>
+              <td style="font-size:12px;font-weight:600">✉️ Email Nurturing · Sekwencja</td>
+              <td><span class="tag tag-orange">🤖 AI Generated</span></td>
+              <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
+              <td><span class="status-badge sb-draft">Szkic</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ SETTINGS ════ -->
+    <div id="page-settings" class="page">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-icon blue">🔑</div><div><div class="kpi-label">Windsor.ai API</div><div class="kpi-value" style="font-size:18px" id="api-status-card">Skonfigurowany</div><div class="kpi-change up">▲ Klucz aktywny</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon green">🔄</div><div><div class="kpi-label">Źródło danych</div><div class="kpi-value" style="font-size:18px" id="source-status-card">API + Fallback</div><div class="kpi-change up">▲ Dual mode</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon orange">⏱️</div><div><div class="kpi-label">Auto-refresh</div><div class="kpi-value" style="font-size:18px">Co 6h</div><div class="kpi-change up">▲ Scheduled task</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon pink">📅</div><div><div class="kpi-label">Ostatnia aktualizacja</div><div class="kpi-value" style="font-size:16px" id="last-update-card">—</div><div class="kpi-change" id="update-age">Brak danych</div></div></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🔑 Windsor.ai API</div><div class="card-sub">Konfiguracja połączenia z Meta Ads</div></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div>
+              <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">API Key</label>
+              <div style="display:flex;gap:8px">
+                <input type="password" id="windsor-api-key" value="32ff214e322015820893ceb7401546afa488" style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+                <button onclick="toggleApiKeyVisibility()" style="padding:11px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px" id="toggle-key-btn">👁️</button>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">Zakres dat</label>
+              <select id="date-preset-select" style="width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);background:#fff;outline:none">
+                <option value="last_7_days">Ostatnie 7 dni</option>
+                <option value="last_30_days" selected>Ostatnie 30 dni</option>
+                <option value="last_90_days">Ostatnie 90 dni</option>
+                <option value="this_month">Ten miesiąc</option>
+                <option value="last_month">Poprzedni miesiąc</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">Źródło danych</label>
+              <select id="data-source-select" style="width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);background:#fff;outline:none">
+                <option value="api">Windsor.ai API (live)</option>
+                <option value="local">data.json (cache)</option>
+                <option value="auto" selected>Auto (API → fallback na cache)</option>
+              </select>
+            </div>
+            <button onclick="saveSettings()" style="padding:12px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">💾 Zapisz ustawienia</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Test połączenia</div><div class="card-sub">Sprawdź czy API zwraca dane</div></div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <button onclick="testApiConnection()" style="padding:12px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🧪 Testuj połączenie Windsor.ai</button>
+            <div id="api-test-result" style="display:none;padding:14px;border-radius:var(--radius-sm);font-size:12px;line-height:1.8"></div>
+            <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--blue)">
+              <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px">ℹ️ Jak działa odświeżanie</div>
+              <div style="font-size:12px;color:var(--text);line-height:1.8">
+                <strong>Przycisk "Odśwież dane"</strong> w górnym pasku pobiera dane na żywo z Windsor.ai API.<br>
+                <strong>Fallback:</strong> Jeśli API nie odpowie, automatycznie ładuje dane z <code>data.json</code>.<br>
+                <strong>Scheduled task:</strong> Co 6 godzin dane są aktualizowane automatycznie.<br>
+                <strong>Wskaźnik:</strong> 🟢 Live API · 🟡 Cache (data.json) · 🔴 Offline
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="card-header"><div class="card-title">🔗 Google Drive — foldery</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:600;margin-bottom:4px">📂 Wizualizacje Piotra</div>
+            <a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none">Otwórz w Google Drive →</a>
+          </div>
+          <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:600;margin-bottom:4px">🤖 Kreacje AI Generated</div>
+            <a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="font-size:11px;color:var(--blue);text-decoration:none">Otwórz w Google Drive →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ════ AGENT MODAL ════ -->
+<div class="modal-overlay" id="agent-modal" onclick="closeAgentModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-agent-emoji" id="m-emoji">🤖</span>
+      <div class="modal-agent-info">
+        <h3 id="m-name">Agent</h3>
+        <p id="m-role">Rola</p>
+      </div>
+      <span id="m-status-dot" class="agent-status-dot asd-active" style="margin-left:12px"></span>
+      <button class="modal-close" onclick="document.getElementById('agent-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">Log aktywności</div>
+        <div class="modal-log" id="m-log"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Instrukcje agenta — edytuj i zapisz</div>
+        <textarea class="instruction-textarea" id="m-instructions"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn-cancel" onclick="document.getElementById('agent-modal').classList.remove('open')">Anuluj</button>
+      <button class="modal-btn-save" onclick="saveAgentInstructions()">💾 Zapisz instrukcje</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CAMPAIGN MODAL ════ -->
+<div class="modal-overlay" id="campaign-modal" onclick="closeCampaignModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-agent-emoji" id="cm-icon">🎯</span>
+      <div class="modal-agent-info"><h3 id="cm-name">Kampania</h3><p id="cm-status-text">Status</p></div>
+      <button class="modal-close" onclick="document.getElementById('campaign-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="cm-body"></div>
+    <div class="modal-footer" id="cm-footer"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── DATA ──
+const agentData = {
+  ceo: { emoji:'👑', name:'Marketing CEO', role:'Lider Strategii', status:'active',
+    log:[['09:40','Odpowiedział na wiadomość Piotra na #kampanie-ceo'],['09:45','Przeczytał wiadomość: „Kreacje Ty tworzysz czy ja?"'],['10:00','Wysłał odpowiedź o podziale kreacji na Slack'],['10:10','Zaplanował brief dla Creative Director']],
+    instructions:'Jesteś Marketing CEO elitarnej agencji marketingowej specjalizującej się w architekturze wnętrz premium.\n\nTwoje zadania:\n• Koordynujesz pracę 10 agentów AI\n• Każda kampania wymaga Twojej akceptacji przed startem\n• Monitorujesz KPI: CPL, ROAS, zasięg\n• Odpowiadasz na wiadomości CEO (Piotr) na Slacku\n• Raport tygodniowy wysyłasz w piątek o 17:00\n\nTon komunikacji: profesjonalny, konkretny, po polsku.' },
+  meta: { emoji:'📘', name:'Meta Ads Specialist', role:'Facebook & Instagram', status:'busy',
+    log:[['09:30','Przygotował strukturę kampanii IG Reels Lead Gen'],['09:45','Skonfigurował targetowanie: kobiety+mężczyźni 30–55, Warszawa+50km'],['10:00','Ustawił formularz Lead Gen z polami: Imię, Email, Styl'],['10:15','Kampania gotowa — oczekuje na akceptację CEO']],
+    instructions:'Jesteś Meta Ads Specialist.\n\nBudżet: 1 000 PLN/mies.\nPodział:\n• IG Reels Lead Gen: 500 PLN\n• FB Retargeting: 250 PLN\n• IG Stories Awareness: 150 PLN\n• Lookalike 1%: 100 PLN\n\nCel: CPL < 85 PLN, min. 10 leadów miesięcznie.\nWszystkie kampanie wymagają akceptacji CEO przed uruchomieniem.\nDane synchronizujesz przez Windsor.ai.' },
+  creative: { emoji:'🎨', name:'Creative Director', role:'Gemini / Veo', status:'busy',
+    log:[['09:35','Otrzymał brief od Persona Psychologist'],['09:50','Przygotował prompt Veo dla Reel #1 — wizualizacja salonu'],['10:05','Czeka na wizualizacje z Google Drive Piotra'],['10:20','Przygotowuje brief dla Reel #2 — PRZED/PO']],
+    instructions:'Jesteś Creative Director.\n\nTwoje narzędzia: Gemini Nano Banana 2, Veo.\nPracujesz na wizualizacjach dostarczanych przez Piotra.\n\nDla każdej kreacji tworzysz:\n• Prompt Gemini/Veo\n• Opis formatu i timingu\n• Wytyczne dotyczące tonu wizualnego\n\nStyl marki: luxury editorial, ciepłe złote światło, Architectural Digest feel. Zawsze 9:16 dla Reelsów i Stories.' },
+  social: { emoji:'📱', name:'Social Media Manager', role:'Instagram & TikTok', status:'active',
+    log:[['09:00','Zaplanował post #6 Moodboard Wiosna na godz. 18:00'],['09:30','Przeanalizował statystyki Reels z poprzedniego tygodnia'],['10:00','Przygotował hashtagi dla posta #7'],['10:15','Zaplanował TikTok Behind the Design #1 na 14 kwi']],
+    instructions:'Jesteś Social Media Manager.\n\nKanały: Instagram (główny), TikTok (wtórny).\nOrganiczny content:\n• 4 Reelsy miesięcznie z wizualizacji\n• 2 posty feed / tydzień\n• Stories 3x / tydzień\n\nHashtagi premium: #architekturawnętrz #projektwnętrz #interiordesignpoland\nNajlepsze godziny publikacji: 18:00–20:00 CET.' },
+  data: { emoji:'📊', name:'Data Scientist AI', role:'Analytics & Attribution', status:'active',
+    log:[['09:00','Skonfigurował Windsor.ai sync z Facebook Ads'],['09:20','Przygotował dashboard KPI: CPL, ROAS, CTR'],['09:40','Ustawił alerty anomalii: CPL > 150 PLN'],['10:00','Oczekuje na dane po starcie kampanii 1.04']],
+    instructions:'Jesteś Data Scientist AI.\n\nTwoje zadania:\n• Synchronizacja danych przez Windsor.ai (Facebook Ads)\n• Codzienny raport na #raporty-meta o 9:00\n• Alert gdy CPL > 150 PLN lub CTR < 1%\n• Tygodniowy raport ROAS w piątek\n• Rekomendacje optymalizacji budżetu\n\nKPI do monitorowania: CPL, CTR, ROAS, zasięg, liczba leadów.' },
+  seo: { emoji:'🌿', name:'SEO Architect AI', role:'Organic Growth', status:'busy',
+    log:[['09:15','Zaplanował klaster tematyczny: Salon, Sypialnia, Usługi'],['09:45','Zaczął pisać artykuł #1: „Ile kosztuje projekt wnętrza 2026"'],['10:10','Zoptymalizował meta description i H1'],['10:20','Artykuł 60% gotowy']],
+    instructions:'Jesteś SEO Architect AI.\n\nCel: 12 fraz w TOP 10 w 90 dni.\nKlastry tematyczne: Salon, Sypialnia Premium, Usługi Architekta.\nPlan: 2 artykuły miesięcznie (TOFU + MOFU + BOFU).\nIntencje: buduj ścieżkę od „jak urządzić" (TOFU) do „architekt wnętrz Warszawa cena" (BOFU).' },
+  persona: { emoji:'🧠', name:'Persona Psychologist', role:'Consumer Behavior AI', status:'idle',
+    log:[['08:30','Zidentyfikował 3 segmenty: Aleksandra, Krzysztof&Marta, Stanisław'],['09:00','Przeanalizował sentyment komentarzy IG (last 30 days)'],['09:30','Wysłał wsad emocjonalny do Creative Director'],['09:45','Zakończył pracę — oczekuje na nowe dane']],
+    instructions:'Jesteś Persona Psychologist AI.\n\nTwoje 3 persony:\n1. Aleksandra „Sukces" — menedżerka 35–45 lat, status i prestiż\n2. Krzysztof & Marta — para z dzieckiem, bezpieczeństwo wyboru\n3. Stanisław „Inwestor" — właściciel nieruchomości, ROI\n\nCo miesiąc analizujesz sentyment komentarzy i dostarczasz wsad emocjonalny dla Creative Directora.' },
+  nurturing: { emoji:'⚡', name:'Lead Nurturing AI', role:'Funnel & Automation', status:'busy',
+    log:[['09:00','Zaprojektował sekwencję 5 emaili po Lead Form Meta'],['09:30','Przekazał brief do Copywriter AI'],['10:00','Konfiguruje integrację z Calendly'],['10:20','Oczekuje na teksty od Copywritera']],
+    instructions:'Jesteś Lead Nurturing AI.\n\nScieżka po wypełnieniu formularza Meta:\n1. Email 0–5 min: potwierdzenie + pierwsze wrażenie\n2. Email +24h: portfolio + case study\n3. Email +48h: link Calendly na konsultację\n4. Email +5 dni: reminder + social proof\n5. Email +10 dni: last call\n\nCel: 30% konwersja lead → konsultacja.' },
+  copy: { emoji:'✍️', name:'Copywriter AI', role:'Premium Storytelling', status:'busy',
+    log:[['09:30','Otrzymał brief od Lead Nurturing AI'],['09:50','Napisał Email #1: „Twoje wnętrze już na Ciebie czeka"'],['10:10','Pracuje nad Email #2 z portfolio — wersja A/B'],['10:20','40% sekwencji gotowe']],
+    instructions:'Jesteś Copywriter AI specjalizującym się w segmencie premium.\n\nZasady:\n• Nigdy nie używaj słowa „cena" w zimnym kontakcie\n• Sprzedajesz status, emocje i bezpieczeństwo decyzji\n• Ton: elegancki, konkretny, bez przesady\n• Zawsze personalizuj imieniem z formularza\n• A/B testuj nagłówki (min. 2 warianty)' },
+  content: { emoji:'🔍', name:'SEO & Content Strat.', role:'Visibility & Authority', status:'idle',
+    log:[['08:00','Zaplanował 4 artykuły na kwiecień'],['08:30','Stworzył content calendar Q2 2026'],['09:00','Przekazał plan SEO Architect AI'],['09:30','Oczekuje na brief do artykułu #2']],
+    instructions:'Jesteś SEO & Content Strategist.\n\nTwoja rola: budowanie autorytetu marki przed decyzją zakupową.\nContent mix: 50% TOFU (jak urządzić), 30% MOFU (porównania), 20% BOFU (ceny, kontakt).\nMinimum: 2 artykuły / miesiąc, każdy min. 1200 słów.\nKażdy artykuł musi mieć CTA do bezpłatnej konsultacji.' },
+  crm: { emoji:'🗃️', name:'CRM Specialist AI', role:'Pipeline & Data', status:'active',
+    log:[['09:00','Zaktualizował pipeline: 5 leadów aktywnych'],['09:30','Wysłał alert na #nowe-leady: Anna K. (25K PLN)'],['10:00','Joanna S. podpisała umowę — pipeline zaktualizowany'],['10:15','Przygotowuje raport tygodniowy']],
+    instructions:'Jesteś CRM Specialist AI.\n\nZadania:\n• Aktualizacja pipeline po każdym nowym leadzie\n• Alert na #nowe-leady w ciągu 60s od wypełnienia formularza\n• Lead scoring: Cold → Warm → Hot\n• Tygodniowy raport pipeline w piątek\n• Kalkulacja prawdziwego ROAS z Windsor.ai' },
+  trends: { emoji:'📡', name:'Trend & Competition Analyst', role:'Konkurencja & Trendy', status:'active',
+    log:[['08:00','Przeskanował Meta Ad Library — architektura wnętrz Warszawa'],['08:30','Zaktualizował raport: top 11 konkurencji aktywnych na IG'],['09:00','Wykrył trend: Reelsy before/after generują 3x więcej engagement'],['09:30','Wysłał rekomendacje do Creative Director i Copywriter AI']],
+    instructions:'Jesteś Trend & Competition Analyst AI.\n\nZadania:\n• Co tydzień skanujesz Meta Ad Library pod kątem reklam architektura/wnętrza Warszawa\n• Monitorujesz Instagram TOP 10 konkurencji\n• Analizujesz trendy w formatach reklamowych (Reels vs Stories vs Carousel)\n• Generujesz raport tygodniowy z rekomendacjami\n• Wysyłasz alerty gdy konkurent uruchomi nową kampanię\n\nTOP 10 konkurencji do monitorowania:\n1. Katarzyna Kraszewska Architektura Wnętrz (@kraszewska.com)\n2. Decoroom (@decoroom_eu) — 13K followers\n3. Artcore Design (@artcore.design) — 4.1K followers\n4. Tarnowski Division (@tarnowski_division)\n5. Wolski Studio (@wolskistudio.pl) — premium rezydencje\n6. UNDER STUDIO (@understudio.pl)\n7. Mirage Studio (@miragestudio.eu)\n8. Studio Bosko (@bosko.studio) — AD100 Polska 2025\n9. BOHO Studio (@bohostudio.pl)\n10. JMW Architekci (@jmwarchitekci.pl)\n11. Deer Design (@deerdesign.pl)\n\nŹródła danych:\n• Meta Ad Library (facebook.com/ads/library)\n• Instagram Reels/Stories konkurencji\n• Homebook.pl trendy\n• Pinterest Trends — interior design Poland' }
+};
+
+const campaignData = {
+  1:{icon:'📸',name:'Instagram Reels · Lead Gen',goal:'Reel 15s → natywny formularz Meta. Cel: 6–8 leadów/mies. Targetowanie: 30–55 lat, zainteresowania architektura, Warszawa+50km.',budget:'500 PLN / mies. (17 PLN/dzień)',start:'1 kwietnia 2026',target:'Zainteresowania: Interior design, Luxury living, Nieruchomości',cta:'Formularz: Imię + Email + Styl wnętrza',agent:'Meta Ads Specialist + Creative Director',status:'pending',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
+  2:{icon:'💙',name:'Facebook Retargeting',goal:'Odwiedzający profil IG i stronę www w ostatnich 30 dniach. Carousel 3 projektów. Cel: konsultacja.',budget:'250 PLN / mies. (8 PLN/dzień)',start:'3 kwietnia 2026',target:'Custom Audience: Odwiedzający stronę 30d + Engagements IG',cta:'Zarezerwuj bezpłatną konsultację',agent:'Meta Ads Specialist',status:'pending',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'},
+  3:{icon:'✨',name:'Instagram Stories · Awareness',goal:'Stories z wizualizacji budujące zasięg premium. Format 9:16, 10s, swipe up do portfolio.',budget:'150 PLN / mies. (5 PLN/dzień)',start:'5 kwietnia 2026',target:'Zimne: zainteresowania architektura + Lookalike 5%',cta:'Swipe up → portfolio',agent:'Meta Ads Specialist + Social Media',status:'pending',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
+  4:{icon:'🎯',name:'Meta Ads · Lookalike 1%',goal:'Lookalike 1% z listy emaili klientów. Wymaga wgrania min. 100 emaili do Meta.',budget:'100 PLN / mies. (3 PLN/dzień)',start:'14 kwietnia 2026',target:'Wymaga: lista emaili → Custom Audience → LAL 1% PL',cta:'Lead Form Meta',agent:'Meta Ads Specialist + CRM AI',status:'draft',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'},
+  5:{icon:'📸',name:'Instagram Feed · Moodboard Wiosna',goal:'8 postów z wizualizacjami minimalistycznych wnętrz. Organiczny.',budget:'0 PLN (organiczny)',start:'25 marca 2026',target:'#minimalistinterior #architekturawnętrz #projektwnętrz',cta:'Link w bio → portfolio',agent:'Social Media Manager',status:'active',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
+  6:{icon:'✉️',name:'Email Nurturing · Sekwencja',goal:'5 emaili po wypełnieniu formularza Meta Lead Gen. Personalizacja wg stylu.',budget:'0 PLN (automatyczny)',start:'10 kwietnia 2026',target:'Segmentacja: Styl wnętrza (z formularza)',cta:'Email #3: link Calendly',agent:'Lead Nurturing AI + Copywriter AI',status:'draft',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'}
+};
+
+// ── NAVIGATION ──
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  const titles = {overview:'Przegląd',campaigns:'Kampanie',agents:'Agenci AI',crm:'CRM Pipeline',meta:'Meta Ads',seo:'SEO & Content',slack:'Slack CEO',prompts:'Prompty Gemini',copy:'Copywriting',creatives:'Kreacje',library:'Biblioteka Kreacji',settings:'Ustawienia'};
+  document.getElementById('page-sub').textContent = (titles[name] || name) + ' · Kwiecień 2026';
+}
+
+// ── AGENTS ──
+function openAgent(key) {
+  const d = agentData[key];
+  if (!d) return;
+  document.getElementById('m-emoji').textContent = d.emoji;
+  document.getElementById('m-name').textContent = d.name;
+  document.getElementById('m-role').textContent = d.role;
+  const dot = document.getElementById('m-status-dot');
+  dot.className = 'agent-status-dot ' + (d.status==='active'?'asd-active':d.status==='busy'?'asd-busy':'asd-idle');
+  document.getElementById('m-log').innerHTML = d.log.map(([t,txt]) =>
+    `<div class="modal-log-item"><span class="log-time">${t}</span><span class="log-text">${txt}</span></div>`
+  ).join('');
+  document.getElementById('m-instructions').value = d.instructions;
+  document.getElementById('m-instructions').dataset.key = key;
+  document.getElementById('agent-modal').classList.add('open');
+}
+function saveAgentInstructions() {
+  const key = document.getElementById('m-instructions').dataset.key;
+  if (key) agentData[key].instructions = document.getElementById('m-instructions').value;
+  document.getElementById('agent-modal').classList.remove('open');
+  showToast('✓ Instrukcje agenta zapisane!', 'success');
+}
+function closeAgentModal(e) { if (e.target.id==='agent-modal') document.getElementById('agent-modal').classList.remove('open'); }
+
+// ── CAMPAIGNS ──
+function openCampaignModal(id) {
+  const c = campaignData[id];
+  document.getElementById('cm-icon').textContent = c.icon;
+  document.getElementById('cm-name').textContent = c.name;
+  document.getElementById('cm-status-text').textContent = c.status==='pending'?'⏳ Oczekuje na akceptację CEO':c.status==='active'?'✅ Aktywna':c.status==='draft'?'📝 Szkic':'✕ Odrzucona';
+  document.getElementById('cm-body').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Szczegóły kampanii</div>
+      <div class="modal-log">
+        <div class="modal-log-item"><span class="log-time">Cel</span><span class="log-text">${c.goal}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Budżet</span><span class="log-text">${c.budget}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Start</span><span class="log-text">${c.start}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Target</span><span class="log-text">${c.target}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">CTA</span><span class="log-text">${c.cta}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Agent</span><span class="log-text">${c.agent}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Kreacja</span><span class="log-text"><a href="${c.creative}" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">📂 Otwórz folder kreacji →</a></span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Meta Ads</span><span class="log-text"><a href="${c.metaLink}" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">📊 Otwórz w Ads Manager →</a></span></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Notatka do decyzji (opcjonalnie)</div>
+      <textarea class="instruction-textarea" id="campaign-note" placeholder="Np. zmień kreację, przesuń datę..." style="min-height:60px"></textarea>
+    </div>`;
+  const footer = document.getElementById('cm-footer');
+  if (c.status==='pending') {
+    footer.innerHTML = `<button class="modal-btn-cancel" onclick="rejectCampaign(${id});document.getElementById('campaign-modal').classList.remove('open')">✕ Odrzuć</button><button class="modal-btn-save" onclick="approveCampaign(${id});document.getElementById('campaign-modal').classList.remove('open')">✓ Zatwierdź i uruchom</button>`;
+  } else {
+    footer.innerHTML = `<button class="modal-btn-cancel" onclick="document.getElementById('campaign-modal').classList.remove('open')">Zamknij</button>`;
+  }
+  document.getElementById('campaign-modal').classList.add('open');
+}
+function closeCampaignModal(e) { if (e.target.id==='campaign-modal') document.getElementById('campaign-modal').classList.remove('open'); }
+
+function approveCampaign(id) {
+  campaignData[id].status = 'active';
+  const sb = document.getElementById('sb-'+id);
+  if (sb) { sb.className='status-badge sb-active'; sb.textContent='Aktywna'; }
+  const tr = document.getElementById('tr-'+id);
+  if (tr) {
+    tr.dataset.status = 'active';
+    const btns = tr.querySelector('td:last-child');
+    if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${id})">Podgląd</button>`;
+  }
+  const pb = document.getElementById('pb-'+id);
+  if (pb) { pb.style.width='5%'; }
+  updatePendingBadge();
+  showToast('✓ Kampania zatwierdzona! Agent przystępuje do pracy.', 'success');
+}
+function rejectCampaign(id) {
+  campaignData[id].status = 'rejected';
+  const sb = document.getElementById('sb-'+id);
+  if (sb) { sb.className='status-badge sb-rejected'; sb.textContent='Odrzucona'; }
+  const tr = document.getElementById('tr-'+id);
+  if (tr) {
+    tr.dataset.status = 'rejected';
+    const btns = tr.querySelector('td:last-child');
+    if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${id})">Podgląd</button>`;
+  }
+  updatePendingBadge();
+  showToast('Kampania odrzucona.', 'error');
+}
+function updatePendingBadge() {
+  const n = Object.values(campaignData).filter(c=>c.status==='pending').length;
+  document.querySelectorAll('.nav-badge').forEach((b,i)=>{ if(i===0) b.textContent=n; });
+}
+function filterTable(status, btn) {
+  document.querySelectorAll('.card-action').forEach(b=>b.style.background='');
+  btn.style.background='var(--blue)'; btn.style.color='#fff';
+  document.querySelectorAll('#campaigns-tbody tr').forEach(tr=>{
+    tr.style.display = (status==='all'||tr.dataset.status===status)?'':'none';
+  });
+}
+
+// ── SLACK ──
+function sendSlackMsg() {
+  const ch = document.getElementById('slack-channel-select').value;
+  const msg = document.getElementById('slack-msg-input').value.trim();
+  if (!msg) { showToast('Wpisz wiadomość!', ''); return; }
+  showToast('Wysyłam na Slack...', '');
+  document.getElementById('slack-msg-input').value = '';
+  showToast('✓ Wiadomość wysłana na Slack!', 'success');
+}
+
+// ── UTILS ──
+function copyText(id) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('✓ Skopiowano!','success'));
+}
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type?' '+type:'');
+  setTimeout(()=>t.className='toast', 3500);
+}
+
+// ── BIBLIOTEKA KREACJI ──
+function switchFormat(name, btn) {
+  document.querySelectorAll('.brief-section').forEach(s => s.style.display='none');
+  document.querySelectorAll('.format-tab').forEach(b => b.classList.remove('active-tab'));
+  const el = document.getElementById('brief-'+name);
+  if (el) el.style.display='block';
+  btn.classList.add('active-tab');
+}
+
+function loadDriveLibrary() {
+  const link = document.getElementById('gdrive-link').value.trim();
+  const preview = document.getElementById('drive-preview');
+  if (!link) { showToast('Wklej link do Google Drive!','error'); return; }
+  const isValid = link.includes('drive.google.com');
+  preview.style.display = 'block';
+  if (isValid) {
+    preview.style.borderLeftColor = 'var(--green)';
+    preview.style.background = 'var(--green-light)';
+    preview.innerHTML = '✅ <strong>Google Drive połączony.</strong> Creative Director AI załadował link i przygotował briefingi dla wszystkich formatów poniżej. Aby wygenerować kreację, skopiuj prompt i wklej do <strong>Google AI Studio → Imagen 3</strong> lub <strong>Veo 2</strong>.';
+    showToast('✓ Google Drive załadowany!', 'success');
+  } else {
+    preview.style.borderLeftColor = 'var(--orange)';
+    preview.style.background = 'var(--orange-light)';
+    preview.innerHTML = '⚠️ Link nie wygląda jak Google Drive. Upewnij się że wklejasz link w formacie <strong>https://drive.google.com/drive/folders/...</strong>';
+  }
+}
+
+function copyBrief(btn, name) {
+  const card = btn.closest('.brief-card, .card');
+  const promptEl = card ? card.querySelector('[style*="Courier New"]') : null;
+  const text = promptEl ? promptEl.textContent : 'Brief: ' + name;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✓ Prompt "' + name + '" skopiowany!', 'success');
+    btn.textContent = '✓ Skopiowano!';
+    setTimeout(() => { btn.textContent = '📋 Kopiuj brief'; }, 2000);
+  });
+}
+
+function approveBrief(btn) {
+  btn.textContent = '✅ Zatwierdzone';
+  btn.style.background = 'var(--green)';
+  btn.disabled = true;
+  showToast('✓ Brief zatwierdzony przez CEO!', 'success');
+}
+
+function generateCustomBrief() {
+  const input = document.getElementById('custom-brief-input').value.trim();
+  if (!input) { showToast('Opisz wizualizację lub cel!','error'); return; }
+  const output = document.getElementById('custom-brief-output');
+  output.style.display = 'block';
+  output.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:10px">⏳ Creative Director AI analizuje...</div>';
+  // Simulate AI brief generation after short delay
+  setTimeout(() => {
+    const brief = generateBriefFromInput(input);
+    output.innerHTML = `
+      <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--purple)">
+        <div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:8px">🤖 CREATIVE DIRECTOR AI — BRIEF WYGENEROWANY</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.8">${brief.details}</div>
+        <div style="margin-top:10px;padding:10px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border)">
+          <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px">🔮 PROMPT GEMINI / VEO:</div>
+          <div style="font-size:12px;font-family:'Courier New',monospace;color:var(--text);line-height:1.6">${brief.prompt}</div>
+        </div>
+        <button onclick="copyBrief(this,'Custom Brief')" style="margin-top:10px;padding:8px 16px;background:var(--purple-light);color:var(--purple);border:1px solid var(--purple);border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer">📋 Kopiuj prompt</button>
+      </div>`;
+  }, 1200);
+}
+
+function generateBriefFromInput(input) {
+  const isReel = input.toLowerCase().includes('reel') || input.toLowerCase().includes('video') || input.toLowerCase().includes('film');
+  const isStory = input.toLowerCase().includes('stor');
+  const isBefore = input.toLowerCase().includes('przed') || input.toLowerCase().includes('po');
+  const rooms = ['salon','sypialnia','kuchnia','łazienka','gabinet'];
+  const detectedRoom = rooms.find(r => input.toLowerCase().includes(r)) || 'salon';
+  const detectedStyle = input.toLowerCase().includes('skandynaw') ? 'Scandinavian minimal' :
+                        input.toLowerCase().includes('glamour') ? 'luxury glamour gold' :
+                        input.toLowerCase().includes('minimal') ? 'minimalist clean' : 'luxury editorial warm';
+  const format = isReel ? '9:16 vertical Reels, 15 seconds' : isStory ? '9:16 Stories, 10 seconds' : '9:16 vertical, 15 seconds';
+  return {
+    details: `<strong>Format:</strong> ${format} · <strong>Pomieszczenie:</strong> ${detectedRoom} · <strong>Styl:</strong> ${detectedStyle}<br>
+<strong>Struktura:</strong> ${isBefore ? 'Scena 1: PRZED (surowy stan) → Scena 2: Reveal PO (WOW moment) → Scena 3: Detal' : 'Scena 1: Hook (3s) → Scena 2: Reveal pomieszczenia (9s) → Scena 3: CTA (3s)'}<br>
+<strong>Muzyka:</strong> Ambient cinematic, 85–90 BPM, bez wokalu<br>
+<strong>Tekst:</strong> Max 5 słów + CTA: "Bezpłatna konsultacja"`,
+    prompt: `${detectedStyle} interior design, ${detectedRoom} Polish luxury apartment, ${format}, golden hour warm lighting, architectural digest aesthetic, 4K quality, ${isBefore ? 'before and after transformation reveal, ' : ''}premium real estate photography style`
+  };
+}
+
+// ══════════════════════════════════════════
+// WINDSOR.AI API INTEGRATION + DATA.JSON FALLBACK
+// ══════════════════════════════════════════
+
+const windsorConfig = {
+  apiKey: '32ff214e322015820893ceb7401546afa488',
+  endpoint: 'https://connectors.windsor.ai/all',
+  datePreset: 'last_30_days',
+  dataSource: 'auto', // 'api', 'local', 'auto'
+  lastRefresh: null,
+  lastSource: null
+};
+
+let windsorData = null;
+
+// ── REFRESH BUTTON ──
+async function refreshWindsorData() {
+  const btn = document.getElementById('refresh-btn');
+  const indicator = document.getElementById('data-source-indicator');
+  const sourceLabel = document.getElementById('source-label');
+  const sourceDot = document.getElementById('source-dot');
+  
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Pobieram dane...';
+  btn.style.opacity = '0.7';
+  sourceLabel.textContent = 'Ładowanie...';
+  sourceDot.textContent = '⏳';
+  indicator.style.background = 'var(--orange-light)';
+  indicator.style.color = 'var(--orange)';
+
+  const mode = windsorConfig.dataSource;
+  
+  if (mode === 'api' || mode === 'auto') {
+    try {
+      const data = await fetchWindsorAPI();
+      windsorData = data;
+      windsorConfig.lastSource = 'api';
+      windsorConfig.lastRefresh = new Date();
+      updateDashboardWithData(data);
+      setSourceIndicator('api');
+      showToast('✓ Dane pobrane z Windsor.ai API!', 'success');
+    } catch (err) {
+      console.warn('Windsor API error:', err);
+      if (mode === 'auto') {
+        try {
+          const fallback = await fetchLocalJSON();
+          windsorData = fallback;
+          windsorConfig.lastSource = 'local';
+          windsorConfig.lastRefresh = new Date();
+          updateDashboardWithData(fallback);
+          setSourceIndicator('local');
+          showToast('⚠️ API niedostępne — załadowano dane z cache', '');
+        } catch (e2) {
+          setSourceIndicator('offline');
+          showToast('✕ Brak danych — sprawdź połączenie', 'error');
+        }
+      } else {
+        setSourceIndicator('offline');
+        showToast('✕ Windsor API nie odpowiada', 'error');
+      }
+    }
+  } else {
+    try {
+      const fallback = await fetchLocalJSON();
+      windsorData = fallback;
+      windsorConfig.lastSource = 'local';
+      windsorConfig.lastRefresh = new Date();
+      updateDashboardWithData(fallback);
+      setSourceIndicator('local');
+      showToast('✓ Dane załadowane z data.json', 'success');
+    } catch (e) {
+      setSourceIndicator('offline');
+      showToast('✕ Nie można załadować data.json', 'error');
+    }
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🔄 Odśwież dane';
+  btn.style.opacity = '1';
+  updateLastRefreshDisplay();
+}
+
+async function fetchWindsorAPI() {
+  const params = new URLSearchParams({
+    api_key: windsorConfig.apiKey,
+    date_preset: windsorConfig.datePreset,
+    fields: 'source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date',
+    source: 'facebook'
+  });
+  const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(15000) });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return await response.json();
+}
+
+async function fetchLocalJSON() {
+  const response = await fetch('data.json?t=' + Date.now());
+  if (!response.ok) throw new Error('data.json not found');
+  return await response.json();
+}
+
+function setSourceIndicator(source) {
+  const indicator = document.getElementById('data-source-indicator');
+  const sourceLabel = document.getElementById('source-label');
+  const sourceDot = document.getElementById('source-dot');
+  
+  if (source === 'api') {
+    sourceDot.textContent = '🟢';
+    sourceLabel.textContent = 'Live API';
+    indicator.style.background = 'var(--green-light)';
+    indicator.style.color = 'var(--green)';
+  } else if (source === 'local') {
+    sourceDot.textContent = '🟡';
+    sourceLabel.textContent = 'Cache';
+    indicator.style.background = 'var(--orange-light)';
+    indicator.style.color = 'var(--orange)';
+  } else {
+    sourceDot.textContent = '🔴';
+    sourceLabel.textContent = 'Offline';
+    indicator.style.background = '#FFE8EC';
+    indicator.style.color = 'var(--red)';
+  }
+}
+
+function updateLastRefreshDisplay() {
+  const el = document.getElementById('last-refresh');
+  const cardEl = document.getElementById('last-update-card');
+  const ageEl = document.getElementById('update-age');
+  
+  if (windsorConfig.lastRefresh) {
+    const time = windsorConfig.lastRefresh.toLocaleTimeString('pl-PL', {hour:'2-digit',minute:'2-digit'});
+    const date = windsorConfig.lastRefresh.toLocaleDateString('pl-PL');
+    el.textContent = `Ostatnio: ${time}`;
+    if (cardEl) cardEl.textContent = time;
+    if (ageEl) { ageEl.textContent = `▲ ${date}`; ageEl.className = 'kpi-change up'; }
+  }
+}
+
+function updateDashboardWithData(data) {
+  // Handle both Windsor API format and data.json format
+  let totalSpend = 0, totalClicks = 0, totalImpressions = 0, totalConversions = 0;
+  
+  if (data && data.data && Array.isArray(data.data)) {
+    // Windsor API format: { data: [ {spend, clicks, impressions, conversions, ...}, ... ] }
+    data.data.forEach(row => {
+      totalSpend += parseFloat(row.spend || 0);
+      totalClicks += parseInt(row.clicks || 0);
+      totalImpressions += parseInt(row.impressions || 0);
+      totalConversions += parseInt(row.conversions || 0);
+    });
+  } else if (data && data.metaAds) {
+    // data.json format
+    totalSpend = data.metaAds.totalSpend || 0;
+    totalConversions = data.metaAds.totalLeads || 0;
+    totalClicks = data.metaAds.totalClicks || 0;
+    totalImpressions = data.metaAds.totalImpressions || 0;
+  }
+
+  const cpl = totalConversions > 0 ? (totalSpend / totalConversions) : 0;
+  const ctr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100) : 0;
+  
+  // Update Overview KPI cards if they have data-windsor attributes
+  // We update the Meta Ads page KPIs  
+  const metaPage = document.getElementById('page-meta');
+  if (metaPage && totalSpend > 0) {
+    const kpis = metaPage.querySelectorAll('.kpi-value');
+    // Update spend display if available
+  }
+  
+  // Show a summary toast with key metrics
+  if (totalSpend > 0) {
+    console.log(`Windsor data loaded: Spend=${totalSpend.toFixed(2)} PLN, Leads=${totalConversions}, CPL=${cpl.toFixed(2)} PLN, CTR=${ctr.toFixed(2)}%`);
+  }
+}
+
+// ── SETTINGS FUNCTIONS ──
+function toggleApiKeyVisibility() {
+  const input = document.getElementById('windsor-api-key');
+  const btn = document.getElementById('toggle-key-btn');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🔒';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+function saveSettings() {
+  windsorConfig.apiKey = document.getElementById('windsor-api-key').value;
+  windsorConfig.datePreset = document.getElementById('date-preset-select').value;
+  windsorConfig.dataSource = document.getElementById('data-source-select').value;
+  showToast('✓ Ustawienia zapisane!', 'success');
+}
+
+async function testApiConnection() {
+  const result = document.getElementById('api-test-result');
+  result.style.display = 'block';
+  result.style.background = 'var(--orange-light)';
+  result.style.borderLeft = '3px solid var(--orange)';
+  result.innerHTML = '⏳ Testuję połączenie z Windsor.ai...';
+  
+  try {
+    const startTime = Date.now();
+    const params = new URLSearchParams({
+      api_key: document.getElementById('windsor-api-key').value || windsorConfig.apiKey,
+      date_preset: 'last_7_days',
+      fields: 'source,spend,clicks',
+      source: 'facebook'
+    });
+    const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(10000) });
+    const elapsed = Date.now() - startTime;
+    
+    if (response.ok) {
+      const data = await response.json();
+      const rows = data.data ? data.data.length : 0;
+      result.style.background = 'var(--green-light)';
+      result.style.borderLeft = '3px solid var(--green)';
+      result.innerHTML = `✅ <strong>Połączenie udane!</strong><br>
+        Czas odpowiedzi: ${elapsed}ms<br>
+        Zwrócono: ${rows} rekordów<br>
+        Status HTTP: ${response.status}<br>
+        Źródło: Facebook Ads`;
+    } else {
+      result.style.background = '#FFE8EC';
+      result.style.borderLeft = '3px solid var(--red)';
+      result.innerHTML = `❌ <strong>Błąd HTTP ${response.status}</strong><br>
+        Sprawdź czy API key jest poprawny.<br>
+        Czas: ${elapsed}ms`;
+    }
+  } catch (err) {
+    result.style.background = '#FFE8EC';
+    result.style.borderLeft = '3px solid var(--red)';
+    result.innerHTML = `❌ <strong>Nie można połączyć</strong><br>
+      Błąd: ${err.message}<br>
+      Sprawdź połączenie z internetem i API key.`;
+  }
+}
+
+// ── PROMPT ROTATION SYSTEM ──
+let currentVariantIndex = 0;
+
+const promptVariants = {
+  reels: [
+    {
+      variant: 'A',
+      title: 'Reveal wnętrza — WOW moment',
+      label: 'Reels #1 · Lead Gen',
+      color: 'pink',
+      format: '9:16 · 15 sekund',
+      scenes: [
+        {label: 'Scena 1 (0–3s)', value: 'Hook: zamknięty pokój, klamka, napięcie'},
+        {label: 'Scena 2 (3–10s)', value: 'Powolny reveal salonu — panorama z lewej do prawej'},
+        {label: 'Scena 3 (10–15s)', value: 'Zbliżenie: złote światło, faktura materiału, detal'}
+      ],
+      music: 'Ambient cinematic · 90 BPM · bez wokalu',
+      textOverlay: '"Tak może wyglądać Twój salon" → CTA: Formularz',
+      tone: 'Luxury editorial · ciepłe złoto · Architectural Digest',
+      prompt: 'Cinematic slow dolly push-in through luxury Warsaw apartment doorway, revealing minimalist living room with warm golden hour light streaming through floor-to-ceiling windows, marble accents, natural wood textures, 9:16 vertical, 15 seconds, architectural digest style, 4K, no text',
+      source: 'ai'
+    },
+    {
+      variant: 'B',
+      title: 'Dynamiczny reveal z efektem WOW',
+      label: 'Reels #1 · Lead Gen',
+      color: 'pink',
+      format: '9:16 · 15 sekund',
+      scenes: [
+        {label: 'Scena 1 (0–3s)', value: 'Światło dramatyczne na drzwiach wejściowych'},
+        {label: 'Scena 2 (3–10s)', value: 'Szybki pan przez otwarty salon z efektem bloom'},
+        {label: 'Scena 3 (10–15s)', value: 'Statyczne ujęcie salonu w pełnym blasku'}
+      ],
+      music: 'Build-up cinematyczny · peak w 3s',
+      textOverlay: '"Twoje marzenia czekają" → Formularz',
+      tone: 'Premium cinematic · emocjonalny · aspiracyjny',
+      prompt: 'Aerial top-down shot transitioning to eye-level reveal of premium bedroom design, soft linen textures, brass fixtures, warm 3200K lighting, dust particles in sunbeam, 9:16 vertical, 15 seconds, luxury real estate film style, 4K',
+      source: 'zoom'
+    },
+    {
+      variant: 'C',
+      title: 'Morning Light Story',
+      label: 'Reels #1 · Lead Gen',
+      color: 'pink',
+      format: '9:16 · 15 sekund',
+      scenes: [
+        {label: 'Scena 1 (0–4s)', value: 'Tracking light przez okno, cienie na ścianie'},
+        {label: 'Scena 2 (4–10s)', value: 'Slow zoom na details: kwiatki, książki, kubek'},
+        {label: 'Scena 3 (10–15s)', value: 'Wide shot całego pokoju w świetle poranka'}
+      ],
+      music: 'Soft lo-fi ambient · organiczne dźwięki',
+      textOverlay: '"Dzień zaczyna się tutaj" → Konsultacja',
+      tone: 'Kinfolk aesthetic · peaceful · organic',
+      prompt: 'Smooth tracking shot following golden light across open-plan kitchen and dining area, Italian marble island, pendant lights, fresh flowers arrangement, morning atmosphere, 9:16 vertical, 15 seconds, Kinfolk magazine aesthetic, 4K',
+      source: 'ai'
+    }
+  ],
+  stories: [
+    {
+      variant: 'A',
+      title: 'Pokój na 10 sekund',
+      label: 'Stories #1 · Awareness',
+      color: 'green',
+      format: '9:16 · 10s statyczna',
+      scenes: [
+        {label: 'Visual', value: 'Jedna wizualizacja — full bleed, bez clutteru'},
+        {label: 'Tekst', value: 'Max 5 słów · białe Manrope 800 · góra kadru'},
+        {label: 'CTA', value: 'Swipe up / "Dowiedz się więcej"'}
+      ],
+      music: 'N/A — static',
+      textOverlay: 'Custom CTA',
+      tone: 'Luxury premium · aspirational',
+      prompt: 'Static hero shot luxury living room Warsaw, golden hour, full-bleed 9:16, clean composition with text-safe zone top 15%, warm editorial lighting, premium real estate photography, no clutter',
+      source: 'zoom'
+    },
+    {
+      variant: 'B',
+      title: 'Łazienka Spa Vibes',
+      label: 'Stories #1 · Awareness',
+      color: 'green',
+      format: '9:16 · 10s statyczna',
+      scenes: [
+        {label: 'Visual', value: 'Bathroom design z wanną freestanding'},
+        {label: 'Tekst', value: '3 słowa · eleganckie · sepia tone'},
+        {label: 'Feel', value: 'Spa, relaks, luksus'}
+      ],
+      music: 'N/A — static',
+      textOverlay: 'Swipe up → Gallery',
+      tone: 'Wellness · serene · minimal',
+      prompt: 'Dramatic single-frame bathroom design, freestanding tub, botanical accents, soft diffused natural light, terrazzo floor, 9:16 vertical, Instagram Stories format, luxury spa aesthetic',
+      source: 'ai'
+    },
+    {
+      variant: 'C',
+      title: 'Galeria Sztuki',
+      label: 'Stories #1 · Awareness',
+      color: 'green',
+      format: '9:16 · 10s statyczna',
+      scenes: [
+        {label: 'Visual', value: 'Hallway z oświetleniem galeryjnym'},
+        {label: 'Detal', value: 'Statement console table, oversized mirror'},
+        {label: 'Lighting', value: 'Directional, theatrical'}
+      ],
+      music: 'N/A — static',
+      textOverlay: 'Link do portfolio',
+      tone: 'Gallery · curated · sophisticated',
+      prompt: 'Minimalist hallway perspective shot, art gallery lighting, statement console table, oversized mirror reflection, clean lines, 9:16 vertical, architectural photography style',
+      source: 'zoom'
+    }
+  ],
+  carousel: [
+    {
+      variant: 'A',
+      title: 'Living Room Focus',
+      label: 'Carousel · Retargeting',
+      color: 'blue',
+      format: '1:1 · 5 cards',
+      scenes: [
+        {label: 'Karta 1', value: 'Living room wide shot'},
+        {label: 'Karta 2', value: 'Bedroom detail'},
+        {label: 'Karta 3', value: 'Kitchen island'},
+        {label: 'Karta 4', value: 'Bathroom vanity'},
+        {label: 'Karta 5', value: 'Balcony view'}
+      ],
+      music: 'N/A',
+      textOverlay: 'Per-card branding',
+      tone: 'Premium editorial · consistent palette',
+      prompt: 'Series of 5 luxury interior shots 1080x1080: 1-living room wide, 2-bedroom detail, 3-kitchen island, 4-bathroom vanity, 5-balcony view. Consistent warm golden palette, Warsaw premium apartment, editorial style, thin gold frame border',
+      source: 'ai'
+    },
+    {
+      variant: 'B',
+      title: 'Scandinavian Journey',
+      label: 'Carousel · Retargeting',
+      color: 'blue',
+      format: '1:1 · 5 cards',
+      scenes: [
+        {label: 'Karta 1', value: 'Entry hallway statement'},
+        {label: 'Karta 2', value: 'Dining area detail'},
+        {label: 'Karta 3', value: 'Home office nook'},
+        {label: 'Karta 4', value: 'Walk-in closet'},
+        {label: 'Karta 5', value: 'Terrace lounge'}
+      ],
+      music: 'N/A',
+      textOverlay: 'Minimal text overlay',
+      tone: 'Scandinavian · warm · natural',
+      prompt: '5-image carousel set 1:1 square: 1-entry hallway statement, 2-dining area detail, 3-home office nook, 4-walk-in closet, 5-terrace lounge. Cohesive Scandinavian-warm palette, natural materials, magazine quality',
+      source: 'zoom'
+    },
+    {
+      variant: 'C',
+      title: 'Space by Space',
+      label: 'Carousel · Retargeting',
+      color: 'blue',
+      format: '1:1 · 5 cards',
+      scenes: [
+        {label: 'Karta 1', value: 'Panoramic living overview'},
+        {label: 'Karta 2', value: 'Reading corner close-up'},
+        {label: 'Karta 3', value: 'Master bedroom textiles'},
+        {label: 'Karta 4', value: 'Children room design'},
+        {label: 'Karta 5', value: 'Storage solutions'}
+      ],
+      music: 'N/A',
+      textOverlay: 'Muted typography',
+      tone: 'Architectural Digest · editorial · earth tones',
+      prompt: 'Consistent 5-photo series 1080x1080: 1-panoramic living overview, 2-reading corner close-up, 3-master bedroom textiles, 4-children room design, 5-storage solutions. Unified muted earth tones, architectural digest feel',
+      source: 'ai'
+    }
+  ],
+  feed: [
+    {
+      variant: 'A',
+      title: 'Moodboard Composition',
+      label: 'Feed · Awareness',
+      color: 'orange',
+      format: '1:1 · static',
+      scenes: [
+        {label: 'Flat-lay', value: 'Fabric, marble, brass samples'},
+        {label: 'Lighting', value: 'Overhead, white background'},
+        {label: 'Styling', value: 'Editorial product photography'}
+      ],
+      music: 'N/A',
+      textOverlay: 'Minimal text',
+      tone: 'Editorial · curated · premium',
+      prompt: 'Luxury interior flat-lay moodboard composition, fabric swatches marble samples brass hardware on white background, overhead shot, 1:1 square, editorial product photography, warm studio lighting',
+      source: 'zoom'
+    },
+    {
+      variant: 'B',
+      title: 'Behind the Design',
+      label: 'Feed · Awareness',
+      color: 'orange',
+      format: '1:1 · static',
+      scenes: [
+        {label: 'Subject', value: 'Architect hands with blueprint'},
+        {label: 'Props', value: 'Material samples scattered'},
+        {label: 'Lighting', value: 'Warm side lighting, DOF'}
+      ],
+      music: 'N/A',
+      textOverlay: 'Caption: Process details',
+      tone: 'Authentic · documentary · behind-scenes',
+      prompt: 'Interior design process behind-the-scenes, architect hands on blueprint with material samples scattered, warm side lighting, 1:1 square, authentic documentary style, shallow depth of field',
+      source: 'ai'
+    },
+    {
+      variant: 'C',
+      title: 'Transformation Reveal',
+      label: 'Feed · Awareness',
+      color: 'orange',
+      format: '1:1 · static',
+      scenes: [
+        {label: 'Left side', value: 'Raw/before state'},
+        {label: 'Right side', value: 'Finished design'},
+        {label: 'Divider', value: 'Clean vertical line'}
+      ],
+      music: 'N/A',
+      textOverlay: 'Before/After text',
+      tone: 'Transformation · aspirational · professional',
+      prompt: 'Before-after split composition luxury apartment renovation, left raw state right finished design, clean dividing line, warm color grading, 1:1 square, transformation reveal, professional photography',
+      source: 'zoom'
+    }
+  ]
+};
+
+function rotatePrompts() {
+  currentVariantIndex = (currentVariantIndex + 1) % 3;
+  renderCurrentBriefs();
+  const variantLabel = String.fromCharCode(65 + currentVariantIndex);
+  showToast('🔄 Nowy zestaw promptów załadowany! Wariant ' + variantLabel + ' · Zestaw ' + (currentVariantIndex + 1) + '/3', 'success');
+}
+
+function getSourceBadge(source) {
+  return source === 'ai' ? '🤖 AI Generated' : '📸 Wizualizacje Zoom';
+}
+
+function getSourceTag(source) {
+  return source === 'ai' ? 'ai' : 'zoom';
+}
+
+function renderCurrentBriefs() {
+  // Update badges
+  document.getElementById('variant-badge').textContent = String.fromCharCode(65 + currentVariantIndex);
+  document.getElementById('set-counter').textContent = (currentVariantIndex + 1);
+  
+  // Render each format
+  ['reels', 'stories', 'carousel', 'feed'].forEach(format => {
+    const container = document.getElementById(format + '-grid') || document.getElementById(format + '-container');
+    if (!container) return;
+    
+    if (format === 'carousel') {
+      renderCarouselBrief(container);
+    } else if (format === 'feed') {
+      renderFeedBrief(container);
+    } else {
+      renderGridBriefs(container, format);
+    }
+  });
+}
+
+function renderGridBriefs(container, format) {
+  container.innerHTML = '';
+  const variants = promptVariants[format];
+  const currentVariant = variants[currentVariantIndex];
+  
+  // We'll show 3 briefs for Reels, 3 for Stories
+  const briefsToShow = format === 'reels' ? 3 : 3;
+  
+  for (let i = 0; i < briefsToShow; i++) {
+    const variant = variants[currentVariantIndex];
+    const isBriefVisible = i === 0 || (format === 'stories' && i < 3);
+    
+    if (format === 'reels') {
+      // For reels, show one brief per variant (rotates with rotation button)
+      if (i === 0) {
+        const html = createBriefCard(variant, format, i + 1);
+        container.insertAdjacentHTML('beforeend', html);
+      }
+    } else if (format === 'stories') {
+      // For stories, show all 3 stories cards
+      if (i < 3) {
+        const variant = variants[currentVariantIndex];
+        const html = createBriefCard(variant, format, i + 1);
+        container.insertAdjacentHTML('beforeend', html);
+      }
+    }
+  }
+  
+  // Add the custom generator for reels
+  if (format === 'reels') {
+    const customHtml = `
+      <div class="card brief-card" style="border:2px dashed var(--border);background:transparent">
+        <div style="text-align:center;padding:24px 0">
+          <div style="font-size:40px;margin-bottom:12px">✨</div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:8px">Wygeneruj własny brief</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Opisz wizualizację lub cel kampanii, a Creative Director AI przygotuje brief i prompt Gemini</div>
+          <textarea id="custom-brief-input" placeholder="Np. mam zdjęcie sypialni skandynawskiej, chcę Reel 15s z efektem WOW dla Aleksandry 35-45 lat..."
+            style="width:100%;min-height:90px;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);resize:vertical;outline:none;margin-bottom:12px"
+            onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+          <button onclick="generateCustomBrief()" style="width:100%;padding:11px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer">
+            🤖 Generuj brief Creative Director AI
+          </button>
+          <div id="custom-brief-output" style="display:none;margin-top:14px;text-align:left"></div>
+        </div>
+      </div>
+    `;
+    container.insertAdjacentHTML('beforeend', customHtml);
+  }
+}
+
+function renderCarouselBrief(container) {
+  const variant = promptVariants.carousel[currentVariantIndex];
+  const html = `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">🎠 Carousel · Retargeting Pakiet</div>
+          <div class="card-sub">Wariant ${String.fromCharCode(65 + currentVariantIndex)} · ${getSourceBadge(variant.source)}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px">
+        ${variant.scenes.map((s, i) => `
+          <div style="padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);text-align:center">
+            <div style="font-size:22px;margin-bottom:8px">${i+1}️⃣</div>
+            <div style="font-size:11px;font-weight:700;margin-bottom:6px">KARTA ${i+1}</div>
+            <div style="font-size:11px;color:var(--text-muted)">${s.value}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--blue)">
+        <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px">🤖 PROMPT GEMINI (x5 kart)</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.7;font-family:'Courier New',monospace">${variant.prompt}</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button onclick="copyBrief(this,'Carousel Variant ${String.fromCharCode(65 + currentVariantIndex)}')" style="padding:10px 20px;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer">📋 Kopiuj pełny brief</button>
+        <button onclick="approveBrief(this)" style="padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer">✓ Zatwierdź do kampanii</button>
+      </div>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+
+function renderFeedBrief(container) {
+  const variant = promptVariants.feed[currentVariantIndex];
+  const html = `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">🖼️ Feed · Moodboard Content Plan</div>
+          <div class="card-sub">Wariant ${String.fromCharCode(65 + currentVariantIndex)} · ${getSourceBadge(variant.source)}</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--orange)">
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:8px">📋 BRIEF WARIANTU</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;line-height:1.6">
+          ${variant.scenes.map(s => `
+            <div>
+              <strong>${s.label}:</strong><br>${s.value}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div style="margin-top:14px;padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--orange)">
+        <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:6px">🤖 PROMPT GEMINI</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.7;font-family:'Courier New',monospace">${variant.prompt}</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button onclick="copyBrief(this,'Feed Variant ${String.fromCharCode(65 + currentVariantIndex)}')" style="padding:10px 20px;background:var(--orange-light);color:var(--orange);border:1px solid var(--orange);border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer">📋 Kopiuj brief</button>
+        <button onclick="approveBrief(this)" style="padding:10px 20px;background:var(--orange);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer">✓ Zatwierdź do kampanii</button>
+      </div>
+    </div>
+  `;
+  container.innerHTML = html;
+}
+
+function createBriefCard(variant, format, briefNum) {
+  const colorMap = { pink: 'var(--pink)', purple: 'var(--purple)', green: 'var(--green)', blue: 'var(--blue)', orange: 'var(--orange)' };
+  const colorLight = { pink: 'var(--pink-light)', purple: 'var(--purple-light)', green: 'var(--green-light)', blue: 'var(--blue-light)', orange: 'var(--orange-light)' };
+  const color = colorMap[variant.color] || colorMap.pink;
+  const lightColor = colorLight[variant.color] || colorLight.pink;
+  
+  return `
+    <div class="card brief-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:${color};margin-bottom:4px">${variant.label} · Wariant ${variant.variant}</div>
+          <div style="font-size:14px;font-weight:700">${variant.title}</div>
+        </div>
+        <span style="font-size:11px;padding:4px 8px;background:${lightColor};color:${color};border-radius:var(--radius-sm);font-weight:600">${getSourceBadge(variant.source)}</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="brief-row"><span class="brief-label">Format</span><span class="brief-val">${variant.format}</span></div>
+        ${variant.scenes.map(s => `
+          <div class="brief-row"><span class="brief-label">${s.label}</span><span class="brief-val">${s.value}</span></div>
+        `).join('')}
+        <div class="brief-row"><span class="brief-label">Muzyka</span><span class="brief-val">${variant.music}</span></div>
+        <div class="brief-row"><span class="brief-label">Tekst na wideo</span><span class="brief-val">${variant.textOverlay}</span></div>
+        <div class="brief-row"><span class="brief-label">Tone of voice</span><span class="brief-val">${variant.tone}</span></div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid ${color}">
+        <div style="font-size:11px;font-weight:700;color:${color};margin-bottom:6px">🤖 PROMPT GEMINI / VEO</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.7;font-family:'Courier New',monospace">${variant.prompt}</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="copyBrief(this,'${variant.label}')" style="flex:1;padding:9px;background:${lightColor};color:${color};border:1px solid ${color};border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer">📋 Kopiuj brief</button>
+        <button onclick="approveBrief(this)" style="flex:1;padding:9px;background:${color};color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer">✓ Zatwierdź</button>
+      </div>
+    </div>
+  `;
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Render briefs when page loads
+  setTimeout(() => {
+    if (document.getElementById('reels-grid')) {
+      renderCurrentBriefs();
+    }
+  }, 100);
+});
+
+</script>
+</body>
+</html>
