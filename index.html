@@ -405,16 +405,17 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   }
   .sidebar.open { transform:translateX(0); }
   .main { margin-left:0; }
-  .topbar { padding:0 12px; height:52px; gap:6px; }
-  .topbar-title { font-size:15px; }
+  .topbar { padding:0 12px; height:52px; gap:4px; flex-wrap:nowrap; }
+  .topbar-title { font-size:14px; white-space:nowrap; }
   .topbar-title span { display:none; }
-  .topbar-right { gap:6px; }
+  .topbar-right { gap:6px; flex-shrink:0; }
   .topbar-btn { padding:6px 10px; font-size:11px; }
   .topbar-btn .btn-full { display:none; }
   .topbar-btn .btn-short { display:inline; }
-  .slack-pill { display:none; }
-  .notif-btn { width:34px; height:34px; }
+  .slack-pill { display:none !important; }
+  .notif-btn { display:none !important; }
   #data-source-indicator { display:none !important; }
+  #last-refresh { display:none !important; }
   .btn-nowa-kampania { display:none !important; }
   .content { padding:16px; }
 
@@ -449,16 +450,16 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   .brief-row { flex-direction:column; gap:2px; }
   .brief-label { min-width:auto; }
 
-  #data-source-indicator { padding:4px 8px; font-size:10px; }
-  #last-refresh { display:none; }
+  .carousel-cards-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .feed-details-grid { grid-template-columns: 1fr !important; }
 }
 
 @media (max-width: 480px) {
   .kpi-grid { grid-template-columns:1fr; }
   .agents-grid { grid-template-columns:1fr; }
-  .topbar-right { flex-wrap:wrap; }
   .topbar-btn { padding:5px 8px; font-size:10px; }
   .kpi-value { font-size:22px; }
+  .carousel-cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 </style>
 </head>
@@ -1686,7 +1687,8 @@ async function refreshWindsorData() {
   const sourceDot = document.getElementById('source-dot');
   
   btn.disabled = true;
-  btn.innerHTML = '⏳ Pobieram dane...';
+  btn.querySelector('.btn-full').textContent = 'Pobieram...';
+  btn.querySelector('.btn-short').textContent = '...';
   btn.style.opacity = '0.7';
   sourceLabel.textContent = 'Ładowanie...';
   sourceDot.textContent = '⏳';
@@ -1740,7 +1742,8 @@ async function refreshWindsorData() {
   }
 
   btn.disabled = false;
-  btn.innerHTML = '🔄 Odśwież dane';
+  btn.querySelector('.btn-full').textContent = 'Odśwież dane';
+  btn.querySelector('.btn-short').textContent = 'Odśwież';
   btn.style.opacity = '1';
   updateLastRefreshDisplay();
 }
@@ -1752,9 +1755,26 @@ async function fetchWindsorAPI() {
     fields: 'source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date',
     source: 'facebook'
   });
-  const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(15000) });
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  return await response.json();
+  const directUrl = `${windsorConfig.endpoint}?${params}`;
+
+  // Try direct API call first
+  try {
+    const response = await fetch(directUrl, { signal: AbortSignal.timeout(12000) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  } catch (directErr) {
+    console.warn('Direct API failed (likely CORS):', directErr.message);
+    // Try CORS proxy as fallback
+    try {
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(directUrl)}`;
+      const proxyResp = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
+      if (!proxyResp.ok) throw new Error(`Proxy HTTP ${proxyResp.status}`);
+      return await proxyResp.json();
+    } catch (proxyErr) {
+      console.warn('CORS proxy also failed:', proxyErr.message);
+      throw new Error('API niedostępne (CORS). Używam danych z cache.');
+    }
+  }
 }
 
 async function fetchLocalJSON() {
@@ -2220,7 +2240,7 @@ function renderCarouselBrief(container) {
           <div class="card-sub">Wariant ${String.fromCharCode(65 + currentVariantIndex)} · ${getSourceBadge(variant.source)}</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px">
+      <div class="carousel-cards-grid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px">
         ${variant.scenes.map((s, i) => `
           <div style="padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);text-align:center">
             <div style="font-size:22px;margin-bottom:8px">${i+1}️⃣</div>
@@ -2254,7 +2274,7 @@ function renderFeedBrief(container) {
       </div>
       <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--orange)">
         <div style="font-size:11px;font-weight:700;color:var(--orange);margin-bottom:8px">📋 BRIEF WARIANTU</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;line-height:1.6">
+        <div class="feed-details-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;line-height:1.6">
           ${variant.scenes.map(s => `
             <div>
               <strong>${s.label}:</strong><br>${s.value}
@@ -2319,6 +2339,11 @@ document.addEventListener('DOMContentLoaded', function() {
       renderCurrentBriefs();
     }
   }, 100);
+
+  // Auto-load data on startup (try API, fallback to data.json)
+  setTimeout(() => {
+    refreshWindsorData();
+  }, 500);
 });
 
 </script>
