@@ -405,13 +405,17 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   }
   .sidebar.open { transform:translateX(0); }
   .main { margin-left:0; }
-  .topbar { padding:0 16px; height:56px; gap:8px; }
+  .topbar { padding:0 12px; height:52px; gap:6px; }
   .topbar-title { font-size:15px; }
   .topbar-title span { display:none; }
   .topbar-right { gap:6px; }
   .topbar-btn { padding:6px 10px; font-size:11px; }
+  .topbar-btn .btn-full { display:none; }
+  .topbar-btn .btn-short { display:inline; }
   .slack-pill { display:none; }
   .notif-btn { width:34px; height:34px; }
+  #data-source-indicator { display:none !important; }
+  .btn-nowa-kampania { display:none !important; }
   .content { padding:16px; }
 
   .kpi-grid { grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px; }
@@ -532,7 +536,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     </div>
     <div class="topbar-right">
       <button class="topbar-btn" onclick="refreshWindsorData()" id="refresh-btn" style="background:var(--green)">
-  🔄 Odśwież dane
+  🔄 <span class="btn-full">Odśwież dane</span><span class="btn-short" style="display:none">Odśwież</span>
 </button>
 <div id="data-source-indicator" style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;background:var(--green-light);color:var(--green)">
   <span id="source-dot">🟢</span> <span id="source-label">Gotowy</span>
@@ -544,7 +548,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="notif-btn" onclick="showToast('3 kampanie oczekują na Twoją akceptację','')">
         🔔 <div class="notif-dot"></div>
       </div>
-      <button class="topbar-btn" onclick="showPage('campaigns',document.querySelector('.nav-item:nth-child(5)'))">+ Nowa kampania</button>
+      <button class="topbar-btn btn-nowa-kampania" onclick="showPage('campaigns',document.querySelector('.nav-item:nth-child(5)'))">+ Nowa kampania</button>
     </div>
   </div>
 
