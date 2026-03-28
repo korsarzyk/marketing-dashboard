@@ -1268,7 +1268,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     <!-- ════ SETTINGS ════ -->
     <div id="page-settings" class="page">
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-icon blue">🔑</div><div><div class="kpi-label">Windsor.ai API</div><div class="kpi-value" style="font-size:18px" id="api-status-card">Skonfigurowany</div><div class="kpi-change up">▲ Klucz aktywny</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon blue">🔑</div><div><div class="kpi-label">Windsor.ai API</div><div class="kpi-value" style="font-size:18px" id="api-status-card">Wklej klucz</div><div class="kpi-change" id="api-key-status">⚠️ Klucz nie ustawiony</div></div></div>
         <div class="kpi-card"><div class="kpi-icon green">🔄</div><div><div class="kpi-label">Źródło danych</div><div class="kpi-value" style="font-size:18px" id="source-status-card">API + Fallback</div><div class="kpi-change up">▲ Dual mode</div></div></div>
         <div class="kpi-card"><div class="kpi-icon orange">⏱️</div><div><div class="kpi-label">Auto-refresh</div><div class="kpi-value" style="font-size:18px">Co 6h</div><div class="kpi-change up">▲ Scheduled task</div></div></div>
         <div class="kpi-card"><div class="kpi-icon pink">📅</div><div><div class="kpi-label">Ostatnia aktualizacja</div><div class="kpi-value" style="font-size:16px" id="last-update-card">—</div><div class="kpi-change" id="update-age">Brak danych</div></div></div>
@@ -1277,11 +1277,14 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="grid2">
         <div class="card">
           <div class="card-header"><div class="card-title">🔑 Windsor.ai API</div><div class="card-sub">Konfiguracja połączenia z Meta Ads</div></div>
+          <div style="padding:10px 14px;background:#EDFAFA;border-radius:var(--radius-sm);border-left:3px solid var(--green);margin-bottom:14px;font-size:12px;color:var(--text);line-height:1.6">
+            🔒 <strong>Bezpieczeństwo:</strong> Klucz API NIE jest zapisywany w kodzie. Jest przechowywany tylko w sesji przeglądarki (sessionStorage) i znika po zamknięciu karty. Musisz go wkleić przy każdej nowej sesji.
+          </div>
           <div style="display:flex;flex-direction:column;gap:14px">
             <div>
               <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">API Key</label>
               <div style="display:flex;gap:8px">
-                <input type="password" id="windsor-api-key" value="32ff214e322015820893ceb7401546afa488" style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+                <input type="password" id="windsor-api-key" value="" placeholder="Wklej klucz API Windsor.ai" style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
                 <button onclick="toggleApiKeyVisibility()" style="padding:11px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px" id="toggle-key-btn">👁️</button>
               </div>
             </div>
@@ -1669,13 +1672,19 @@ function generateBriefFromInput(input) {
 // ══════════════════════════════════════════
 
 const windsorConfig = {
-  apiKey: '32ff214e322015820893ceb7401546afa488',
+  apiKey: '', // BEZPIECZEŃSTWO: klucz wpisywany ręcznie w Ustawieniach, NIGDY w kodzie
   endpoint: 'https://connectors.windsor.ai/all',
   datePreset: 'last_30_days',
   dataSource: 'auto', // 'api', 'local', 'auto'
   lastRefresh: null,
   lastSource: null
 };
+
+// Próba załadowania klucza z sessionStorage (żyje tylko do zamknięcia karty)
+(function() {
+  const savedKey = sessionStorage.getItem('windsor_api_key');
+  if (savedKey) windsorConfig.apiKey = savedKey;
+})();
 
 let windsorData = null;
 
@@ -1696,8 +1705,11 @@ async function refreshWindsorData() {
   indicator.style.color = 'var(--orange)';
 
   const mode = windsorConfig.dataSource;
-  
-  if (mode === 'api' || mode === 'auto') {
+
+  // Sprawdź czy klucz API jest ustawiony
+  const hasApiKey = windsorConfig.apiKey && windsorConfig.apiKey.length > 10;
+
+  if ((mode === 'api' || mode === 'auto') && hasApiKey) {
     try {
       const data = await fetchWindsorAPI();
       windsorData = data;
@@ -1725,6 +1737,20 @@ async function refreshWindsorData() {
         setSourceIndicator('offline');
         showToast('✕ Windsor API nie odpowiada', 'error');
       }
+    }
+  } else if ((mode === 'api' || mode === 'auto') && !hasApiKey) {
+    // Brak klucza API — od razu fallback na data.json
+    try {
+      const fallback = await fetchLocalJSON();
+      windsorData = fallback;
+      windsorConfig.lastSource = 'local';
+      windsorConfig.lastRefresh = new Date();
+      updateDashboardWithData(fallback);
+      setSourceIndicator('local');
+      showToast('ℹ️ Wpisz klucz API w Ustawieniach, aby połączyć się z Windsor.ai. Dane z cache.', '');
+    } catch (e) {
+      setSourceIndicator('offline');
+      showToast('ℹ️ Brak klucza API. Idź do Ustawienia → wklej klucz Windsor.ai', '');
     }
   } else {
     try {
@@ -1755,26 +1781,10 @@ async function fetchWindsorAPI() {
     fields: 'source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date',
     source: 'facebook'
   });
-  const directUrl = `${windsorConfig.endpoint}?${params}`;
-
-  // Try direct API call first
-  try {
-    const response = await fetch(directUrl, { signal: AbortSignal.timeout(12000) });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return await response.json();
-  } catch (directErr) {
-    console.warn('Direct API failed (likely CORS):', directErr.message);
-    // Try CORS proxy as fallback
-    try {
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(directUrl)}`;
-      const proxyResp = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
-      if (!proxyResp.ok) throw new Error(`Proxy HTTP ${proxyResp.status}`);
-      return await proxyResp.json();
-    } catch (proxyErr) {
-      console.warn('CORS proxy also failed:', proxyErr.message);
-      throw new Error('API niedostępne (CORS). Używam danych z cache.');
-    }
-  }
+  // Bezpośrednie połączenie z API — bez proxy pośredników (bezpieczeństwo klucza)
+  const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(12000) });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return await response.json();
 }
 
 async function fetchLocalJSON() {
@@ -1871,10 +1881,21 @@ function toggleApiKeyVisibility() {
 }
 
 function saveSettings() {
-  windsorConfig.apiKey = document.getElementById('windsor-api-key').value;
+  const apiKey = document.getElementById('windsor-api-key').value;
+  windsorConfig.apiKey = apiKey;
   windsorConfig.datePreset = document.getElementById('date-preset-select').value;
   windsorConfig.dataSource = document.getElementById('data-source-select').value;
-  showToast('✓ Ustawienia zapisane!', 'success');
+  // Klucz zapisywany TYLKO w sessionStorage (znika po zamknięciu karty przeglądarki)
+  if (apiKey) {
+    sessionStorage.setItem('windsor_api_key', apiKey);
+    const statusCard = document.getElementById('api-status-card');
+    const statusText = document.getElementById('api-key-status');
+    if (statusCard) statusCard.textContent = 'Połączony';
+    if (statusText) { statusText.textContent = '▲ Klucz aktywny'; statusText.className = 'kpi-change up'; }
+  } else {
+    sessionStorage.removeItem('windsor_api_key');
+  }
+  showToast('✓ Ustawienia zapisane! Klucz API przechowywany tylko w tej sesji przeglądarki.', 'success');
 }
 
 async function testApiConnection() {
@@ -2340,7 +2361,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 100);
 
-  // Auto-load data on startup (try API, fallback to data.json)
+  // Restore API key from sessionStorage to Settings input
+  const savedKey = sessionStorage.getItem('windsor_api_key');
+  if (savedKey) {
+    const keyInput = document.getElementById('windsor-api-key');
+    if (keyInput) keyInput.value = savedKey;
+    const statusCard = document.getElementById('api-status-card');
+    const statusText = document.getElementById('api-key-status');
+    if (statusCard) statusCard.textContent = 'Połączony';
+    if (statusText) { statusText.textContent = '▲ Klucz aktywny'; statusText.className = 'kpi-change up'; }
+  }
+
+  // Auto-load data on startup (try API if key present, otherwise fallback to data.json)
   setTimeout(() => {
     refreshWindsorData();
   }, 500);
