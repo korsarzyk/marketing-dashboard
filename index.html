@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marketing HQ — Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;600;700;800&display=swap');
 
 :root {
   --bg: #F4F6FA;
@@ -53,7 +55,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 }
 .sidebar-logo p { font-size:11px; color:var(--sidebar-text); margin-top:3px; }
 
-.sidebar-section { padding:20px 16px 8px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.25); }
+.sidebar-section { padding:20px 16px 8px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.5); }
 
 .nav-item {
   display:flex; align-items:center; gap:12px;
@@ -105,7 +107,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .topbar-btn:hover { opacity:.9; transform:translateY(-1px); }
 .topbar-btn.outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); }
 .notif-btn {
-  width:38px; height:38px; border-radius:var(--radius-sm);
+  width:44px; height:44px; border-radius:var(--radius-sm);
   background:var(--bg); border:1px solid var(--border);
   display:flex; align-items:center; justify-content:center; cursor:pointer;
   font-size:16px; position:relative;
@@ -283,7 +285,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .modal-agent-emoji { font-size:36px; }
 .modal-agent-info h3 { font-family:'Manrope',sans-serif; font-size:18px; font-weight:700; }
 .modal-agent-info p { font-size:12px; color:var(--text-muted); margin-top:2px; }
-.modal-close { margin-left:auto; background:var(--bg); border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+.modal-close { margin-left:auto; background:var(--bg); border:none; width:44px; height:44px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
 .modal-close:hover { background:var(--border); }
 .modal-body { padding:24px 28px; overflow-y:auto; flex:1; }
 .modal-section { margin-bottom:20px; }
@@ -374,7 +376,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 
 /* ── HAMBURGER BUTTON ── */
 .hamburger {
-  display:none; width:40px; height:40px; border:none; background:none; cursor:pointer;
+  display:none; width:44px; height:44px; border:none; background:none; cursor:pointer;
   flex-direction:column; align-items:center; justify-content:center; gap:5px; z-index:150; padding:0;
 }
 .hamburger span {
@@ -388,6 +390,15 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:99;
 }
 .sidebar-overlay.open { display:block; }
+
+/* ── FOCUS VISIBLE ── */
+.nav-item:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+.topbar-btn:focus-visible, .format-tab:focus-visible, .card-action:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+.hamburger:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+button:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px solid var(--blue); outline-offset:2px; border-color:var(--blue); }
+.agent-card:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+.modal-close:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1200px) {
@@ -472,44 +483,44 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
     <p>Studio · Architektura Wnętrz</p>
   </div>
   <div class="sidebar-section">Główne</div>
-  <a class="nav-item active" onclick="showPage('overview',this)">
+  <a class="nav-item active" tabindex="0" role="button" onclick="showPage('overview',this)">
     <span class="nav-icon">📊</span> Przegląd
   </a>
-  <a class="nav-item" onclick="showPage('campaigns',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('campaigns',this)">
     <span class="nav-icon">🎯</span> Kampanie
     <span class="nav-badge">3</span>
   </a>
-  <a class="nav-item" onclick="showPage('agents',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('agents',this)">
     <span class="nav-icon">🤖</span> Agenci AI
     <span class="nav-badge green">12</span>
   </a>
-  <a class="nav-item" onclick="showPage('crm',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('crm',this)">
     <span class="nav-icon">👥</span> CRM Pipeline
   </a>
   <div class="sidebar-section">Kanały</div>
-  <a class="nav-item" onclick="showPage('meta',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('meta',this)">
     <span class="nav-icon">📘</span> Meta Ads
   </a>
-  <a class="nav-item" onclick="showPage('seo',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('seo',this)">
     <span class="nav-icon">🌿</span> SEO & Content
   </a>
-  <a class="nav-item" onclick="showPage('slack',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('slack',this)">
     <span class="nav-icon">💬</span> Slack CEO
   </a>
   <div class="sidebar-section">Narzędzia</div>
-  <a class="nav-item" onclick="showPage('prompts',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('prompts',this)">
     <span class="nav-icon">✨</span> Prompty Gemini
   </a>
-  <a class="nav-item" onclick="showPage('copy',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('copy',this)">
     <span class="nav-icon">✍️</span> Copywriting
   </a>
-  <a class="nav-item" onclick="showPage('library',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('library',this)">
     <span class="nav-icon">🖼️</span> Biblioteka Kreacji
   </a>
-  <a class="nav-item" onclick="showPage('creatives',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('creatives',this)">
     <span class="nav-icon">🎨</span> Kreacje
   </a>
-  <a class="nav-item" onclick="showPage('settings',this)">
+  <a class="nav-item" tabindex="0" role="button" onclick="showPage('settings',this)">
     <span class="nav-icon">⚙️</span> Ustawienia
   </a>
   <div class="sidebar-bottom">
@@ -530,7 +541,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 <div class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
-      <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()">
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu nawigacji" onclick="toggleSidebar()">
         <span></span><span></span><span></span>
       </button>
       <div class="topbar-title">Przegląd <span id="page-sub">Dashboard · Kwiecień 2026</span></div>
@@ -546,7 +557,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
       <div class="slack-pill" onclick="showPage('slack',document.querySelector('.nav-item:nth-child(10)'))">
         💬 Slack CEO
       </div>
-      <div class="notif-btn" onclick="showToast('3 kampanie oczekują na Twoją akceptację','')">
+      <div class="notif-btn" role="button" tabindex="0" aria-label="Powiadomienia" onclick="showToast('3 kampanie oczekują na Twoją akceptację','')">
         🔔 <div class="notif-dot"></div>
       </div>
       <button class="topbar-btn btn-nowa-kampania" onclick="showPage('campaigns',document.querySelector('.nav-item:nth-child(5)'))">+ Nowa kampania</button>
@@ -1014,7 +1025,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
             <option value="C0APU636KG8">#raporty-meta</option>
             <option value="C0ANZTMGJTU">#nowe-leady</option>
           </select>
-          <textarea id="slack-msg-input" style="background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);resize:vertical;min-height:80px;" placeholder="Wpisz wiadomość..."></textarea>
+          <textarea id="slack-msg-input" aria-label="Wiadomość Slack" style="background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--text);resize:vertical;min-height:80px;" placeholder="Wpisz wiadomość..."></textarea>
           <button class="topbar-btn" style="align-self:flex-start" onclick="sendSlackMsg()">Wyślij na Slack →</button>
         </div>
       </div>
@@ -1068,7 +1079,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
           </div>
         </div>
         <div style="display:flex;gap:12px;align-items:center;margin-top:16px">
-          <input type="text" id="gdrive-link" placeholder="Wklej link do Google Drive z wizualizacjami (np. https://drive.google.com/drive/folders/...)"
+          <input type="text" id="gdrive-link" aria-label="Link do Google Drive" placeholder="Wklej link do Google Drive z wizualizacjami (np. https://drive.google.com/drive/folders/...)"
             style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);background:#fff;outline:none;transition:border .2s"
             onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
           <button onclick="loadDriveLibrary()" style="padding:11px 22px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;white-space:nowrap" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
@@ -1284,7 +1295,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
             <div>
               <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">API Key</label>
               <div style="display:flex;gap:8px">
-                <input type="password" id="windsor-api-key" value="" placeholder="Wklej klucz API Windsor.ai" style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+                <input type="password" id="windsor-api-key" aria-label="Klucz API Windsor.ai" value="" placeholder="Wklej klucz API Windsor.ai" style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
                 <button onclick="toggleApiKeyVisibility()" style="padding:11px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px" id="toggle-key-btn">👁️</button>
               </div>
             </div>
@@ -1346,7 +1357,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 </div><!-- /main -->
 
 <!-- ════ AGENT MODAL ════ -->
-<div class="modal-overlay" id="agent-modal" onclick="closeAgentModal(event)">
+<div class="modal-overlay" id="agent-modal" role="dialog" aria-modal="true" aria-label="Panel agenta" onclick="closeAgentModal(event)">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-agent-emoji" id="m-emoji">🤖</span>
@@ -1355,7 +1366,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
         <p id="m-role">Rola</p>
       </div>
       <span id="m-status-dot" class="agent-status-dot asd-active" style="margin-left:12px"></span>
-      <button class="modal-close" onclick="document.getElementById('agent-modal').classList.remove('open')">✕</button>
+      <button class="modal-close" aria-label="Zamknij" onclick="document.getElementById('agent-modal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body">
       <div class="modal-section">
@@ -1375,7 +1386,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 </div>
 
 <!-- ════ CAMPAIGN MODAL ════ -->
-<div class="modal-overlay" id="campaign-modal" onclick="closeCampaignModal(event)">
+<div class="modal-overlay" id="campaign-modal" role="dialog" aria-modal="true" aria-label="Panel kampanii" onclick="closeCampaignModal(event)">
   <div class="modal">
     <div class="modal-header">
       <span class="modal-agent-emoji" id="cm-icon">🎯</span>
@@ -1471,6 +1482,7 @@ function openAgent(key) {
   document.getElementById('m-role').textContent = d.role;
   const dot = document.getElementById('m-status-dot');
   dot.className = 'agent-status-dot ' + (d.status==='active'?'asd-active':d.status==='busy'?'asd-busy':'asd-idle');
+  dot.title = d.status === 'active' ? 'Aktywny' : d.status === 'busy' ? 'Zajęty' : 'Bezczynny';
   document.getElementById('m-log').innerHTML = d.log.map(([t,txt]) =>
     `<div class="modal-log-item"><span class="log-time">${t}</span><span class="log-text">${txt}</span></div>`
   ).join('');
@@ -1489,6 +1501,7 @@ function closeAgentModal(e) { if (e.target.id==='agent-modal') document.getEleme
 // ── CAMPAIGNS ──
 function openCampaignModal(id) {
   const c = campaignData[id];
+  if (!c) return;
   document.getElementById('cm-icon').textContent = c.icon;
   document.getElementById('cm-name').textContent = c.name;
   document.getElementById('cm-status-text').textContent = c.status==='pending'?'⏳ Oczekuje na akceptację CEO':c.status==='active'?'✅ Aktywna':c.status==='draft'?'📝 Szkic':'✕ Odrzucona';
@@ -1512,9 +1525,20 @@ function openCampaignModal(id) {
     </div>`;
   const footer = document.getElementById('cm-footer');
   if (c.status==='pending') {
-    footer.innerHTML = `<button class="modal-btn-cancel" onclick="rejectCampaign(${id});document.getElementById('campaign-modal').classList.remove('open')">✕ Odrzuć</button><button class="modal-btn-save" onclick="approveCampaign(${id});document.getElementById('campaign-modal').classList.remove('open')">✓ Zatwierdź i uruchom</button>`;
+    footer.innerHTML = `<button class="modal-btn-cancel" data-action="reject" data-id="${parseInt(id)}">✕ Odrzuć</button><button class="modal-btn-save" data-action="approve" data-id="${parseInt(id)}">✓ Zatwierdź i uruchom</button>`;
+    footer.querySelectorAll('button[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cid = parseInt(btn.dataset.id);
+        if (btn.dataset.action === 'approve') approveCampaign(cid);
+        else rejectCampaign(cid);
+        document.getElementById('campaign-modal').classList.remove('open');
+      });
+    });
   } else {
-    footer.innerHTML = `<button class="modal-btn-cancel" onclick="document.getElementById('campaign-modal').classList.remove('open')">Zamknij</button>`;
+    footer.innerHTML = `<button class="modal-btn-cancel" data-action="close">Zamknij</button>`;
+    footer.querySelector('button[data-action="close"]').addEventListener('click', () => {
+      document.getElementById('campaign-modal').classList.remove('open');
+    });
   }
   document.getElementById('campaign-modal').classList.add('open');
 }
@@ -1572,7 +1596,7 @@ function sendSlackMsg() {
 
 // ── UTILS ──
 function copyText(id) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('✓ Skopiowano!','success'));
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>showToast('✓ Skopiowano!','success')).catch(()=>showToast('Nie można skopiować — sprawdź uprawnienia','error'));
 }
 function showToast(msg, type='') {
   const t = document.getElementById('toast');
@@ -1616,7 +1640,7 @@ function copyBrief(btn, name) {
     showToast('✓ Prompt "' + name + '" skopiowany!', 'success');
     btn.textContent = '✓ Skopiowano!';
     setTimeout(() => { btn.textContent = '📋 Kopiuj brief'; }, 2000);
-  });
+  }).catch(()=>showToast('Nie można skopiować — sprawdź uprawnienia','error'));
 }
 
 function approveBrief(btn) {
@@ -1682,14 +1706,19 @@ const windsorConfig = {
 
 // Próba załadowania klucza z sessionStorage (żyje tylko do zamknięcia karty)
 (function() {
-  const savedKey = sessionStorage.getItem('windsor_api_key');
-  if (savedKey) windsorConfig.apiKey = savedKey;
+  try {
+    const savedKey = sessionStorage.getItem('windsor_api_key');
+    if (savedKey) windsorConfig.apiKey = savedKey;
+  } catch(e) { /* sessionStorage unavailable (private browsing) */ }
 })();
 
 let windsorData = null;
+let isRefreshing = false;
 
 // ── REFRESH BUTTON ──
 async function refreshWindsorData() {
+  if (isRefreshing) return;
+  isRefreshing = true;
   const btn = document.getElementById('refresh-btn');
   const indicator = document.getElementById('data-source-indicator');
   const sourceLabel = document.getElementById('source-label');
@@ -1772,6 +1801,7 @@ async function refreshWindsorData() {
   btn.querySelector('.btn-short').textContent = 'Odśwież';
   btn.style.opacity = '1';
   updateLastRefreshDisplay();
+  isRefreshing = false;
 }
 
 async function fetchWindsorAPI() {
@@ -1852,15 +1882,15 @@ function updateDashboardWithData(data) {
 
   const cpl = totalConversions > 0 ? (totalSpend / totalConversions) : 0;
   const ctr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100) : 0;
-  
-  // Update Overview KPI cards if they have data-windsor attributes
-  // We update the Meta Ads page KPIs  
-  const metaPage = document.getElementById('page-meta');
-  if (metaPage && totalSpend > 0) {
-    const kpis = metaPage.querySelectorAll('.kpi-value');
-    // Update spend display if available
+
+  // Update Overview page KPIs
+  const overviewKpis = document.querySelectorAll('#page-overview .kpi-value');
+  if (overviewKpis.length >= 4 && totalSpend > 0) {
+    overviewKpis[0].innerHTML = totalSpend.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' <span style="font-size:14px;font-weight:400">PLN</span>';
+    overviewKpis[1].textContent = totalConversions;
+    overviewKpis[2].innerHTML = '< ' + cpl.toFixed(0) + ' <span style="font-size:14px;font-weight:400">PLN</span>';
   }
-  
+
   // Show a summary toast with key metrics
   if (totalSpend > 0) {
     console.log(`Windsor data loaded: Spend=${totalSpend.toFixed(2)} PLN, Leads=${totalConversions}, CPL=${cpl.toFixed(2)} PLN, CTR=${ctr.toFixed(2)}%`);
@@ -1887,13 +1917,17 @@ function saveSettings() {
   windsorConfig.dataSource = document.getElementById('data-source-select').value;
   // Klucz zapisywany TYLKO w sessionStorage (znika po zamknięciu karty przeglądarki)
   if (apiKey) {
-    sessionStorage.setItem('windsor_api_key', apiKey);
+    try {
+      sessionStorage.setItem('windsor_api_key', apiKey);
+    } catch(e) { /* sessionStorage unavailable (private browsing) */ }
     const statusCard = document.getElementById('api-status-card');
     const statusText = document.getElementById('api-key-status');
     if (statusCard) statusCard.textContent = 'Połączony';
     if (statusText) { statusText.textContent = '▲ Klucz aktywny'; statusText.className = 'kpi-change up'; }
   } else {
-    sessionStorage.removeItem('windsor_api_key');
+    try {
+      sessionStorage.removeItem('windsor_api_key');
+    } catch(e) { /* sessionStorage unavailable (private browsing) */ }
   }
   showToast('✓ Ustawienia zapisane! Klucz API przechowywany tylko w tej sesji przeglądarki.', 'success');
 }
@@ -2167,10 +2201,11 @@ const promptVariants = {
 };
 
 function rotatePrompts() {
-  currentVariantIndex = (currentVariantIndex + 1) % 3;
+  const maxVariants = promptVariants.reels.length;
+  currentVariantIndex = (currentVariantIndex + 1) % maxVariants;
   renderCurrentBriefs();
   const variantLabel = String.fromCharCode(65 + currentVariantIndex);
-  showToast('🔄 Nowy zestaw promptów załadowany! Wariant ' + variantLabel + ' · Zestaw ' + (currentVariantIndex + 1) + '/3', 'success');
+  showToast('🔄 Nowy zestaw promptów załadowany! Wariant ' + variantLabel + ' · Zestaw ' + (currentVariantIndex + 1) + '/' + maxVariants, 'success');
 }
 
 function getSourceBadge(source) {
@@ -2205,29 +2240,10 @@ function renderGridBriefs(container, format) {
   container.innerHTML = '';
   const variants = promptVariants[format];
   const currentVariant = variants[currentVariantIndex];
-  
-  // We'll show 3 briefs for Reels, 3 for Stories
-  const briefsToShow = format === 'reels' ? 3 : 3;
-  
-  for (let i = 0; i < briefsToShow; i++) {
-    const variant = variants[currentVariantIndex];
-    const isBriefVisible = i === 0 || (format === 'stories' && i < 3);
-    
-    if (format === 'reels') {
-      // For reels, show one brief per variant (rotates with rotation button)
-      if (i === 0) {
-        const html = createBriefCard(variant, format, i + 1);
-        container.insertAdjacentHTML('beforeend', html);
-      }
-    } else if (format === 'stories') {
-      // For stories, show all 3 stories cards
-      if (i < 3) {
-        const variant = variants[currentVariantIndex];
-        const html = createBriefCard(variant, format, i + 1);
-        container.insertAdjacentHTML('beforeend', html);
-      }
-    }
-  }
+
+  // Show only 1 brief card (the current variant) for both reels and stories
+  const html = createBriefCard(currentVariant, format, 1);
+  container.insertAdjacentHTML('beforeend', html);
   
   // Add the custom generator for reels
   if (format === 'reels') {
@@ -2237,7 +2253,7 @@ function renderGridBriefs(container, format) {
           <div style="font-size:40px;margin-bottom:12px">✨</div>
           <div style="font-size:14px;font-weight:700;margin-bottom:8px">Wygeneruj własny brief</div>
           <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Opisz wizualizację lub cel kampanii, a Creative Director AI przygotuje brief i prompt Gemini</div>
-          <textarea id="custom-brief-input" placeholder="Np. mam zdjęcie sypialni skandynawskiej, chcę Reel 15s z efektem WOW dla Aleksandry 35-45 lat..."
+          <textarea id="custom-brief-input" aria-label="Opis wizualizacji do wygenerowania briefu" placeholder="Np. mam zdjęcie sypialni skandynawskiej, chcę Reel 15s z efektem WOW dla Aleksandry 35-45 lat..."
             style="width:100%;min-height:90px;padding:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);resize:vertical;outline:none;margin-bottom:12px"
             onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'"></textarea>
           <button onclick="generateCustomBrief()" style="width:100%;padding:11px;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:700;cursor:pointer">
@@ -2362,20 +2378,37 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 100);
 
   // Restore API key from sessionStorage to Settings input
-  const savedKey = sessionStorage.getItem('windsor_api_key');
-  if (savedKey) {
-    const keyInput = document.getElementById('windsor-api-key');
-    if (keyInput) keyInput.value = savedKey;
-    const statusCard = document.getElementById('api-status-card');
-    const statusText = document.getElementById('api-key-status');
-    if (statusCard) statusCard.textContent = 'Połączony';
-    if (statusText) { statusText.textContent = '▲ Klucz aktywny'; statusText.className = 'kpi-change up'; }
-  }
+  try {
+    const savedKey = sessionStorage.getItem('windsor_api_key');
+    if (savedKey) {
+      const keyInput = document.getElementById('windsor-api-key');
+      if (keyInput) keyInput.value = savedKey;
+      const statusCard = document.getElementById('api-status-card');
+      const statusText = document.getElementById('api-key-status');
+      if (statusCard) statusCard.textContent = 'Połączony';
+      if (statusText) { statusText.textContent = '▲ Klucz aktywny'; statusText.className = 'kpi-change up'; }
+    }
+  } catch(e) { /* sessionStorage unavailable (private browsing) */ }
 
   // Auto-load data on startup (try API if key present, otherwise fallback to data.json)
   setTimeout(() => {
     refreshWindsorData();
   }, 500);
+
+  // Keyboard navigation for nav items
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
+    });
+  });
+});
+
+// Global Escape key handler for modals
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.getElementById('agent-modal').classList.remove('open');
+    document.getElementById('campaign-modal').classList.remove('open');
+  }
 });
 
 </script>
