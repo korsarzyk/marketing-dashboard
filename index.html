@@ -544,7 +544,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
       <button class="hamburger" id="hamburger-btn" aria-label="Menu nawigacji" onclick="toggleSidebar()">
         <span></span><span></span><span></span>
       </button>
-      <div class="topbar-title">Przegląd <span id="page-sub">Dashboard · Kwiecień 2026</span></div>
+      <div class="topbar-title"><span id="page-title">Przegląd</span> <span id="page-sub">Dashboard · Kwiecień 2026</span></div>
     </div>
     <div class="topbar-right">
       <button class="topbar-btn" onclick="refreshWindsorData()" id="refresh-btn" style="background:var(--green)">
@@ -1464,6 +1464,7 @@ function showPage(name, el) {
   document.getElementById('page-' + name).classList.add('active');
   if (el) el.classList.add('active');
   const titles = {overview:'Przegląd',campaigns:'Kampanie',agents:'Agenci AI',crm:'CRM Pipeline',meta:'Meta Ads',seo:'SEO & Content',slack:'Slack CEO',prompts:'Prompty Gemini',copy:'Copywriting',creatives:'Kreacje',library:'Biblioteka Kreacji',settings:'Ustawienia'};
+  document.getElementById('page-title').textContent = titles[name] || name;
   document.getElementById('page-sub').textContent = (titles[name] || name) + ' · Kwiecień 2026';
   // Close sidebar on mobile after selecting page
   if (window.innerWidth <= 768) {
