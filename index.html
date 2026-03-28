@@ -324,11 +324,50 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .pipeline-card {
   background:var(--white); border-radius:var(--radius-sm); padding:12px;
   box-shadow:var(--shadow); border:1px solid var(--border); margin-bottom:8px;
-  border-left:3px solid;
+  border-left:3px solid; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s;
 }
+.pipeline-card:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(0,0,0,0.1); }
 .pc-name { font-size:13px; font-weight:600; color:var(--text); }
 .pc-val { font-size:12px; color:var(--orange); font-weight:600; margin-top:2px; }
 .pc-src { font-size:10px; color:var(--text-muted); margin-top:4px; }
+.pc-status-row { display:flex; align-items:center; justify-content:space-between; margin-top:6px; }
+.lead-status-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.lead-status-dot.ls-new { background:#FF6B6B; }
+.lead-status-dot.ls-progress { background:#FFB347; }
+.lead-status-dot.ls-done { background:#2EC4B6; }
+.lead-status-label { font-size:9px; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
+.lead-status-label.ls-new { color:#FF6B6B; }
+.lead-status-label.ls-progress { color:#FFB347; }
+.lead-status-label.ls-done { color:#2EC4B6; }
+/* Lead modal extras */
+.lead-contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.lead-contact-item { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; }
+.lead-contact-item .lci-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); font-weight:600; margin-bottom:4px; }
+.lead-contact-item .lci-value { font-size:13px; font-weight:600; color:var(--text); }
+.lead-contact-item .lci-value a { color:var(--blue); text-decoration:none; }
+.lead-contact-item .lci-value a:hover { text-decoration:underline; }
+.lead-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.lead-action-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:var(--radius-sm); border:1.5px solid var(--border); background:var(--white); font-size:12px; font-weight:600; cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.15s; }
+.lead-action-btn:hover { border-color:var(--blue); color:var(--blue); background:#F0F4FF; }
+.lead-action-btn.lab-primary { background:linear-gradient(135deg,var(--blue),var(--purple)); color:#fff; border-color:transparent; }
+.lead-action-btn.lab-primary:hover { opacity:0.9; }
+.lead-action-btn.lab-green { background:var(--green); color:#fff; border-color:transparent; }
+.lead-action-btn.lab-green:hover { opacity:0.9; }
+.lead-timeline { position:relative; padding-left:20px; }
+.lead-timeline::before { content:''; position:absolute; left:5px; top:0; bottom:0; width:2px; background:var(--border); }
+.lead-tl-item { position:relative; margin-bottom:12px; font-size:12px; }
+.lead-tl-item::before { content:''; position:absolute; left:-18px; top:5px; width:10px; height:10px; border-radius:50%; background:var(--blue); border:2px solid var(--white); }
+.lead-tl-date { font-size:10px; color:var(--text-muted); font-weight:600; }
+.lead-tl-text { color:var(--text); margin-top:2px; }
+.lead-status-select { display:flex; gap:6px; margin-top:8px; }
+.lead-status-opt { padding:6px 14px; border-radius:20px; font-size:11px; font-weight:600; cursor:pointer; border:2px solid var(--border); background:var(--white); transition:all 0.15s; }
+.lead-status-opt.active { border-color:currentColor; }
+.lead-status-opt.lso-new { color:#FF6B6B; }
+.lead-status-opt.lso-new.active { background:#FFE8E8; border-color:#FF6B6B; }
+.lead-status-opt.lso-progress { color:#FFB347; }
+.lead-status-opt.lso-progress.active { background:#FFF3E0; border-color:#FFB347; }
+.lead-status-opt.lso-done { color:#2EC4B6; }
+.lead-status-opt.lso-done.active { background:#E0F7F5; border-color:#2EC4B6; }
 
 /* ── SLACK SECTION ── */
 .slack-card { background:linear-gradient(135deg,#1E1E2D,#2D1B3D); border-radius:var(--radius); padding:24px; color:#fff; }
@@ -919,24 +958,24 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
         <div class="pipeline">
           <div class="pipeline-col">
             <div class="pipeline-col-header pch-new">Nowy Lead</div>
-            <div class="pipeline-card" style="border-color:var(--blue)"><div class="pc-name">Anna K.</div><div class="pc-val">~25 000 PLN</div><div class="pc-src">📸 IG Reel · 2 dni temu</div></div>
-            <div class="pipeline-card" style="border-color:var(--blue)"><div class="pc-name">Marek W.</div><div class="pc-val">~15 000 PLN</div><div class="pc-src">💙 FB Retarg. · wczoraj</div></div>
+            <div class="pipeline-card" style="border-color:var(--blue)" data-lead="anna-k" tabindex="0"><div class="pc-name">Anna K.</div><div class="pc-val">~25 000 PLN</div><div class="pc-src">📸 IG Reel · 2 dni temu</div><div class="pc-status-row"><span class="lead-status-label ls-new">Nowy</span><span class="lead-status-dot ls-new"></span></div></div>
+            <div class="pipeline-card" style="border-color:var(--blue)" data-lead="marek-w" tabindex="0"><div class="pc-name">Marek W.</div><div class="pc-val">~15 000 PLN</div><div class="pc-src">💙 FB Retarg. · wczoraj</div><div class="pc-status-row"><span class="lead-status-label ls-new">Nowy</span><span class="lead-status-dot ls-new"></span></div></div>
           </div>
           <div class="pipeline-col">
             <div class="pipeline-col-header pch-contact">Kontakt</div>
-            <div class="pipeline-card" style="border-color:var(--orange)"><div class="pc-name">Katarzyna B.</div><div class="pc-val">~40 000 PLN</div><div class="pc-src">✉️ Email #2 wysłany</div></div>
+            <div class="pipeline-card" style="border-color:var(--orange)" data-lead="katarzyna-b" tabindex="0"><div class="pc-name">Katarzyna B.</div><div class="pc-val">~40 000 PLN</div><div class="pc-src">✉️ Email #2 wysłany</div><div class="pc-status-row"><span class="lead-status-label ls-progress">W trakcie</span><span class="lead-status-dot ls-progress"></span></div></div>
           </div>
           <div class="pipeline-col">
             <div class="pipeline-col-header pch-consult">Konsultacja</div>
-            <div class="pipeline-card" style="border-color:var(--purple)"><div class="pc-name">Piotr & Ewa N.</div><div class="pc-val">~60 000 PLN</div><div class="pc-src">📅 Spotkanie 5.04</div></div>
+            <div class="pipeline-card" style="border-color:var(--purple)" data-lead="piotr-ewa" tabindex="0"><div class="pc-name">Piotr & Ewa N.</div><div class="pc-val">~60 000 PLN</div><div class="pc-src">📅 Spotkanie 5.04</div><div class="pc-status-row"><span class="lead-status-label ls-progress">W trakcie</span><span class="lead-status-dot ls-progress"></span></div></div>
           </div>
           <div class="pipeline-col">
             <div class="pipeline-col-header pch-offer">Oferta</div>
-            <div class="pipeline-card" style="border-color:var(--green)"><div class="pc-name">Michał D.</div><div class="pc-val">~30 000 PLN</div><div class="pc-src">📄 Oferta wysłana 1.04</div></div>
+            <div class="pipeline-card" style="border-color:var(--green)" data-lead="michal-d" tabindex="0"><div class="pc-name">Michał D.</div><div class="pc-val">~30 000 PLN</div><div class="pc-src">📄 Oferta wysłana 1.04</div><div class="pc-status-row"><span class="lead-status-label ls-progress">W trakcie</span><span class="lead-status-dot ls-progress"></span></div></div>
           </div>
           <div class="pipeline-col">
             <div class="pipeline-col-header pch-won">Umowa ✓</div>
-            <div class="pipeline-card" style="border-color:#27ae60"><div class="pc-name">Joanna S.</div><div class="pc-val">22 000 PLN ✅</div><div class="pc-src">🚀 Start projektu 3.04</div></div>
+            <div class="pipeline-card" style="border-color:#27ae60" data-lead="joanna-s" tabindex="0"><div class="pc-name">Joanna S.</div><div class="pc-val">22 000 PLN ✅</div><div class="pc-src">🚀 Start projektu 3.04</div><div class="pc-status-row"><span class="lead-status-label ls-done">Obsłużony</span><span class="lead-status-dot ls-done"></span></div></div>
           </div>
         </div>
       </div>
@@ -1404,6 +1443,20 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
   </div>
 </div>
 
+<!-- ════ LEAD MODAL ════ -->
+<div class="modal-overlay" id="lead-modal" role="dialog" aria-modal="true" aria-label="Szczegóły leada" onclick="closeLeadModal(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-agent-emoji" id="lm-icon">👤</span>
+      <div class="modal-agent-info"><h3 id="lm-name">Lead</h3><p id="lm-stage">Etap</p></div>
+      <span class="demo-tag" style="margin-left:8px">DEMO</span>
+      <button class="modal-close" onclick="document.getElementById('lead-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="lm-body"></div>
+    <div class="modal-footer" id="lm-footer"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1455,6 +1508,205 @@ const campaignData = {
   5:{icon:'📸',name:'Instagram Feed · Moodboard Wiosna',goal:'8 postów z wizualizacjami minimalistycznych wnętrz. Organiczny.',budget:'0 PLN (organiczny)',start:'25 marca 2026',target:'#minimalistinterior #architekturawnętrz #projektwnętrz',cta:'Link w bio → portfolio',agent:'Social Media Manager',status:'active',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
   6:{icon:'✉️',name:'Email Nurturing · Sekwencja',goal:'5 emaili po wypełnieniu formularza Meta Lead Gen. Personalizacja wg stylu.',budget:'0 PLN (automatyczny)',start:'10 kwietnia 2026',target:'Segmentacja: Styl wnętrza (z formularza)',cta:'Email #3: link Calendly',agent:'Lead Nurturing AI + Copywriter AI',status:'draft',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'}
 };
+
+// ── LEAD DATA ──
+const leadData = {
+  'anna-k': {
+    name:'Anna K.', stage:'Nowy Lead', value:'~25 000 PLN', source:'📸 IG Reel · Lead Gen',
+    date:'26 marca 2026', handleStatus:'new',
+    phone:'+48 512 XXX XXX', email:'anna.k***@gmail.com',
+    style:'Minimalizm / Japandi', area:'65 m² · mieszkanie 3-pokojowe',
+    location:'Warszawa, Mokotów', budget:'20 000 – 30 000 PLN',
+    notes:'Wypełniła formularz Meta Lead Gen. Interesuje ją salon + sypialnia. Preferuje jasne kolory i naturalne materiały.',
+    timeline:[
+      {date:'26.03 · 14:22', text:'Wypełniła formularz Meta (IG Reel Lead Gen)', type:'form'},
+      {date:'26.03 · 14:23', text:'CRM AI: Alert wysłany na #nowe-leady', type:'auto'},
+      {date:'26.03 · 15:00', text:'Lead Nurturing AI: Email #1 wysłany — „Twoje wnętrze już na Ciebie czeka"', type:'email'}
+    ]
+  },
+  'marek-w': {
+    name:'Marek W.', stage:'Nowy Lead', value:'~15 000 PLN', source:'💙 FB Retargeting',
+    date:'27 marca 2026', handleStatus:'new',
+    phone:'+48 601 XXX XXX', email:'marek.w***@wp.pl',
+    style:'Nowoczesny / Loft', area:'45 m² · kawalerka',
+    location:'Warszawa, Wola', budget:'10 000 – 20 000 PLN',
+    notes:'Kliknął carousel retargeting po odwiedzeniu profilu IG. Szuka architekta do kawalerki w nowym budownictwie.',
+    timeline:[
+      {date:'27.03 · 09:15', text:'Kliknął reklamę FB Retargeting Carousel', type:'ad'},
+      {date:'27.03 · 09:16', text:'Wypełnił formularz kontaktowy', type:'form'},
+      {date:'27.03 · 09:17', text:'CRM AI: Alert wysłany na #nowe-leady', type:'auto'}
+    ]
+  },
+  'katarzyna-b': {
+    name:'Katarzyna B.', stage:'Kontakt', value:'~40 000 PLN', source:'📸 IG Reel · Lead Gen',
+    date:'20 marca 2026', handleStatus:'progress',
+    phone:'+48 508 XXX XXX', email:'katarzyna.b***@outlook.com',
+    style:'Klasyczny glamour', area:'120 m² · dom jednorodzinny',
+    location:'Warszawa, Wilanów', budget:'35 000 – 50 000 PLN',
+    notes:'Zainteresowana pełnym projektem domu. Wysłano email #2 z portfolio realizacji w stylu glamour. Czeka na odpowiedź.',
+    timeline:[
+      {date:'20.03 · 11:30', text:'Wypełniła formularz Meta (IG Reel)', type:'form'},
+      {date:'20.03 · 11:31', text:'CRM AI: Alert na #nowe-leady', type:'auto'},
+      {date:'20.03 · 14:00', text:'Lead Nurturing AI: Email #1 wysłany', type:'email'},
+      {date:'23.03 · 10:00', text:'Email #2 wysłany — portfolio glamour', type:'email'},
+      {date:'25.03 · 09:00', text:'Przeniesiona do etapu Kontakt', type:'stage'}
+    ]
+  },
+  'piotr-ewa': {
+    name:'Piotr & Ewa N.', stage:'Konsultacja', value:'~60 000 PLN', source:'🌿 SEO · Blog organiczny',
+    date:'15 marca 2026', handleStatus:'progress',
+    phone:'+48 600 XXX XXX', email:'piotr.n***@gmail.com',
+    style:'Skandynawski / Biophilic', area:'140 m² · dom z ogrodem',
+    location:'Piaseczno k. Warszawy', budget:'50 000 – 70 000 PLN',
+    notes:'Trafili z artykułu SEO „Jak urządzić dom w stylu skandynawskim". Spotkanie konsultacyjne zaplanowane na 5 kwietnia. Duży potencjał — cały dom.',
+    timeline:[
+      {date:'15.03 · 16:40', text:'Formularz kontaktowy ze strony (SEO organic)', type:'form'},
+      {date:'15.03 · 16:41', text:'CRM AI: Alert na #nowe-leady', type:'auto'},
+      {date:'16.03 · 10:00', text:'Email #1 wysłany', type:'email'},
+      {date:'18.03 · 14:00', text:'Odpowiedzieli na email — proszą o spotkanie', type:'reply'},
+      {date:'20.03 · 09:00', text:'Przeniesieni do etapu Kontakt', type:'stage'},
+      {date:'25.03 · 11:00', text:'Rozmowa telefoniczna — umówione spotkanie 5.04', type:'call'},
+      {date:'25.03 · 11:30', text:'Przeniesieni do Konsultacja', type:'stage'}
+    ]
+  },
+  'michal-d': {
+    name:'Michał D.', stage:'Oferta', value:'~30 000 PLN', source:'💙 FB Retargeting',
+    date:'10 marca 2026', handleStatus:'progress',
+    phone:'+48 505 XXX XXX', email:'michal.d***@firma.pl',
+    style:'Nowoczesny minimalizm', area:'85 m² · apartament',
+    location:'Warszawa, Śródmieście', budget:'25 000 – 35 000 PLN',
+    notes:'Właściciel firmy IT. Kupił apartament inwestycyjnie. Oferta wysłana 1 kwietnia — czekamy na decyzję. Lead scoring: HOT.',
+    timeline:[
+      {date:'10.03 · 20:12', text:'Kliknął FB Retargeting po 2 wizytach na profilu IG', type:'ad'},
+      {date:'10.03 · 20:13', text:'Wypełnił formularz Meta', type:'form'},
+      {date:'11.03 · 09:00', text:'Email #1 wysłany', type:'email'},
+      {date:'14.03 · 10:00', text:'Odpowiedź — zainteresowany', type:'reply'},
+      {date:'17.03 · 14:00', text:'Konsultacja online 45 min', type:'call'},
+      {date:'25.03 · 09:00', text:'Przeniesiony do Oferta', type:'stage'},
+      {date:'01.04 · 10:00', text:'Oferta wysłana: 28 500 PLN netto', type:'offer'}
+    ]
+  },
+  'joanna-s': {
+    name:'Joanna S.', stage:'Umowa ✓', value:'22 000 PLN', source:'📸 IG Reel · Lead Gen',
+    date:'1 marca 2026', handleStatus:'done',
+    phone:'+48 515 XXX XXX', email:'joanna.s***@gmail.com',
+    style:'Boho / Eklektyczny', area:'72 m² · mieszkanie',
+    location:'Warszawa, Żoliborz', budget:'20 000 – 25 000 PLN',
+    notes:'Umowa podpisana 28 marca. Start projektu 3 kwietnia. Pierwsza klientka z kampanii Meta Ads!',
+    timeline:[
+      {date:'01.03 · 18:45', text:'Wypełniła formularz Meta (IG Reel)', type:'form'},
+      {date:'02.03 · 09:00', text:'Email #1 wysłany', type:'email'},
+      {date:'05.03 · 11:00', text:'Odpowiedź + pytania', type:'reply'},
+      {date:'07.03 · 14:00', text:'Konsultacja online', type:'call'},
+      {date:'14.03 · 10:00', text:'Oferta: 22 000 PLN', type:'offer'},
+      {date:'21.03 · 16:00', text:'Negocjacje — akceptacja', type:'reply'},
+      {date:'28.03 · 10:00', text:'Umowa podpisana ✅', type:'won'},
+      {date:'03.04 · 09:00', text:'Start projektu 🚀 (planowany)', type:'start'}
+    ]
+  }
+};
+
+const stageNames = ['Nowy Lead','Kontakt','Konsultacja','Oferta','Umowa ✓'];
+const handleStatusLabels = {new:'Nowy — do obsłużenia', progress:'W trakcie', done:'Obsłużony'};
+
+function openLeadModal(leadId) {
+  const lead = leadData[leadId];
+  if (!lead) return;
+  document.getElementById('lm-icon').textContent = '👤';
+  document.getElementById('lm-name').textContent = lead.name;
+  document.getElementById('lm-stage').textContent = lead.stage + ' · ' + lead.value;
+
+  const hsClass = lead.handleStatus === 'done' ? 'ls-done' : lead.handleStatus === 'progress' ? 'ls-progress' : 'ls-new';
+
+  document.getElementById('lm-body').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Status obsługi</div>
+      <div class="lead-status-select">
+        <div class="lead-status-opt lso-new ${lead.handleStatus==='new'?'active':''}" data-lead="${leadId}" data-status="new" tabindex="0">🔴 Nowy</div>
+        <div class="lead-status-opt lso-progress ${lead.handleStatus==='progress'?'active':''}" data-lead="${leadId}" data-status="progress" tabindex="0">🟡 W trakcie</div>
+        <div class="lead-status-opt lso-done ${lead.handleStatus==='done'?'active':''}" data-lead="${leadId}" data-status="done" tabindex="0">🟢 Obsłużony</div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Dane kontaktowe</div>
+      <div class="lead-contact-grid">
+        <div class="lead-contact-item"><div class="lci-label">Telefon</div><div class="lci-value"><a href="tel:${lead.phone.replace(/\s/g,'')}">${lead.phone}</a></div></div>
+        <div class="lead-contact-item"><div class="lci-label">Email</div><div class="lci-value"><a href="mailto:${lead.email}">${lead.email}</a></div></div>
+        <div class="lead-contact-item"><div class="lci-label">Lokalizacja</div><div class="lci-value">${lead.location}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Data wpłynięcia</div><div class="lci-value">${lead.date}</div></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Szczegóły projektu</div>
+      <div class="lead-contact-grid">
+        <div class="lead-contact-item"><div class="lci-label">Preferowany styl</div><div class="lci-value">${lead.style}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Metraż</div><div class="lci-value">${lead.area}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Budżet klienta</div><div class="lci-value">${lead.budget}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Źródło</div><div class="lci-value">${lead.source}</div></div>
+      </div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Notatki</div>
+      <div class="modal-log" style="font-size:13px;line-height:1.6">${lead.notes}</div>
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Historia kontaktu</div>
+      <div class="lead-timeline">
+        ${lead.timeline.map(t => `<div class="lead-tl-item"><div class="lead-tl-date">${t.date}</div><div class="lead-tl-text">${t.text}</div></div>`).join('')}
+      </div>
+    </div>`;
+
+  const currentStageIdx = stageNames.indexOf(lead.stage);
+  const nextStage = currentStageIdx < stageNames.length - 1 ? stageNames[currentStageIdx + 1] : null;
+
+  document.getElementById('lm-footer').innerHTML = `
+    <a href="tel:${lead.phone.replace(/\s/g,'')}" class="lead-action-btn lab-green" style="text-decoration:none">📞 Zadzwoń</a>
+    <a href="mailto:${lead.email}" class="lead-action-btn" style="text-decoration:none">✉️ Email</a>
+    ${nextStage ? `<button class="lead-action-btn lab-primary" data-lead="${leadId}" data-next-stage="${nextStage}">→ Przesuń do: ${nextStage}</button>` : '<span class="lead-action-btn" style="background:#E0F7F5;color:#2EC4B6;border-color:#2EC4B6;cursor:default">✅ Zamknięty</span>'}`;
+
+  // Attach event listeners for status buttons
+  document.querySelectorAll('.lead-status-opt[data-lead]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      const lid = this.dataset.lead;
+      const newStatus = this.dataset.status;
+      if (leadData[lid]) {
+        leadData[lid].handleStatus = newStatus;
+        document.querySelectorAll('.lead-status-opt[data-lead="'+lid+'"]').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        updateLeadCardStatus(lid, newStatus);
+        showToast('Status leada zmieniony: ' + handleStatusLabels[newStatus], 'success');
+      }
+    });
+  });
+
+  // Attach event listener for stage move button
+  const moveBtn = document.querySelector('#lm-footer button[data-next-stage]');
+  if (moveBtn) {
+    moveBtn.addEventListener('click', function() {
+      const lid = this.dataset.lead;
+      const ns = this.dataset.nextStage;
+      if (leadData[lid]) {
+        leadData[lid].stage = ns;
+        showToast('Lead ' + leadData[lid].name + ' przeniesiony do: ' + ns, 'success');
+        document.getElementById('lead-modal').classList.remove('open');
+      }
+    });
+  }
+
+  document.getElementById('lead-modal').classList.add('open');
+}
+
+function updateLeadCardStatus(leadId, status) {
+  const dot = document.querySelector('.pipeline-card[data-lead="'+leadId+'"] .lead-status-dot');
+  const label = document.querySelector('.pipeline-card[data-lead="'+leadId+'"] .lead-status-label');
+  if (dot) { dot.className = 'lead-status-dot ls-' + (status === 'done' ? 'done' : status === 'progress' ? 'progress' : 'new'); }
+  if (label) {
+    label.className = 'lead-status-label ls-' + (status === 'done' ? 'done' : status === 'progress' ? 'progress' : 'new');
+    label.textContent = status === 'done' ? 'Obsłużony' : status === 'progress' ? 'W trakcie' : 'Nowy';
+  }
+}
+
+function closeLeadModal(e) { if (e.target.id === 'lead-modal') document.getElementById('lead-modal').classList.remove('open'); }
 
 // ── NAVIGATION ──
 // ── MOBILE SIDEBAR TOGGLE ──
@@ -2416,6 +2668,14 @@ document.addEventListener('DOMContentLoaded', function() {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.click(); }
     });
   });
+
+  // Pipeline card click → open lead modal
+  document.querySelectorAll('.pipeline-card[data-lead]').forEach(function(card) {
+    card.addEventListener('click', function() { openLeadModal(this.dataset.lead); });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLeadModal(this.dataset.lead); }
+    });
+  });
 });
 
 // Global Escape key handler for modals
@@ -2423,6 +2683,7 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     document.getElementById('agent-modal').classList.remove('open');
     document.getElementById('campaign-modal').classList.remove('open');
+    document.getElementById('lead-modal').classList.remove('open');
   }
 });
 
