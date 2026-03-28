@@ -235,6 +235,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .sb-pending { background:#FFF5EB; color:#FF9F43; }
 .sb-active { background:#EDFAFA; color:#2EC4B6; }
 .sb-draft { background:#EEF1FF; color:#4361EE; }
+.demo-tag { display:inline-block; background:#FFE0B2; color:#E65100; font-size:9px; font-weight:700; padding:1px 5px; border-radius:4px; margin-left:6px; letter-spacing:0.5px; vertical-align:middle; }
 .sb-rejected { background:#FFE8EC; color:#EE4266; }
 .status-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
 
@@ -620,7 +621,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Lead Gen · 500 PLN</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
               </div>
-              <span class="status-badge sb-pending">Oczekuje</span>
+              <span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span class="ch-pill ch-fb">💙 FB Retarg.</span>
@@ -628,7 +629,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Retargeting · 250 PLN</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
               </div>
-              <span class="status-badge sb-pending">Oczekuje</span>
+              <span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span class="ch-pill ch-ig">✨ IG Stories</span>
@@ -636,7 +637,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Awareness · 150 PLN</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
               </div>
-              <span class="status-badge sb-pending">Oczekuje</span>
+              <span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span>
             </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span class="ch-pill ch-ig">📸 IG Feed</span>
@@ -644,7 +645,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Moodboard Wiosna · organiczny</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-green" style="width:65%"></div></div><span class="progress-pct">65%</span></div>
               </div>
-              <span class="status-badge sb-active">Aktywna</span>
+              <span class="status-badge sb-active">Aktywna</span><span class="demo-tag">DEMO</span>
             </div>
           </div>
         </div>
@@ -754,7 +755,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="pending" id="tr-1">
               <td><span class="ch-pill ch-ig">📸 Instagram</span></td>
               <td><div style="font-size:13px;font-weight:600">Reels · Lead Gen</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
-              <td><span class="status-badge sb-pending" id="sb-1">Oczekuje</span></td>
+              <td><span class="status-badge sb-pending" id="sb-1">Oczekuje</span><span class="demo-tag">DEMO</span></td>
               <td><div style="font-weight:600">500 PLN</div><div style="font-size:11px;color:var(--text-muted)">~17 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-1"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">1 kwi 2026</td>
@@ -763,7 +764,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="pending" id="tr-2">
               <td><span class="ch-pill ch-fb">💙 Facebook</span></td>
               <td><div style="font-size:13px;font-weight:600">Retargeting</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
-              <td><span class="status-badge sb-pending" id="sb-2">Oczekuje</span></td>
+              <td><span class="status-badge sb-pending" id="sb-2">Oczekuje</span><span class="demo-tag">DEMO</span></td>
               <td><div style="font-weight:600">250 PLN</div><div style="font-size:11px;color:var(--text-muted)">~8 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:0%" id="pb-2"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">3 kwi 2026</td>
@@ -772,7 +773,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="pending" id="tr-3">
               <td><span class="ch-pill ch-ig">✨ Instagram</span></td>
               <td><div style="font-size:13px;font-weight:600">Stories · Awareness</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
-              <td><span class="status-badge sb-pending" id="sb-3">Oczekuje</span></td>
+              <td><span class="status-badge sb-pending" id="sb-3">Oczekuje</span><span class="demo-tag">DEMO</span></td>
               <td><div style="font-weight:600">150 PLN</div><div style="font-size:11px;color:var(--text-muted)">~5 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-3"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">5 kwi 2026</td>
@@ -781,7 +782,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="draft" id="tr-4">
               <td><span class="ch-pill ch-meta">🎯 Meta</span></td>
               <td><div style="font-size:13px;font-weight:600">Lookalike 1%</div><div style="font-size:11px;color:var(--text-muted)">Wymaga listy emaili klientów</div></td>
-              <td><span class="status-badge sb-draft" id="sb-4">Szkic</span></td>
+              <td><span class="status-badge sb-draft" id="sb-4">Szkic</span><span class="demo-tag">DEMO</span></td>
               <td><div style="font-weight:600">100 PLN</div><div style="font-size:11px;color:var(--text-muted)">~3 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:20%" id="pb-4"></div></div><span class="progress-pct">20%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">14 kwi 2026</td>
@@ -790,7 +791,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="active" id="tr-5">
               <td><span class="ch-pill ch-ig">📸 Instagram</span></td>
               <td><div style="font-size:13px;font-weight:600">Moodboard Wiosna · Feed</div><div style="font-size:11px;color:var(--text-muted)">Social Media Manager</div></td>
-              <td><span class="status-badge sb-active" id="sb-5">Aktywna</span></td>
+              <td><span class="status-badge sb-active" id="sb-5">Aktywna</span><span class="demo-tag">DEMO</span></td>
               <td><div style="font-weight:600">0 PLN</div><div style="font-size:11px;color:var(--text-muted)">Organiczny</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-green" style="width:65%" id="pb-5"></div></div><span class="progress-pct">65%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">25 mar 2026</td>
@@ -799,7 +800,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="draft" id="tr-6">
               <td><span class="ch-pill ch-email">✉️ Email</span></td>
               <td><div style="font-size:13px;font-weight:600">Sekwencja nurturing</div><div style="font-size:11px;color:var(--text-muted)">Lead Nurturing AI + Copywriter</div></td>
-              <td><span class="status-badge sb-draft" id="sb-6">Szkic</span></td>
+              <td><span class="status-badge sb-draft" id="sb-6">Szkic</span><span class="demo-tag">DEMO</span></td>
               <td><div style="font-weight:600">0 PLN</div><div style="font-size:11px;color:var(--text-muted)">Automatyczny</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-orange" style="width:40%" id="pb-6"></div></div><span class="progress-pct">40%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">10 kwi 2026</td>
@@ -1239,37 +1240,37 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
               <td style="font-size:12px;font-weight:600">📸 Instagram Reels · Lead Gen</td>
               <td><span class="tag tag-orange">🤖 AI Generated</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
-              <td><span class="status-badge sb-active">Aktywna</span></td>
+              <td><span class="status-badge sb-active">Aktywna</span><span class="demo-tag">DEMO</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">💙 Facebook Retargeting</td>
               <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
-              <td><span class="status-badge sb-pending">Oczekuje</span></td>
+              <td><span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">✨ Instagram Stories · Awareness</td>
               <td><span class="tag tag-orange">🤖 AI Generated</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
-              <td><span class="status-badge sb-pending">Oczekuje</span></td>
+              <td><span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">🎯 Meta Ads · Lookalike 1%</td>
               <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
-              <td><span class="status-badge sb-draft">Szkic</span></td>
+              <td><span class="status-badge sb-draft">Szkic</span><span class="demo-tag">DEMO</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">📸 Instagram Feed · Moodboard Wiosna</td>
               <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
-              <td><span class="status-badge sb-active">Aktywna</span></td>
+              <td><span class="status-badge sb-active">Aktywna</span><span class="demo-tag">DEMO</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">✉️ Email Nurturing · Sekwencja</td>
               <td><span class="tag tag-orange">🤖 AI Generated</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
-              <td><span class="status-badge sb-draft">Szkic</span></td>
+              <td><span class="status-badge sb-draft">Szkic</span><span class="demo-tag">DEMO</span></td>
             </tr>
           </tbody>
         </table>
@@ -1298,6 +1299,11 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
                 <input type="password" id="windsor-api-key" aria-label="Klucz API Windsor.ai" value="" placeholder="Wklej klucz API Windsor.ai" style="flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
                 <button onclick="toggleApiKeyVisibility()" style="padding:11px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:14px" id="toggle-key-btn">👁️</button>
               </div>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">Meta Ads Account ID</label>
+              <input type="text" id="windsor-account-id" aria-label="Meta Ads Account ID" value="540019046643832" placeholder="ID konta reklamowego (np. 540019046643832)" style="width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:monospace;font-size:13px;color:var(--text);background:#fff;outline:none" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border)'">
+              <div style="font-size:10px;color:var(--text-muted);margin-top:4px">ZoomArchitekci — widoczne w Meta Ads Manager → Ustawienia konta</div>
             </div>
             <div>
               <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">Zakres dat</label>
@@ -1505,7 +1511,7 @@ function openCampaignModal(id) {
   if (!c) return;
   document.getElementById('cm-icon').textContent = c.icon;
   document.getElementById('cm-name').textContent = c.name;
-  document.getElementById('cm-status-text').textContent = c.status==='pending'?'⏳ Oczekuje na akceptację CEO':c.status==='active'?'✅ Aktywna':c.status==='draft'?'📝 Szkic':'✕ Odrzucona';
+  document.getElementById('cm-status-text').textContent = (c.status==='pending'?'⏳ Oczekuje na akceptację CEO':c.status==='active'?'✅ Aktywna':c.status==='draft'?'📝 Szkic':'✕ Odrzucona') + ' [DEMO]';
   document.getElementById('cm-body').innerHTML = `
     <div class="modal-section">
       <div class="modal-section-title">Szczegóły kampanii</div>
@@ -1698,6 +1704,7 @@ function generateBriefFromInput(input) {
 
 const windsorConfig = {
   apiKey: '', // BEZPIECZEŃSTWO: klucz wpisywany ręcznie w Ustawieniach, NIGDY w kodzie
+  accountId: '540019046643832', // ZoomArchitekci — Meta Ads Account ID
   endpoint: 'https://connectors.windsor.ai/all',
   datePreset: 'last_30_days',
   dataSource: 'auto', // 'api', 'local', 'auto'
@@ -1810,7 +1817,8 @@ async function fetchWindsorAPI() {
     api_key: windsorConfig.apiKey,
     date_preset: windsorConfig.datePreset,
     fields: 'source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date',
-    source: 'facebook'
+    source: 'facebook',
+    account_id: windsorConfig.accountId
   });
   // Bezpośrednie połączenie z API — bez proxy pośredników (bezpieczeństwo klucza)
   const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(12000) });
@@ -1916,6 +1924,10 @@ function saveSettings() {
   windsorConfig.apiKey = apiKey;
   windsorConfig.datePreset = document.getElementById('date-preset-select').value;
   windsorConfig.dataSource = document.getElementById('data-source-select').value;
+  const accountIdInput = document.getElementById('windsor-account-id');
+  if (accountIdInput && accountIdInput.value.trim()) {
+    windsorConfig.accountId = accountIdInput.value.trim();
+  }
   // Klucz zapisywany TYLKO w sessionStorage (znika po zamknięciu karty przeglądarki)
   if (apiKey) {
     try {
@@ -1942,11 +1954,13 @@ async function testApiConnection() {
   
   try {
     const startTime = Date.now();
+    const accountIdVal = document.getElementById('windsor-account-id') ? document.getElementById('windsor-account-id').value.trim() : windsorConfig.accountId;
     const params = new URLSearchParams({
       api_key: document.getElementById('windsor-api-key').value || windsorConfig.apiKey,
       date_preset: 'last_7_days',
       fields: 'source,spend,clicks',
-      source: 'facebook'
+      source: 'facebook',
+      account_id: accountIdVal || windsorConfig.accountId
     });
     const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(10000) });
     const elapsed = Date.now() - startTime;
