@@ -371,6 +371,91 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 #refresh-btn:disabled { cursor: wait; }
 #refresh-btn { transition: all 0.3s; }
 #refresh-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(46,196,182,0.3); }
+
+/* ── HAMBURGER BUTTON ── */
+.hamburger {
+  display:none; width:40px; height:40px; border:none; background:none; cursor:pointer;
+  flex-direction:column; align-items:center; justify-content:center; gap:5px; z-index:150; padding:0;
+}
+.hamburger span {
+  display:block; width:22px; height:2px; background:var(--text); border-radius:2px;
+  transition:all .3s;
+}
+.hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity:0; }
+.hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+.sidebar-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:99;
+}
+.sidebar-overlay.open { display:block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .agents-grid { grid-template-columns: repeat(3, 1fr); }
+  .pipeline { grid-template-columns: repeat(3, 1fr); }
+  .slack-channels { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hamburger { display:flex; }
+  .sidebar {
+    transform:translateX(-100%); transition:transform .3s ease;
+    width:280px;
+  }
+  .sidebar.open { transform:translateX(0); }
+  .main { margin-left:0; }
+  .topbar { padding:0 16px; height:56px; gap:8px; }
+  .topbar-title { font-size:15px; }
+  .topbar-title span { display:none; }
+  .topbar-right { gap:6px; }
+  .topbar-btn { padding:6px 10px; font-size:11px; }
+  .slack-pill { display:none; }
+  .notif-btn { width:34px; height:34px; }
+  .content { padding:16px; }
+
+  .kpi-grid { grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:16px; }
+  .kpi-card { padding:14px 16px; gap:12px; }
+  .kpi-icon { width:40px; height:40px; font-size:18px; }
+  .kpi-value { font-size:20px; }
+  .kpi-label { font-size:10px; }
+
+  .grid2, .grid3 { grid-template-columns:1fr; gap:14px; }
+  .agents-grid { grid-template-columns:1fr 1fr; gap:12px; }
+  .pipeline { grid-template-columns:1fr; gap:10px; }
+  .slack-channels { grid-template-columns:1fr; }
+
+  .card { padding:16px; border-radius:12px; }
+  .card-header { flex-direction:column; align-items:flex-start; gap:8px; }
+
+  .campaign-table { font-size:12px; }
+  .campaign-table th, .campaign-table td { padding:10px 8px; }
+  .campaign-table th:nth-child(n+4), .campaign-table td:nth-child(n+4) { display:none; }
+
+  .modal { width:95vw; max-height:92vh; border-radius:14px; }
+  .modal-header { padding:16px; }
+  .modal-body { padding:16px; }
+  .modal-footer { padding:12px 16px; }
+  .modal-agent-emoji { font-size:28px; }
+  .modal-agent-info h3 { font-size:15px; }
+
+  .chart-bar-wrap { height:80px; }
+  .funnel-label { width:70px; font-size:11px; }
+
+  .brief-row { flex-direction:column; gap:2px; }
+  .brief-label { min-width:auto; }
+
+  #data-source-indicator { padding:4px 8px; font-size:10px; }
+  #last-refresh { display:none; }
+}
+
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns:1fr; }
+  .agents-grid { grid-template-columns:1fr; }
+  .topbar-right { flex-wrap:wrap; }
+  .topbar-btn { padding:5px 8px; font-size:10px; }
+  .kpi-value { font-size:22px; }
+}
 </style>
 </head>
 <body>
@@ -433,10 +518,16 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
   </div>
 </aside>
 
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
-    <div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+      </button>
       <div class="topbar-title">Przegląd <span id="page-sub">Dashboard · Kwiecień 2026</span></div>
     </div>
     <div class="topbar-right">
@@ -1341,6 +1432,13 @@ const campaignData = {
 };
 
 // ── NAVIGATION ──
+// ── MOBILE SIDEBAR TOGGLE ──
+function toggleSidebar() {
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+  document.getElementById('hamburger-btn').classList.toggle('active');
+}
+
 function showPage(name, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1348,6 +1446,12 @@ function showPage(name, el) {
   if (el) el.classList.add('active');
   const titles = {overview:'Przegląd',campaigns:'Kampanie',agents:'Agenci AI',crm:'CRM Pipeline',meta:'Meta Ads',seo:'SEO & Content',slack:'Slack CEO',prompts:'Prompty Gemini',copy:'Copywriting',creatives:'Kreacje',library:'Biblioteka Kreacji',settings:'Ustawienia'};
   document.getElementById('page-sub').textContent = (titles[name] || name) + ' · Kwiecień 2026';
+  // Close sidebar on mobile after selecting page
+  if (window.innerWidth <= 768) {
+    document.querySelector('.sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+    document.getElementById('hamburger-btn').classList.remove('active');
+  }
 }
 
 // ── AGENTS ──
