@@ -1347,9 +1347,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <div>
               <label style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px">Zakres dat</label>
               <select id="date-preset-select" style="width:100%;padding:11px 16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--text);background:#fff;outline:none">
-                <option value="last_7_days">Ostatnie 7 dni</option>
-                <option value="last_30_days" selected>Ostatnie 30 dni</option>
-                <option value="last_90_days">Ostatnie 90 dni</option>
+                <option value="last_7d">Ostatnie 7 dni</option>
+                <option value="last_30d" selected>Ostatnie 30 dni</option>
+                <option value="last_90d">Ostatnie 90 dni</option>
                 <option value="this_month">Ten miesiąc</option>
                 <option value="last_month">Poprzedni miesiąc</option>
               </select>
@@ -1958,7 +1958,7 @@ const windsorConfig = {
   apiKey: '', // BEZPIECZEŃSTWO: klucz wpisywany ręcznie w Ustawieniach, NIGDY w kodzie
   accountId: '540019046643832', // ZoomArchitekci — Meta Ads Account ID
   endpoint: 'https://connectors.windsor.ai/all',
-  datePreset: 'last_30_days',
+  datePreset: 'last_30d',
   dataSource: 'auto', // 'api', 'local', 'auto'
   lastRefresh: null,
   lastSource: null
@@ -2069,8 +2069,7 @@ async function fetchWindsorAPI() {
     api_key: windsorConfig.apiKey,
     date_preset: windsorConfig.datePreset,
     fields: 'source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date',
-    source: 'facebook',
-    account_id: windsorConfig.accountId
+    source: 'facebook'
   });
   // Bezpośrednie połączenie z API — bez proxy pośredników (bezpieczeństwo klucza)
   const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(12000) });
@@ -2206,13 +2205,11 @@ async function testApiConnection() {
   
   try {
     const startTime = Date.now();
-    const accountIdVal = document.getElementById('windsor-account-id') ? document.getElementById('windsor-account-id').value.trim() : windsorConfig.accountId;
     const params = new URLSearchParams({
       api_key: document.getElementById('windsor-api-key').value || windsorConfig.apiKey,
-      date_preset: 'last_7_days',
+      date_preset: 'last_7d',
       fields: 'source,spend,clicks',
-      source: 'facebook',
-      account_id: accountIdVal || windsorConfig.accountId
+      source: 'facebook'
     });
     const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(10000) });
     const elapsed = Date.now() - startTime;
