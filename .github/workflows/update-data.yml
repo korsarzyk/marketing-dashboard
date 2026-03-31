@@ -1,3 +1,4 @@
+name: Aktualizacja danych Windsor.ai
 
 on:
   schedule:
@@ -19,8 +20,7 @@ jobs:
           WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
         run: |
           echo "Pobieram dane z Windsor.ai..."
-          RESPONSE=$(curl -s -w "\n%{http_code}" \
-            "https://connectors.windsor.ai/all?api_key=${WINDSOR_API_KEY}&date_preset=last_30d&fields=source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date&source=facebook")
+          RESPONSE=$(curl -s -w "\n%{http_code}" "https://connectors.windsor.ai/all?api_key=${WINDSOR_API_KEY}&date_preset=last_30d&fields=source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date&source=facebook")
           HTTP_CODE=$(echo "$RESPONSE" | tail -1)
           BODY=$(echo "$RESPONSE" | head -n -1)
           if [ "$HTTP_CODE" != "200" ]; then
@@ -30,7 +30,7 @@ jobs:
           fi
           echo "Dane pobrane (HTTP $HTTP_CODE)"
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          TOTAL_SPEND=$(echo "$BODY" | python3 -c "
+          echo "$BODY" | python3 -c "
           import json, sys
           data = json.load(sys.stdin)
           rows = data.get('data', [])
@@ -77,9 +77,9 @@ jobs:
               }
           }
           print(json.dumps(result, indent=2, ensure_ascii=False))
-          ")
-          echo "$TOTAL_SPEND" > data.json
+          " > data.json
           echo "data.json zaktualizowany: $TIMESTAMP"
+          cat data.json | head -5
 
       - name: Commit i push jesli dane sie zmienily
         run: |
@@ -92,4 +92,4 @@ jobs:
             git commit -m "Auto-update data.json $(date -u +'%Y-%m-%d %H:%M UTC')"
             git push
             echo "Dane zaktualizowane"
-          fi```
+          fi
