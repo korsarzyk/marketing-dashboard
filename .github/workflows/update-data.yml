@@ -1,0 +1,95 @@
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repozytorium
+        uses: actions/checkout@v4
+
+      - name: Pobierz dane z Windsor.ai
+        env:
+          WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
+        run: |
+          echo "Pobieram dane z Windsor.ai..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            "https://connectors.windsor.ai/all?api_key=${WINDSOR_API_KEY}&date_preset=last_30d&fields=source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date&source=facebook")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | head -n -1)
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Windsor API HTTP $HTTP_CODE"
+            echo "$BODY"
+            exit 1
+          fi
+          echo "Dane pobrane (HTTP $HTTP_CODE)"
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          TOTAL_SPEND=$(echo "$BODY" | python3 -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          rows = data.get('data', [])
+          spend = sum(float(r.get('spend') or 0) for r in rows)
+          impressions = sum(int(float(r.get('impressions') or 0)) for r in rows)
+          clicks = sum(int(float(r.get('clicks') or 0)) for r in rows)
+          conversions = sum(int(float(r.get('conversions') or 0)) for r in rows)
+          ctr = round((clicks/impressions*100) if impressions > 0 else 0, 2)
+          cpc = round((spend/clicks) if clicks > 0 else 0, 2)
+          cpl = round((spend/conversions) if conversions > 0 else 0, 2)
+          campaigns = {}
+          for r in rows:
+              name = r.get('campaign') or 'Nieznana'
+              if name not in campaigns:
+                  campaigns[name] = {'spend':0,'impressions':0,'clicks':0,'conversions':0}
+              campaigns[name]['spend'] += float(r.get('spend') or 0)
+              campaigns[name]['impressions'] += int(float(r.get('impressions') or 0))
+              campaigns[name]['clicks'] += int(float(r.get('clicks') or 0))
+              campaigns[name]['conversions'] += int(float(r.get('conversions') or 0))
+          campaign_list = []
+          for cname, cdata in campaigns.items():
+              campaign_list.append({
+                  'name': cname,
+                  'spend': round(cdata['spend'], 2),
+                  'impressions': cdata['impressions'],
+                  'clicks': cdata['clicks'],
+                  'conversions': cdata['conversions'],
+                  'ctr': round((cdata['clicks']/cdata['impressions']*100) if cdata['impressions'] > 0 else 0, 2),
+                  'cpc': round((cdata['spend']/cdata['clicks']) if cdata['clicks'] > 0 else 0, 2)
+              })
+          result = {
+              'lastUpdated': '$TIMESTAMP',
+              'source': 'windsor_api_auto',
+              'account_id': '540019046643832',
+              'metaAds': {
+                  'spend': round(spend, 2),
+                  'impressions': impressions,
+                  'clicks': clicks,
+                  'conversions': conversions,
+                  'ctr': ctr,
+                  'cpc': cpc,
+                  'cpl': cpl,
+                  'campaigns': campaign_list
+              }
+          }
+          print(json.dumps(result, indent=2, ensure_ascii=False))
+          ")
+          echo "$TOTAL_SPEND" > data.json
+          echo "data.json zaktualizowany: $TIMESTAMP"
+
+      - name: Commit i push jesli dane sie zmienily
+        run: |
+          git config user.name "Marketing CEO Bot"
+          git config user.email "bot@marketing-dashboard.github.io"
+          git add data.json
+          if git diff --staged --quiet; then
+            echo "Brak zmian w danych"
+          else
+            git commit -m "Auto-update data.json $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+            echo "Dane zaktualizowane"
+          fi```
