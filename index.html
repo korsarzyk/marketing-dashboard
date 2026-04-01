@@ -653,11 +653,11 @@ body.pin-locked {
   </a>
   <a class="nav-item" tabindex="0" role="button" onclick="showPage('campaigns',this)">
     <span class="nav-icon">🎯</span> Kampanie
-    <span class="nav-badge">3</span>
+    <span class="nav-badge">2</span>
   </a>
   <a class="nav-item" tabindex="0" role="button" onclick="showPage('agents',this)">
     <span class="nav-icon">🤖</span> Agenci AI
-    <span class="nav-badge green">12</span>
+    <span class="nav-badge green">11</span>
   </a>
   <a class="nav-item" tabindex="0" role="button" onclick="showPage('crm',this)">
     <span class="nav-icon">👥</span> CRM Pipeline
@@ -884,9 +884,9 @@ body.pin-locked {
     <!-- ════ CAMPAIGNS ════ -->
     <div id="page-campaigns" class="page">
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-icon pink">⏳</div><div><div class="kpi-label">Oczekują akceptacji</div><div class="kpi-value">3</div><div class="kpi-change" style="color:var(--orange)">Wymagają decyzji</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon pink">⏳</div><div><div class="kpi-label">Oczekują akceptacji</div><div class="kpi-value">2</div><div class="kpi-change" style="color:var(--orange)">Wymagają decyzji</div></div></div>
         <div class="kpi-card"><div class="kpi-icon green">✅</div><div><div class="kpi-label">Aktywne</div><div class="kpi-value">1</div><div class="kpi-change up">▲ IG Feed organiczny</div></div></div>
-        <div class="kpi-card"><div class="kpi-icon blue">📝</div><div><div class="kpi-label">Szkice</div><div class="kpi-value">2</div><div class="kpi-change" style="color:var(--text-muted)">W przygotowaniu</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon blue">📝</div><div><div class="kpi-label">Szkice</div><div class="kpi-value">3</div><div class="kpi-change" style="color:var(--text-muted)">W przygotowaniu</div></div></div>
         <div class="kpi-card"><div class="kpi-icon orange">💰</div><div><div class="kpi-label">Budżet miesięczny</div><div class="kpi-value">1 000 <span style="font-size:13px">PLN</span></div><div class="kpi-change up">▲ Meta Ads</div></div></div>
       </div>
 
@@ -1055,13 +1055,6 @@ body.pin-locked {
           <div class="agent-role">Pipeline & Data</div>
           <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Teraz</div>5 leadów w pipeline · Joanna S. — umowa podpisana ✓</div>
           <div class="agent-footer"><span class="agent-last">Aktywny teraz</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('crm')">Edytuj</button></div>
-        </div>
-        <div class="agent-card" onclick="openAgent('trends')">
-          <div class="agent-top"><span class="agent-emoji">📡</span><div class="agent-status-dot asd-active"></div></div>
-          <div class="agent-name">Trend & Competition</div>
-          <div class="agent-role">Konkurencja & Trendy</div>
-          <div class="agent-activity blue"><div class="agent-activity-label" style="color:var(--blue)">Ostatnie</div>Raport tygodniowy: Reelsy before/after = 3x engagement · nowa kampania Decoroom</div>
-          <div class="agent-footer"><span class="agent-last">30 min temu</span><button class="agent-edit-btn" onclick="event.stopPropagation();openAgent('trends')">Edytuj</button></div>
         </div>
       </div>
     </div>
@@ -1850,9 +1843,6 @@ const agentData = {
   crm: { emoji:'🗃️', name:'CRM Specialist AI', role:'Pipeline & Data', status:'active',
     log:[['09:00','Zaktualizował pipeline: 5 leadów aktywnych'],['09:30','Wysłał alert na #nowe-leady: Anna K. (25K PLN)'],['10:00','Joanna S. podpisała umowę — pipeline zaktualizowany'],['10:15','Przygotowuje raport tygodniowy']],
     instructions:'Jesteś CRM Specialist AI.\n\nZadania:\n• Aktualizacja pipeline po każdym nowym leadzie\n• Alert na #nowe-leady w ciągu 60s od wypełnienia formularza\n• Lead scoring: Cold → Warm → Hot\n• Tygodniowy raport pipeline w piątek\n• Kalkulacja prawdziwego ROAS z Windsor.ai' },
-  trends: { emoji:'📡', name:'Trend & Competition Analyst', role:'Konkurencja & Trendy', status:'active',
-    log:[['08:00','Przeskanował Meta Ad Library — architektura wnętrz Warszawa'],['08:30','Zaktualizował raport: top 11 konkurencji aktywnych na IG'],['09:00','Wykrył trend: Reelsy before/after generują 3x więcej engagement'],['09:30','Wysłał rekomendacje do Creative Director i Copywriter AI']],
-    instructions:'Jesteś Trend & Competition Analyst AI.\n\nZadania:\n• Co tydzień skanujesz Meta Ad Library pod kątem reklam architektura/wnętrza Warszawa\n• Monitorujesz Instagram TOP 10 konkurencji\n• Analizujesz trendy w formatach reklamowych (Reels vs Stories vs Carousel)\n• Generujesz raport tygodniowy z rekomendacjami\n• Wysyłasz alerty gdy konkurent uruchomi nową kampanię\n\nTOP 10 konkurencji do monitorowania:\n1. Katarzyna Kraszewska Architektura Wnętrz (@kraszewska.com)\n2. Decoroom (@decoroom_eu) — 13K followers\n3. Artcore Design (@artcore.design) — 4.1K followers\n4. Tarnowski Division (@tarnowski_division)\n5. Wolski Studio (@wolskistudio.pl) — premium rezydencje\n6. UNDER STUDIO (@understudio.pl)\n7. Mirage Studio (@miragestudio.eu)\n8. Studio Bosko (@bosko.studio) — AD100 Polska 2025\n9. BOHO Studio (@bohostudio.pl)\n10. JMW Architekci (@jmwarchitekci.pl)\n11. Deer Design (@deerdesign.pl)\n\nŹródła danych:\n• Meta Ad Library (facebook.com/ads/library)\n• Instagram Reels/Stories konkurencji\n• Homebook.pl trendy\n• Pinterest Trends — interior design Poland' }
 };
 
 // ── XSS PREVENTION ──
