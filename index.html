@@ -2165,6 +2165,57 @@ function openCampaignModal(id) {
 }
 function closeCampaignModal(e) { if (e.target.id==='campaign-modal') document.getElementById('campaign-modal').classList.remove('open'); }
 
+// ── CAMPAIGN STATUS PERSISTENCE ──
+function saveCampaignStatuses() {
+  try {
+    const statuses = {};
+    Object.keys(campaignData).forEach(id => { statuses[id] = campaignData[id].status; });
+    localStorage.setItem('campaign_statuses', JSON.stringify(statuses));
+  } catch(e) { /* localStorage unavailable */ }
+}
+function loadCampaignStatuses() {
+  try {
+    const saved = localStorage.getItem('campaign_statuses');
+    if (!saved) return;
+    const statuses = JSON.parse(saved);
+    Object.keys(statuses).forEach(id => {
+      if (!campaignData[id]) return;
+      const newStatus = statuses[id];
+      if (newStatus === campaignData[id].status) return;
+      campaignData[id].status = newStatus;
+      const sb = document.getElementById('sb-'+id);
+      const tr = document.getElementById('tr-'+id);
+      const statusMap = {
+        'active':   { cls:'sb-active',   text:'Aktywna' },
+        'pending':  { cls:'sb-pending',  text:'Oczekuje' },
+        'draft':    { cls:'sb-draft',    text:'Szkic' },
+        'rejected': { cls:'sb-rejected', text:'Odrzucona' }
+      };
+      const s = statusMap[newStatus] || statusMap['draft'];
+      if (sb) { sb.className='status-badge '+s.cls; sb.textContent=s.text; }
+      if (tr) {
+        tr.dataset.status = newStatus;
+        if (newStatus === 'active' || newStatus === 'rejected') {
+          const btns = tr.querySelector('td:last-child');
+          if (btns) btns.innerHTML = '<button class="btn-view" onclick="openCampaignModal('+sanitize(id)+')">Podgląd</button>';
+        }
+      }
+    });
+    updatePendingBadge();
+    updateMiniCards();
+  } catch(e) { /* parse error or localStorage unavailable */ }
+}
+function updateMiniCards() {
+  const counts = { active:0, pending:0, draft:0, rejected:0 };
+  Object.values(campaignData).forEach(c => { counts[c.status] = (counts[c.status]||0) + 1; });
+  // Update KPI cards on Kampanie page
+  const kpiValues = document.querySelectorAll('#page-campaigns .kpi-value');
+  if (kpiValues.length >= 3) {
+    kpiValues[0].textContent = counts.pending;
+    kpiValues[1].textContent = counts.active;
+    kpiValues[2].textContent = counts.draft;
+  }
+}
 function approveCampaign(id) {
   campaignData[id].status = 'active';
   const sb = document.getElementById('sb-'+id);
@@ -2178,6 +2229,8 @@ function approveCampaign(id) {
   const pb = document.getElementById('pb-'+id);
   if (pb) { pb.style.width='5%'; }
   updatePendingBadge();
+  updateMiniCards();
+  saveCampaignStatuses();
   showToast('✓ Kampania zatwierdzona! Agent przystępuje do pracy.', 'success');
 }
 function rejectCampaign(id) {
@@ -2191,6 +2244,8 @@ function rejectCampaign(id) {
     if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${sanitize(id)})">Podgląd</button>`;
   }
   updatePendingBadge();
+  updateMiniCards();
+  saveCampaignStatuses();
   showToast('Kampania odrzucona.', 'error');
 }
 function updatePendingBadge() {
@@ -3015,6 +3070,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (statusText) { statusText.textContent = '▲ Klucz aktywny'; statusText.className = 'kpi-change up'; }
     }
   } catch(e) { /* sessionStorage unavailable (private browsing) */ }
+
+  // Restore saved campaign statuses (approve/reject decisions persist across reloads)
+  loadCampaignStatuses();
 
   // Auto-load data on startup (try API if key present, otherwise fallback to data.json)
   setTimeout(() => {
