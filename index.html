@@ -2,6 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://connectors.windsor.ai">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marketing HQ — Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -235,7 +236,6 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 .sb-pending { background:#FFF5EB; color:#FF9F43; }
 .sb-active { background:#EDFAFA; color:#2EC4B6; }
 .sb-draft { background:#EEF1FF; color:#4361EE; }
-.demo-tag { display:inline-block; background:#FFE0B2; color:#E65100; font-size:9px; font-weight:700; padding:1px 5px; border-radius:4px; margin-left:6px; letter-spacing:0.5px; vertical-align:middle; }
 .sb-rejected { background:#FFE8EC; color:#EE4266; }
 .status-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
 
@@ -512,9 +512,134 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
   .kpi-value { font-size:22px; }
   .carousel-cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
+
+/* ── PIN LOCK ── */
+.pin-lock-overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1E1E2D 0%, #2D1B3D 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+  backdrop-filter: blur(10px);
+}
+
+.pin-lock-overlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pin-lock-container {
+  text-align: center;
+  color: #fff;
+}
+
+.pin-lock-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  display: block;
+}
+
+.pin-lock-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.pin-lock-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.pin-lock-inputs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.pin-input {
+  width: 56px;
+  height: 56px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  font-family: 'Inter', monospace;
+  transition: all 0.2s ease;
+  caret-color: transparent;
+}
+
+.pin-input:focus {
+  outline: none;
+  border-color: #4361EE;
+  background: rgba(67,97,238,0.1);
+  box-shadow: 0 0 0 3px rgba(67,97,238,0.1);
+}
+
+.pin-input.error {
+  border-color: #EE4266;
+  background: rgba(238,66,102,0.1);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.pin-lock-message {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.pin-lock-branding {
+  margin-top: 40px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+body.pin-locked {
+  overflow: hidden;
+}
 </style>
 </head>
 <body>
+
+<!-- PIN LOCK OVERLAY -->
+<div id="pin-lock-overlay" class="pin-lock-overlay pin-locked">
+  <div class="pin-lock-container">
+    <span class="pin-lock-icon">🔐</span>
+    <div class="pin-lock-title">Marketing HQ</div>
+    <div class="pin-lock-subtitle">Wprowadź kod dostępu</div>
+
+    <div class="pin-lock-inputs">
+      <input type="text" class="pin-input" id="pin-input-1" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" />
+      <input type="text" class="pin-input" id="pin-input-2" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" />
+      <input type="text" class="pin-input" id="pin-input-3" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" />
+      <input type="text" class="pin-input" id="pin-input-4" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="off" />
+    </div>
+
+    <div class="pin-lock-message" id="pin-lock-message">Wprowadź kod, aby kontynuować</div>
+    <div class="pin-lock-branding">Marketing HQ — Studio</div>
+  </div>
+</div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
@@ -621,8 +746,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
           <div class="kpi-icon pink">🔥</div>
           <div>
             <div class="kpi-label">Aktywne Leady</div>
-            <div class="kpi-value">5</div>
-            <div class="kpi-change up">▲ +2 ten tydzień</div>
+            <div class="kpi-value">0</div>
+            <div class="kpi-change up">Kampanie w przygotowaniu</div>
           </div>
         </div>
         <div class="kpi-card">
@@ -637,8 +762,8 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
           <div class="kpi-icon orange">🤖</div>
           <div>
             <div class="kpi-label">Agenci aktywni</div>
-            <div class="kpi-value">12</div>
-            <div class="kpi-change up">▲ 8 online teraz</div>
+            <div class="kpi-value">11</div>
+            <div class="kpi-change up">▲ Pełny zespół</div>
           </div>
         </div>
       </div>
@@ -660,32 +785,28 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Lead Gen · 500 PLN</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
               </div>
-              <span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span>
-            </div>
+              <span class="status-badge sb-active">Aktywna</span>            </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span class="ch-pill ch-fb">💙 FB Retarg.</span>
               <div style="flex:1">
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Retargeting · 250 PLN</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
               </div>
-              <span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span>
-            </div>
+              <span class="status-badge sb-pending">Oczekuje</span>            </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span class="ch-pill ch-ig">✨ IG Stories</span>
               <div style="flex:1">
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Awareness · 150 PLN</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%"></div></div><span class="progress-pct">0%</span></div>
               </div>
-              <span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span>
-            </div>
+              <span class="status-badge sb-pending">Oczekuje</span>            </div>
             <div style="display:flex;align-items:center;gap:12px">
               <span class="ch-pill ch-ig">📸 IG Feed</span>
               <div style="flex:1">
                 <div style="font-size:12px;font-weight:500;margin-bottom:4px">Moodboard Wiosna · organiczny</div>
                 <div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-green" style="width:65%"></div></div><span class="progress-pct">65%</span></div>
               </div>
-              <span class="status-badge sb-active">Aktywna</span><span class="demo-tag">DEMO</span>
-            </div>
+              <span class="status-badge sb-draft">Planowane</span>            </div>
           </div>
         </div>
 
@@ -791,10 +912,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             </tr>
           </thead>
           <tbody id="campaigns-tbody">
-            <tr data-status="pending" id="tr-1">
+            <tr data-status="active" id="tr-1">
               <td><span class="ch-pill ch-ig">📸 Instagram</span></td>
               <td><div style="font-size:13px;font-weight:600">Reels · Lead Gen</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
-              <td><span class="status-badge sb-pending" id="sb-1">Oczekuje</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-active" id="sb-1">Aktywna</span></td>
               <td><div style="font-weight:600">500 PLN</div><div style="font-size:11px;color:var(--text-muted)">~17 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-1"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">1 kwi 2026</td>
@@ -803,7 +924,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="pending" id="tr-2">
               <td><span class="ch-pill ch-fb">💙 Facebook</span></td>
               <td><div style="font-size:13px;font-weight:600">Retargeting</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
-              <td><span class="status-badge sb-pending" id="sb-2">Oczekuje</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-pending" id="sb-2">Oczekuje</span></td>
               <td><div style="font-weight:600">250 PLN</div><div style="font-size:11px;color:var(--text-muted)">~8 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:0%" id="pb-2"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">3 kwi 2026</td>
@@ -812,7 +933,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="pending" id="tr-3">
               <td><span class="ch-pill ch-ig">✨ Instagram</span></td>
               <td><div style="font-size:13px;font-weight:600">Stories · Awareness</div><div style="font-size:11px;color:var(--text-muted)">Meta Ads Specialist</div></td>
-              <td><span class="status-badge sb-pending" id="sb-3">Oczekuje</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-pending" id="sb-3">Oczekuje</span></td>
               <td><div style="font-weight:600">150 PLN</div><div style="font-size:11px;color:var(--text-muted)">~5 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-3"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">5 kwi 2026</td>
@@ -821,16 +942,16 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="draft" id="tr-4">
               <td><span class="ch-pill ch-meta">🎯 Meta</span></td>
               <td><div style="font-size:13px;font-weight:600">Lookalike 1%</div><div style="font-size:11px;color:var(--text-muted)">Wymaga listy emaili klientów</div></td>
-              <td><span class="status-badge sb-draft" id="sb-4">Szkic</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-draft" id="sb-4">Szkic</span></td>
               <td><div style="font-weight:600">100 PLN</div><div style="font-size:11px;color:var(--text-muted)">~3 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-blue" style="width:20%" id="pb-4"></div></div><span class="progress-pct">20%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">14 kwi 2026</td>
               <td><button class="btn-view" onclick="openCampaignModal(4)">Podgląd</button></td>
             </tr>
-            <tr data-status="active" id="tr-5">
+            <tr data-status="draft" id="tr-5">
               <td><span class="ch-pill ch-ig">📸 Instagram</span></td>
               <td><div style="font-size:13px;font-weight:600">Moodboard Wiosna · Feed</div><div style="font-size:11px;color:var(--text-muted)">Social Media Manager</div></td>
-              <td><span class="status-badge sb-active" id="sb-5">Aktywna</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-draft" id="sb-5">Planowane</span></td>
               <td><div style="font-weight:600">0 PLN</div><div style="font-size:11px;color:var(--text-muted)">Organiczny</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-green" style="width:65%" id="pb-5"></div></div><span class="progress-pct">65%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">25 mar 2026</td>
@@ -839,7 +960,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
             <tr data-status="draft" id="tr-6">
               <td><span class="ch-pill ch-email">✉️ Email</span></td>
               <td><div style="font-size:13px;font-weight:600">Sekwencja nurturing</div><div style="font-size:11px;color:var(--text-muted)">Lead Nurturing AI + Copywriter</div></td>
-              <td><span class="status-badge sb-draft" id="sb-6">Szkic</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-draft" id="sb-6">Szkic</span></td>
               <td><div style="font-weight:600">0 PLN</div><div style="font-size:11px;color:var(--text-muted)">Automatyczny</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-orange" style="width:40%" id="pb-6"></div></div><span class="progress-pct">40%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">10 kwi 2026</td>
@@ -1279,37 +1400,37 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
               <td style="font-size:12px;font-weight:600">📸 Instagram Reels · Lead Gen</td>
               <td><span class="tag tag-orange">🤖 AI Generated</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
-              <td><span class="status-badge sb-active">Aktywna</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-active">Aktywna</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">💙 Facebook Retargeting</td>
               <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
-              <td><span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-pending">Oczekuje</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">✨ Instagram Stories · Awareness</td>
               <td><span class="tag tag-orange">🤖 AI Generated</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
-              <td><span class="status-badge sb-pending">Oczekuje</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-pending">Oczekuje</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">🎯 Meta Ads · Lookalike 1%</td>
               <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
-              <td><span class="status-badge sb-draft">Szkic</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-draft">Szkic</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">📸 Instagram Feed · Moodboard Wiosna</td>
               <td><span class="tag tag-pink">📸 Wizualizacje Zoom</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F" target="_blank" style="color:var(--blue);text-decoration:none">Zoom folder</a></td>
-              <td><span class="status-badge sb-active">Aktywna</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-draft">Planowane</span></td>
             </tr>
             <tr>
               <td style="font-size:12px;font-weight:600">✉️ Email Nurturing · Sekwencja</td>
               <td><span class="tag tag-orange">🤖 AI Generated</span></td>
               <td style="font-size:11px;color:var(--blue)"><a href="https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR" target="_blank" style="color:var(--blue);text-decoration:none">Veo 2 folder</a></td>
-              <td><span class="status-badge sb-draft">Szkic</span><span class="demo-tag">DEMO</span></td>
+              <td><span class="status-badge sb-draft">Szkic</span></td>
             </tr>
           </tbody>
         </table>
@@ -1449,7 +1570,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
     <div class="modal-header">
       <span class="modal-agent-emoji" id="lm-icon">👤</span>
       <div class="modal-agent-info"><h3 id="lm-name">Lead</h3><p id="lm-stage">Etap</p></div>
-      <span class="demo-tag" style="margin-left:8px">DEMO</span>
       <button class="modal-close" onclick="document.getElementById('lead-modal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body" id="lm-body"></div>
@@ -1460,6 +1580,241 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px 
 <div class="toast" id="toast"></div>
 
 <script>
+// ── PIN LOCK ──
+(function() {
+  // SHA-256 hash of '9182' with salt '_zoom_architekci_salt_2026'
+  // Pre-computed: b0aecc0c30784978c391427b2bb5830ecd44508b169d8f1d7f8de5d8071fa506
+  const CORRECT_PIN_HASH = 'b0aecc0c30784978c391427b2bb5830ecd44508b169d8f1d7f8de5d8071fa506';
+  const OVERLAY_ID = 'pin-lock-overlay';
+  const MESSAGE_ID = 'pin-lock-message';
+  const INPUTS = ['pin-input-1', 'pin-input-2', 'pin-input-3', 'pin-input-4'];
+
+  // Use hashed token instead of plaintext 'true'
+  const SESSION_TOKEN = 'pin_access_' + Math.random().toString(36).substring(7);
+  const SESSION_KEY = 'pin_token_hash';
+
+  // Rate limiting variables (encapsulated in closure)
+  let failedAttempts = 0;
+  let lockUntil = null;
+
+  // Crypto utility to hash PIN with salt
+  async function hashPin(pin) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(pin + '_zoom_architekci_salt_2026');
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  // Hash the session token for storage
+  async function hashSessionToken(token) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(token);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  // Check if access already granted in this session
+  async function checkSessionAccess() {
+    const stored = sessionStorage.getItem(SESSION_KEY);
+    if (!stored) return false;
+
+    const tokenHash = await hashSessionToken(SESSION_TOKEN);
+    return stored === tokenHash;
+  }
+
+  // Lock the overlay
+  function lockOverlay() {
+    document.body.classList.add('pin-locked');
+    const overlay = document.getElementById(OVERLAY_ID);
+    if (overlay) {
+      overlay.classList.remove('fade-out');
+      overlay.classList.add('pin-locked');
+    }
+    document.getElementById('pin-input-1').focus();
+  }
+
+  // Unlock the overlay
+  async function unlockOverlay() {
+    const tokenHash = await hashSessionToken(SESSION_TOKEN);
+    sessionStorage.setItem(SESSION_KEY, tokenHash);
+
+    const overlay = document.getElementById(OVERLAY_ID);
+    if (overlay) {
+      overlay.classList.add('fade-out');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.body.classList.remove('pin-locked');
+      }, 600);
+    }
+  }
+
+  // Show error message with rate limiting
+  function showError(isRateLimited = false) {
+    const msg = document.getElementById(MESSAGE_ID);
+    if (isRateLimited) {
+      msg.textContent = '🔒 Za wiele błędnych prób. Spróbuj za 30 sekund.';
+      msg.style.color = '#FF6B6B';
+    } else {
+      msg.textContent = '❌ Kod jest nieprawidłowy';
+      msg.style.color = '#EE4266';
+    }
+
+    // Add error animation to inputs
+    INPUTS.forEach((id) => {
+      const input = document.getElementById(id);
+      input.classList.add('error');
+      if (isRateLimited) input.disabled = true;
+    });
+
+    if (!isRateLimited) {
+      setTimeout(() => {
+        // Clear inputs
+        INPUTS.forEach((id) => {
+          const input = document.getElementById(id);
+          input.value = '';
+          input.classList.remove('error');
+        });
+        msg.textContent = 'Wprowadź kod, aby kontynuować';
+        msg.style.color = 'rgba(255,255,255,0.5)';
+        document.getElementById('pin-input-1').focus();
+      }, 800);
+    }
+  }
+
+  // Countdown timer display
+  function startCountdown() {
+    let remaining = 30;
+    const msg = document.getElementById(MESSAGE_ID);
+    const countdownInterval = setInterval(() => {
+      remaining--;
+      msg.textContent = `🔒 Spróbuj za ${remaining} sekund...`;
+
+      if (remaining <= 0) {
+        clearInterval(countdownInterval);
+        failedAttempts = 0;
+        lockUntil = null;
+
+        // Re-enable inputs
+        INPUTS.forEach((id) => {
+          const input = document.getElementById(id);
+          input.disabled = false;
+          input.classList.remove('error');
+          input.value = '';
+        });
+        msg.textContent = 'Wprowadź kod, aby kontynuować';
+        msg.style.color = 'rgba(255,255,255,0.5)';
+        document.getElementById('pin-input-1').focus();
+      }
+    }, 1000);
+  }
+
+  // Handle PIN input with rate limiting
+  function setupPINInputs() {
+    INPUTS.forEach((id, index) => {
+      const input = document.getElementById(id);
+      input.addEventListener('input', async (e) => {
+        // Check rate limit
+        if (lockUntil && Date.now() < lockUntil) {
+          e.target.value = '';
+          return;
+        }
+
+        // Only allow numbers
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+        // Auto-advance to next input
+        if (e.target.value.length === 1 && index < INPUTS.length - 1) {
+          document.getElementById(INPUTS[index + 1]).focus();
+        }
+
+        // Check if all inputs are filled
+        const allFilled = INPUTS.every(id => document.getElementById(id).value.length === 1);
+        if (allFilled) {
+          const enteredPIN = INPUTS.map(id => document.getElementById(id).value).join('');
+          const enteredHash = await hashPin(enteredPIN);
+
+          if (enteredHash === CORRECT_PIN_HASH) {
+            failedAttempts = 0;
+            lockUntil = null;
+            unlockOverlay();
+          } else {
+            failedAttempts++;
+            if (failedAttempts >= 3) {
+              lockUntil = Date.now() + 30000; // Lock for 30 seconds
+              showError(true);
+              startCountdown();
+            } else {
+              showError(false);
+            }
+          }
+        }
+      });
+
+      // Handle backspace
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+          document.getElementById(INPUTS[index - 1]).focus();
+        }
+      });
+    });
+  }
+
+  // Detect DevTools and show warning
+  function setupDevToolsDetection() {
+    let devtoolsOpen = false;
+    const threshold = 160;
+
+    setInterval(() => {
+      const before = new Date();
+      debugger;
+      const after = new Date();
+      if (after - before > threshold) {
+        if (!devtoolsOpen) {
+          devtoolsOpen = true;
+          const msg = document.getElementById(MESSAGE_ID);
+          const originalText = msg.textContent;
+          msg.textContent = '⚠️ DevTools wykryte. Bezpieczeństwo narzędzami przeglądarki jest ograniczone.';
+          msg.style.color = '#FF9F43';
+          setTimeout(() => {
+            msg.textContent = originalText;
+          }, 3000);
+        }
+      }
+    }, 500);
+  }
+
+  // Re-validate on focus (catch sessionStorage manipulation from other tabs)
+  window.addEventListener('focus', async () => {
+    if (document.body.classList.contains('pin-locked')) {
+      const hasAccess = await checkSessionAccess();
+      if (hasAccess) {
+        unlockOverlay();
+      }
+    }
+  });
+
+  // Initialize PIN lock on page load
+  window.addEventListener('DOMContentLoaded', async () => {
+    const hasAccess = await checkSessionAccess();
+    if (!hasAccess) {
+      lockOverlay();
+      setupPINInputs();
+      setupDevToolsDetection();
+    } else {
+      // Hide overlay if already accessed
+      const overlay = document.getElementById(OVERLAY_ID);
+      if (overlay) {
+        overlay.style.display = 'none';
+        document.body.classList.remove('pin-locked');
+      }
+    }
+  });
+})();
+
 // ── DATA ──
 const agentData = {
   ceo: { emoji:'👑', name:'Marketing CEO', role:'Lider Strategii', status:'active',
@@ -1500,12 +1855,19 @@ const agentData = {
     instructions:'Jesteś Trend & Competition Analyst AI.\n\nZadania:\n• Co tydzień skanujesz Meta Ad Library pod kątem reklam architektura/wnętrza Warszawa\n• Monitorujesz Instagram TOP 10 konkurencji\n• Analizujesz trendy w formatach reklamowych (Reels vs Stories vs Carousel)\n• Generujesz raport tygodniowy z rekomendacjami\n• Wysyłasz alerty gdy konkurent uruchomi nową kampanię\n\nTOP 10 konkurencji do monitorowania:\n1. Katarzyna Kraszewska Architektura Wnętrz (@kraszewska.com)\n2. Decoroom (@decoroom_eu) — 13K followers\n3. Artcore Design (@artcore.design) — 4.1K followers\n4. Tarnowski Division (@tarnowski_division)\n5. Wolski Studio (@wolskistudio.pl) — premium rezydencje\n6. UNDER STUDIO (@understudio.pl)\n7. Mirage Studio (@miragestudio.eu)\n8. Studio Bosko (@bosko.studio) — AD100 Polska 2025\n9. BOHO Studio (@bohostudio.pl)\n10. JMW Architekci (@jmwarchitekci.pl)\n11. Deer Design (@deerdesign.pl)\n\nŹródła danych:\n• Meta Ad Library (facebook.com/ads/library)\n• Instagram Reels/Stories konkurencji\n• Homebook.pl trendy\n• Pinterest Trends — interior design Poland' }
 };
 
+// ── XSS PREVENTION ──
+function sanitize(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 const campaignData = {
-  1:{icon:'📸',name:'Instagram Reels · Lead Gen',goal:'Reel 15s → natywny formularz Meta. Cel: 6–8 leadów/mies. Targetowanie: 30–55 lat, zainteresowania architektura, Warszawa+50km.',budget:'500 PLN / mies. (17 PLN/dzień)',start:'1 kwietnia 2026',target:'Zainteresowania: Interior design, Luxury living, Nieruchomości',cta:'Formularz: Imię + Email + Styl wnętrza',agent:'Meta Ads Specialist + Creative Director',status:'pending',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
+  1:{icon:'📸',name:'Instagram Reels · Lead Gen',goal:'Reel 15s → natywny formularz Meta. Cel: 6–8 leadów/mies. Targetowanie: 30–55 lat, zainteresowania architektura, Warszawa+50km.',budget:'500 PLN / mies. (17 PLN/dzień)',start:'1 kwietnia 2026',target:'Zainteresowania: Interior design, Luxury living, Nieruchomości',cta:'Formularz: Imię + Email + Styl wnętrza',agent:'Meta Ads Specialist + Creative Director',status:'active',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
   2:{icon:'💙',name:'Facebook Retargeting',goal:'Odwiedzający profil IG i stronę www w ostatnich 30 dniach. Carousel 3 projektów. Cel: konsultacja.',budget:'250 PLN / mies. (8 PLN/dzień)',start:'3 kwietnia 2026',target:'Custom Audience: Odwiedzający stronę 30d + Engagements IG',cta:'Zarezerwuj bezpłatną konsultację',agent:'Meta Ads Specialist',status:'pending',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'},
   3:{icon:'✨',name:'Instagram Stories · Awareness',goal:'Stories z wizualizacji budujące zasięg premium. Format 9:16, 10s, swipe up do portfolio.',budget:'150 PLN / mies. (5 PLN/dzień)',start:'5 kwietnia 2026',target:'Zimne: zainteresowania architektura + Lookalike 5%',cta:'Swipe up → portfolio',agent:'Meta Ads Specialist + Social Media',status:'pending',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
   4:{icon:'🎯',name:'Meta Ads · Lookalike 1%',goal:'Lookalike 1% z listy emaili klientów. Wymaga wgrania min. 100 emaili do Meta.',budget:'100 PLN / mies. (3 PLN/dzień)',start:'14 kwietnia 2026',target:'Wymaga: lista emaili → Custom Audience → LAL 1% PL',cta:'Lead Form Meta',agent:'Meta Ads Specialist + CRM AI',status:'draft',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'},
-  5:{icon:'📸',name:'Instagram Feed · Moodboard Wiosna',goal:'8 postów z wizualizacjami minimalistycznych wnętrz. Organiczny.',budget:'0 PLN (organiczny)',start:'25 marca 2026',target:'#minimalistinterior #architekturawnętrz #projektwnętrz',cta:'Link w bio → portfolio',agent:'Social Media Manager',status:'active',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
+  5:{icon:'📸',name:'Instagram Feed · Moodboard Wiosna',goal:'8 postów z wizualizacjami minimalistycznych wnętrz. Organiczny.',budget:'0 PLN (organiczny)',start:'25 marca 2026',target:'#minimalistinterior #architekturawnętrz #projektwnętrz',cta:'Link w bio → portfolio',agent:'Social Media Manager',status:'draft',creative:'https://drive.google.com/drive/folders/1gisuU9wtWu01LZUO1WOwDFVa0gXHOHvR',metaLink:'https://adsmanager.facebook.com/'},
   6:{icon:'✉️',name:'Email Nurturing · Sekwencja',goal:'5 emaili po wypełnieniu formularza Meta Lead Gen. Personalizacja wg stylu.',budget:'0 PLN (automatyczny)',start:'10 kwietnia 2026',target:'Segmentacja: Styl wnętrza (z formularza)',cta:'Email #3: link Calendly',agent:'Lead Nurturing AI + Copywriter AI',status:'draft',creative:'https://drive.google.com/drive/folders/14NWhu48nBG_fO4nOqm9i1ftSTM8goA1F',metaLink:'https://adsmanager.facebook.com/'}
 };
 
@@ -1622,37 +1984,37 @@ function openLeadModal(leadId) {
     <div class="modal-section">
       <div class="modal-section-title">Status obsługi</div>
       <div class="lead-status-select">
-        <div class="lead-status-opt lso-new ${lead.handleStatus==='new'?'active':''}" data-lead="${leadId}" data-status="new" tabindex="0">🔴 Nowy</div>
-        <div class="lead-status-opt lso-progress ${lead.handleStatus==='progress'?'active':''}" data-lead="${leadId}" data-status="progress" tabindex="0">🟡 W trakcie</div>
-        <div class="lead-status-opt lso-done ${lead.handleStatus==='done'?'active':''}" data-lead="${leadId}" data-status="done" tabindex="0">🟢 Obsłużony</div>
+        <div class="lead-status-opt lso-new ${lead.handleStatus==='new'?'active':''}" data-lead="${sanitize(leadId)}" data-status="new" tabindex="0">🔴 Nowy</div>
+        <div class="lead-status-opt lso-progress ${lead.handleStatus==='progress'?'active':''}" data-lead="${sanitize(leadId)}" data-status="progress" tabindex="0">🟡 W trakcie</div>
+        <div class="lead-status-opt lso-done ${lead.handleStatus==='done'?'active':''}" data-lead="${sanitize(leadId)}" data-status="done" tabindex="0">🟢 Obsłużony</div>
       </div>
     </div>
     <div class="modal-section">
       <div class="modal-section-title">Dane kontaktowe</div>
       <div class="lead-contact-grid">
-        <div class="lead-contact-item"><div class="lci-label">Telefon</div><div class="lci-value"><a href="tel:${lead.phone.replace(/\s/g,'')}">${lead.phone}</a></div></div>
-        <div class="lead-contact-item"><div class="lci-label">Email</div><div class="lci-value"><a href="mailto:${lead.email}">${lead.email}</a></div></div>
-        <div class="lead-contact-item"><div class="lci-label">Lokalizacja</div><div class="lci-value">${lead.location}</div></div>
-        <div class="lead-contact-item"><div class="lci-label">Data wpłynięcia</div><div class="lci-value">${lead.date}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Telefon</div><div class="lci-value"><a href="tel:${sanitize(lead.phone.replace(/\s/g,''))}">${sanitize(lead.phone)}</a></div></div>
+        <div class="lead-contact-item"><div class="lci-label">Email</div><div class="lci-value"><a href="mailto:${sanitize(lead.email)}">${sanitize(lead.email)}</a></div></div>
+        <div class="lead-contact-item"><div class="lci-label">Lokalizacja</div><div class="lci-value">${sanitize(lead.location)}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Data wpłynięcia</div><div class="lci-value">${sanitize(lead.date)}</div></div>
       </div>
     </div>
     <div class="modal-section">
       <div class="modal-section-title">Szczegóły projektu</div>
       <div class="lead-contact-grid">
-        <div class="lead-contact-item"><div class="lci-label">Preferowany styl</div><div class="lci-value">${lead.style}</div></div>
-        <div class="lead-contact-item"><div class="lci-label">Metraż</div><div class="lci-value">${lead.area}</div></div>
-        <div class="lead-contact-item"><div class="lci-label">Budżet klienta</div><div class="lci-value">${lead.budget}</div></div>
-        <div class="lead-contact-item"><div class="lci-label">Źródło</div><div class="lci-value">${lead.source}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Preferowany styl</div><div class="lci-value">${sanitize(lead.style)}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Metraż</div><div class="lci-value">${sanitize(lead.area)}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Budżet klienta</div><div class="lci-value">${sanitize(lead.budget)}</div></div>
+        <div class="lead-contact-item"><div class="lci-label">Źródło</div><div class="lci-value">${sanitize(lead.source)}</div></div>
       </div>
     </div>
     <div class="modal-section">
       <div class="modal-section-title">Notatki</div>
-      <div class="modal-log" style="font-size:13px;line-height:1.6">${lead.notes}</div>
+      <div class="modal-log" style="font-size:13px;line-height:1.6">${sanitize(lead.notes)}</div>
     </div>
     <div class="modal-section">
       <div class="modal-section-title">Historia kontaktu</div>
       <div class="lead-timeline">
-        ${lead.timeline.map(t => `<div class="lead-tl-item"><div class="lead-tl-date">${t.date}</div><div class="lead-tl-text">${t.text}</div></div>`).join('')}
+        ${lead.timeline.map(t => `<div class="lead-tl-item"><div class="lead-tl-date">${sanitize(t.date)}</div><div class="lead-tl-text">${sanitize(t.text)}</div></div>`).join('')}
       </div>
     </div>`;
 
@@ -1660,9 +2022,9 @@ function openLeadModal(leadId) {
   const nextStage = currentStageIdx < stageNames.length - 1 ? stageNames[currentStageIdx + 1] : null;
 
   document.getElementById('lm-footer').innerHTML = `
-    <a href="tel:${lead.phone.replace(/\s/g,'')}" class="lead-action-btn lab-green" style="text-decoration:none">📞 Zadzwoń</a>
-    <a href="mailto:${lead.email}" class="lead-action-btn" style="text-decoration:none">✉️ Email</a>
-    ${nextStage ? `<button class="lead-action-btn lab-primary" data-lead="${leadId}" data-next-stage="${nextStage}">→ Przesuń do: ${nextStage}</button>` : '<span class="lead-action-btn" style="background:#E0F7F5;color:#2EC4B6;border-color:#2EC4B6;cursor:default">✅ Zamknięty</span>'}`;
+    <a href="tel:${sanitize(lead.phone.replace(/\s/g,''))}" class="lead-action-btn lab-green" style="text-decoration:none">📞 Zadzwoń</a>
+    <a href="mailto:${sanitize(lead.email)}" class="lead-action-btn" style="text-decoration:none">✉️ Email</a>
+    ${nextStage ? `<button class="lead-action-btn lab-primary" data-lead="${sanitize(leadId)}" data-next-stage="${sanitize(nextStage)}">→ Przesuń do: ${sanitize(nextStage)}</button>` : '<span class="lead-action-btn" style="background:#E0F7F5;color:#2EC4B6;border-color:#2EC4B6;cursor:default">✅ Zamknięty</span>'}`;
 
   // Attach event listeners for status buttons
   document.querySelectorAll('.lead-status-opt[data-lead]').forEach(function(btn) {
@@ -1743,7 +2105,7 @@ function openAgent(key) {
   dot.className = 'agent-status-dot ' + (d.status==='active'?'asd-active':d.status==='busy'?'asd-busy':'asd-idle');
   dot.title = d.status === 'active' ? 'Aktywny' : d.status === 'busy' ? 'Zajęty' : 'Bezczynny';
   document.getElementById('m-log').innerHTML = d.log.map(([t,txt]) =>
-    `<div class="modal-log-item"><span class="log-time">${t}</span><span class="log-text">${txt}</span></div>`
+    `<div class="modal-log-item"><span class="log-time">${sanitize(t)}</span><span class="log-text">${sanitize(txt)}</span></div>`
   ).join('');
   document.getElementById('m-instructions').value = d.instructions;
   document.getElementById('m-instructions').dataset.key = key;
@@ -1763,19 +2125,19 @@ function openCampaignModal(id) {
   if (!c) return;
   document.getElementById('cm-icon').textContent = c.icon;
   document.getElementById('cm-name').textContent = c.name;
-  document.getElementById('cm-status-text').textContent = (c.status==='pending'?'⏳ Oczekuje na akceptację CEO':c.status==='active'?'✅ Aktywna':c.status==='draft'?'📝 Szkic':'✕ Odrzucona') + ' [DEMO]';
+  document.getElementById('cm-status-text').textContent = (c.status==='pending'?'⏳ Oczekuje na akceptację CEO':c.status==='active'?'✅ Aktywna':c.status==='draft'?'📝 Szkic':'✕ Odrzucona');
   document.getElementById('cm-body').innerHTML = `
     <div class="modal-section">
       <div class="modal-section-title">Szczegóły kampanii</div>
       <div class="modal-log">
-        <div class="modal-log-item"><span class="log-time">Cel</span><span class="log-text">${c.goal}</span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Budżet</span><span class="log-text">${c.budget}</span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Start</span><span class="log-text">${c.start}</span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Target</span><span class="log-text">${c.target}</span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">CTA</span><span class="log-text">${c.cta}</span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Agent</span><span class="log-text">${c.agent}</span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Kreacja</span><span class="log-text"><a href="${c.creative}" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">📂 Otwórz folder kreacji →</a></span></div>
-        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Meta Ads</span><span class="log-text"><a href="${c.metaLink}" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">📊 Otwórz w Ads Manager →</a></span></div>
+        <div class="modal-log-item"><span class="log-time">Cel</span><span class="log-text">${sanitize(c.goal)}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Budżet</span><span class="log-text">${sanitize(c.budget)}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Start</span><span class="log-text">${sanitize(c.start)}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Target</span><span class="log-text">${sanitize(c.target)}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">CTA</span><span class="log-text">${sanitize(c.cta)}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Agent</span><span class="log-text">${sanitize(c.agent)}</span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Kreacja</span><span class="log-text"><a href="${sanitize(c.creative)}" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">📂 Otwórz folder kreacji →</a></span></div>
+        <div class="modal-log-item" style="margin-top:8px"><span class="log-time">Meta Ads</span><span class="log-text"><a href="${sanitize(c.metaLink)}" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">📊 Otwórz w Ads Manager →</a></span></div>
       </div>
     </div>
     <div class="modal-section">
@@ -1784,7 +2146,7 @@ function openCampaignModal(id) {
     </div>`;
   const footer = document.getElementById('cm-footer');
   if (c.status==='pending') {
-    footer.innerHTML = `<button class="modal-btn-cancel" data-action="reject" data-id="${parseInt(id)}">✕ Odrzuć</button><button class="modal-btn-save" data-action="approve" data-id="${parseInt(id)}">✓ Zatwierdź i uruchom</button>`;
+    footer.innerHTML = `<button class="modal-btn-cancel" data-action="reject" data-id="${sanitize(parseInt(id))}">✕ Odrzuć</button><button class="modal-btn-save" data-action="approve" data-id="${sanitize(parseInt(id))}">✓ Zatwierdź i uruchom</button>`;
     footer.querySelectorAll('button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
         const cid = parseInt(btn.dataset.id);
@@ -1794,7 +2156,7 @@ function openCampaignModal(id) {
       });
     });
   } else {
-    footer.innerHTML = `<button class="modal-btn-cancel" data-action="close">Zamknij</button>`;
+    footer.innerHTML = `<button class="modal-btn-cancel" data-action="close">Zamknij</button>`;  // Safe: no variables
     footer.querySelector('button[data-action="close"]').addEventListener('click', () => {
       document.getElementById('campaign-modal').classList.remove('open');
     });
@@ -1811,7 +2173,7 @@ function approveCampaign(id) {
   if (tr) {
     tr.dataset.status = 'active';
     const btns = tr.querySelector('td:last-child');
-    if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${id})">Podgląd</button>`;
+    if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${sanitize(id)})">Podgląd</button>`;
   }
   const pb = document.getElementById('pb-'+id);
   if (pb) { pb.style.width='5%'; }
@@ -1826,7 +2188,7 @@ function rejectCampaign(id) {
   if (tr) {
     tr.dataset.status = 'rejected';
     const btns = tr.querySelector('td:last-child');
-    if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${id})">Podgląd</button>`;
+    if (btns) btns.innerHTML = `<button class="btn-view" onclick="openCampaignModal(${sanitize(id)})">Podgląd</button>`;
   }
   updatePendingBadge();
   showToast('Kampania odrzucona.', 'error');
@@ -1882,12 +2244,12 @@ function loadDriveLibrary() {
   if (isValid) {
     preview.style.borderLeftColor = 'var(--green)';
     preview.style.background = 'var(--green-light)';
-    preview.innerHTML = '✅ <strong>Google Drive połączony.</strong> Creative Director AI załadował link i przygotował briefingi dla wszystkich formatów poniżej. Aby wygenerować kreację, skopiuj prompt i wklej do <strong>Google AI Studio → Imagen 3</strong> lub <strong>Veo 2</strong>.';
+    preview.textContent = '✅ Google Drive połączony. Creative Director AI załadował link i przygotował briefingi dla wszystkich formatów poniżej. Aby wygenerować kreację, skopiuj prompt i wklej do Google AI Studio → Imagen 3 lub Veo 2.';
     showToast('✓ Google Drive załadowany!', 'success');
   } else {
     preview.style.borderLeftColor = 'var(--orange)';
     preview.style.background = 'var(--orange-light)';
-    preview.innerHTML = '⚠️ Link nie wygląda jak Google Drive. Upewnij się że wklejasz link w formacie <strong>https://drive.google.com/drive/folders/...</strong>';
+    preview.textContent = '⚠️ Link nie wygląda jak Google Drive. Upewnij się że wklejasz link w formacie https://drive.google.com/drive/folders/...';
   }
 }
 
@@ -1914,17 +2276,17 @@ function generateCustomBrief() {
   if (!input) { showToast('Opisz wizualizację lub cel!','error'); return; }
   const output = document.getElementById('custom-brief-output');
   output.style.display = 'block';
-  output.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:10px">⏳ Creative Director AI analizuje...</div>';
+  output.textContent = '⏳ Creative Director AI analizuje...';
   // Simulate AI brief generation after short delay
   setTimeout(() => {
     const brief = generateBriefFromInput(input);
     output.innerHTML = `
       <div style="padding:14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--purple)">
         <div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:8px">🤖 CREATIVE DIRECTOR AI — BRIEF WYGENEROWANY</div>
-        <div style="font-size:12px;color:var(--text);line-height:1.8">${brief.details}</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.8">${sanitize(brief.details)}</div>
         <div style="margin-top:10px;padding:10px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border)">
           <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:4px">🔮 PROMPT GEMINI / VEO:</div>
-          <div style="font-size:12px;font-family:'Courier New',monospace;color:var(--text);line-height:1.6">${brief.prompt}</div>
+          <div style="font-size:12px;font-family:'Courier New',monospace;color:var(--text);line-height:1.6">${sanitize(brief.prompt)}</div>
         </div>
         <button onclick="copyBrief(this,'Custom Brief')" style="margin-top:10px;padding:8px 16px;background:var(--purple-light);color:var(--purple);border:1px solid var(--purple);border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer">📋 Kopiuj prompt</button>
       </div>`;
@@ -1942,11 +2304,11 @@ function generateBriefFromInput(input) {
                         input.toLowerCase().includes('minimal') ? 'minimalist clean' : 'luxury editorial warm';
   const format = isReel ? '9:16 vertical Reels, 15 seconds' : isStory ? '9:16 Stories, 10 seconds' : '9:16 vertical, 15 seconds';
   return {
-    details: `<strong>Format:</strong> ${format} · <strong>Pomieszczenie:</strong> ${detectedRoom} · <strong>Styl:</strong> ${detectedStyle}<br>
-<strong>Struktura:</strong> ${isBefore ? 'Scena 1: PRZED (surowy stan) → Scena 2: Reveal PO (WOW moment) → Scena 3: Detal' : 'Scena 1: Hook (3s) → Scena 2: Reveal pomieszczenia (9s) → Scena 3: CTA (3s)'}<br>
-<strong>Muzyka:</strong> Ambient cinematic, 85–90 BPM, bez wokalu<br>
-<strong>Tekst:</strong> Max 5 słów + CTA: "Bezpłatna konsultacja"`,
-    prompt: `${detectedStyle} interior design, ${detectedRoom} Polish luxury apartment, ${format}, golden hour warm lighting, architectural digest aesthetic, 4K quality, ${isBefore ? 'before and after transformation reveal, ' : ''}premium real estate photography style`
+    details: `Format: ${sanitize(format)} · Pomieszczenie: ${sanitize(detectedRoom)} · Styl: ${sanitize(detectedStyle)}<br>
+Struktura: ${isBefore ? 'Scena 1: PRZED (surowy stan) → Scena 2: Reveal PO (WOW moment) → Scena 3: Detal' : 'Scena 1: Hook (3s) → Scena 2: Reveal pomieszczenia (9s) → Scena 3: CTA (3s)'}<br>
+Muzyka: Ambient cinematic, 85–90 BPM, bez wokalu<br>
+Tekst: Max 5 słów + CTA: "Bezpłatna konsultacja"`,
+    prompt: `${sanitize(detectedStyle)} interior design, ${sanitize(detectedRoom)} Polish luxury apartment, ${sanitize(format)}, golden hour warm lighting, architectural digest aesthetic, 4K quality, ${isBefore ? 'before and after transformation reveal, ' : ''}premium real estate photography style`
   };
 }
 
@@ -2008,7 +2370,7 @@ async function refreshWindsorData() {
       setSourceIndicator('api');
       showToast('✓ Dane pobrane z Windsor.ai API!', 'success');
     } catch (err) {
-      console.warn('Windsor API error:', err);
+      // console.warn('Windsor API error:', err);  // SECURITY: Removed sensitive data logging
       if (mode === 'auto') {
         try {
           const fallback = await fetchLocalJSON();
@@ -2153,7 +2515,7 @@ function updateDashboardWithData(data) {
 
   // Show a summary toast with key metrics
   if (totalSpend > 0) {
-    console.log(`Windsor data loaded: Spend=${totalSpend.toFixed(2)} PLN, Leads=${totalConversions}, CPL=${cpl.toFixed(2)} PLN, CTR=${ctr.toFixed(2)}%`);
+    // console.log(`Windsor data loaded: Spend=${totalSpend.toFixed(2)} PLN, Leads=${totalConversions}, CPL=${cpl.toFixed(2)} PLN, CTR=${ctr.toFixed(2)}%`);  // SECURITY: Removed sensitive financial data logging
   }
 }
 
@@ -2201,8 +2563,8 @@ async function testApiConnection() {
   result.style.display = 'block';
   result.style.background = 'var(--orange-light)';
   result.style.borderLeft = '3px solid var(--orange)';
-  result.innerHTML = '⏳ Testuję połączenie z Windsor.ai...';
-  
+  result.textContent = '⏳ Testuję połączenie z Windsor.ai...';
+
   try {
     const startTime = Date.now();
     const params = new URLSearchParams({
@@ -2213,29 +2575,29 @@ async function testApiConnection() {
     });
     const response = await fetch(`${windsorConfig.endpoint}?${params}`, { signal: AbortSignal.timeout(10000) });
     const elapsed = Date.now() - startTime;
-    
+
     if (response.ok) {
       const data = await response.json();
       const rows = data.data ? data.data.length : 0;
       result.style.background = 'var(--green-light)';
       result.style.borderLeft = '3px solid var(--green)';
       result.innerHTML = `✅ <strong>Połączenie udane!</strong><br>
-        Czas odpowiedzi: ${elapsed}ms<br>
-        Zwrócono: ${rows} rekordów<br>
-        Status HTTP: ${response.status}<br>
+        Czas odpowiedzi: ${sanitize(elapsed.toString())}ms<br>
+        Zwrócono: ${sanitize(rows.toString())} rekordów<br>
+        Status HTTP: ${sanitize(response.status.toString())}<br>
         Źródło: Facebook Ads`;
     } else {
       result.style.background = '#FFE8EC';
       result.style.borderLeft = '3px solid var(--red)';
-      result.innerHTML = `❌ <strong>Błąd HTTP ${response.status}</strong><br>
+      result.innerHTML = `❌ <strong>Błąd HTTP ${sanitize(response.status.toString())}</strong><br>
         Sprawdź czy API key jest poprawny.<br>
-        Czas: ${elapsed}ms`;
+        Czas: ${sanitize(elapsed.toString())}ms`;
     }
   } catch (err) {
     result.style.background = '#FFE8EC';
     result.style.borderLeft = '3px solid var(--red)';
     result.innerHTML = `❌ <strong>Nie można połączyć</strong><br>
-      Błąd: ${err.message}<br>
+      Błąd: ${sanitize(err.message)}<br>
       Sprawdź połączenie z internetem i API key.`;
   }
 }
