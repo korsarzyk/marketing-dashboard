@@ -919,7 +919,7 @@ body.pin-locked {
               <td><div style="font-weight:600">500 PLN</div><div style="font-size:11px;color:var(--text-muted)">~17 PLN/dzień</div></td>
               <td><div class="progress-wrap"><div class="progress-bg"><div class="progress-fg pf-pink" style="width:0%" id="pb-1"></div></div><span class="progress-pct">0%</span></div></td>
               <td style="font-size:12px;color:var(--text-muted)">1 kwi 2026</td>
-              <td><div style="display:flex;gap:6px"><button class="btn-view" onclick="openCampaignModal(1)">Podgląd</button><button class="btn-approve" onclick="approveCampaign(1)">✓</button><button class="btn-reject" onclick="rejectCampaign(1)">✕</button></div></td>
+              <td><button class="btn-view" onclick="openCampaignModal(1)">Podgląd</button></td>
             </tr>
             <tr data-status="pending" id="tr-2">
               <td><span class="ch-pill ch-fb">💙 Facebook</span></td>
@@ -2061,20 +2061,35 @@ function openCampaignModal(id) {
 function closeCampaignModal(e) { if (e.target.id==='campaign-modal') document.getElementById('campaign-modal').classList.remove('open'); }
 
 // ── CAMPAIGN STATUS PERSISTENCE ──
+// Version: bump this when hardcoded statuses change to force localStorage reset
+const CAMPAIGN_STATUS_VERSION = 2;
+
+// Campaigns confirmed active in Meta Ads — never allow localStorage to override these
+const META_CONFIRMED_ACTIVE = [1];
+
 function saveCampaignStatuses() {
   try {
     const statuses = {};
     Object.keys(campaignData).forEach(id => { statuses[id] = campaignData[id].status; });
-    localStorage.setItem('campaign_statuses', JSON.stringify(statuses));
+    localStorage.setItem('campaign_statuses', JSON.stringify({ v: CAMPAIGN_STATUS_VERSION, data: statuses }));
   } catch(e) { /* localStorage unavailable */ }
 }
 function loadCampaignStatuses() {
   try {
-    const saved = localStorage.getItem('campaign_statuses');
-    if (!saved) return;
-    const statuses = JSON.parse(saved);
+    const raw = localStorage.getItem('campaign_statuses');
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    // If old version or no version — clear and use hardcoded defaults
+    if (!parsed.v || parsed.v < CAMPAIGN_STATUS_VERSION) {
+      localStorage.removeItem('campaign_statuses');
+      return;
+    }
+    const statuses = parsed.data;
+    if (!statuses) return;
     Object.keys(statuses).forEach(id => {
       if (!campaignData[id]) return;
+      // Never override Meta-confirmed active campaigns
+      if (META_CONFIRMED_ACTIVE.includes(parseInt(id))) return;
       const newStatus = statuses[id];
       if (newStatus === campaignData[id].status) return;
       campaignData[id].status = newStatus;
