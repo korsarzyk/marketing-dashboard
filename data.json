@@ -1,23 +1,23 @@
 {
-  "lastUpdated": "2026-04-04T08:00:06Z",
+  "lastUpdated": "2026-04-04T14:03:21Z",
   "source": "windsor_api_auto",
   "account_id": "540019046643832",
   "metaAds": {
-    "spend": 55.64,
-    "impressions": 1870,
+    "spend": 55.66,
+    "impressions": 1873,
     "clicks": 62,
     "conversions": 0,
-    "ctr": 3.32,
+    "ctr": 3.31,
     "cpc": 0.9,
     "cpl": 0,
     "campaigns": [
       {
         "name": "IG Reels Lead Gen - Zoom Architekci - Q2 2026",
-        "spend": 55.64,
-        "impressions": 1870,
+        "spend": 55.66,
+        "impressions": 1873,
         "clicks": 62,
         "conversions": 0,
-        "ctr": 3.32,
+        "ctr": 3.31,
         "cpc": 0.9
       }
     ]
