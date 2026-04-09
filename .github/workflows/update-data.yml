@@ -2,7 +2,7 @@ name: Aktualizacja danych Windsor.ai
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
@@ -20,20 +20,48 @@ jobs:
           WINDSOR_API_KEY: ${{ secrets.WINDSOR_API_KEY }}
         run: |
           echo "Pobieram dane z Windsor.ai..."
-          RESPONSE=$(curl -s -w "\n%{http_code}" "https://connectors.windsor.ai/all?api_key=${WINDSOR_API_KEY}&date_preset=last_30d&fields=source,campaign,spend,impressions,clicks,conversions,cpc,ctr,date&source=facebook")
-          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
-          BODY=$(echo "$RESPONSE" | head -n -1)
-          if [ "$HTTP_CODE" != "200" ]; then
-            echo "Windsor API HTTP $HTTP_CODE"
+
+          MAX_RETRIES=3
+          RETRY_DELAY=30
+          ATTEMPT=0
+          SUCCESS=false
+
+          while [ $ATTEMPT -lt $MAX_RETRIES ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+            echo "Próba $ATTEMPT z $MAX_RETRIES..."
+
+            RESPONSE=$(curl -s -w "\n%{http_code}" "https://connectors.windsor.ai/all?api_key=${WINDSOR_API_KEY}&date_preset=last_30d&fields=campaign,spend,impressions,clicks,conversions&source=facebook")
+            HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+            BODY=$(echo "$RESPONSE" | head -n -1)
+
+            if [ "$HTTP_CODE" = "200" ]; then
+              SUCCESS=true
+              echo "Dane pobrane (HTTP $HTTP_CODE) — próba $ATTEMPT"
+              break
+            fi
+
+            echo "Windsor API HTTP $HTTP_CODE (próba $ATTEMPT)"
             echo "$BODY"
+
+            if [ $ATTEMPT -lt $MAX_RETRIES ]; then
+              echo "Czekam ${RETRY_DELAY}s przed kolejną próbą..."
+              sleep $RETRY_DELAY
+              RETRY_DELAY=$((RETRY_DELAY * 2))
+            fi
+          done
+
+          if [ "$SUCCESS" != "true" ]; then
+            echo "Wszystkie $MAX_RETRIES próby nieudane. Ostatni HTTP: $HTTP_CODE"
             exit 1
           fi
-          echo "Dane pobrane (HTTP $HTTP_CODE)"
+
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
           echo "$BODY" | python3 -c "
           import json, sys
           data = json.load(sys.stdin)
           rows = data.get('data', [])
+
           spend = sum(float(r.get('spend') or 0) for r in rows)
           impressions = sum(int(float(r.get('impressions') or 0)) for r in rows)
           clicks = sum(int(float(r.get('clicks') or 0)) for r in rows)
@@ -41,6 +69,7 @@ jobs:
           ctr = round((clicks/impressions*100) if impressions > 0 else 0, 2)
           cpc = round((spend/clicks) if clicks > 0 else 0, 2)
           cpl = round((spend/conversions) if conversions > 0 else 0, 2)
+
           campaigns = {}
           for r in rows:
               name = r.get('campaign') or 'Nieznana'
@@ -50,6 +79,7 @@ jobs:
               campaigns[name]['impressions'] += int(float(r.get('impressions') or 0))
               campaigns[name]['clicks'] += int(float(r.get('clicks') or 0))
               campaigns[name]['conversions'] += int(float(r.get('conversions') or 0))
+
           campaign_list = []
           for cname, cdata in campaigns.items():
               campaign_list.append({
@@ -61,6 +91,7 @@ jobs:
                   'ctr': round((cdata['clicks']/cdata['impressions']*100) if cdata['impressions'] > 0 else 0, 2),
                   'cpc': round((cdata['spend']/cdata['clicks']) if cdata['clicks'] > 0 else 0, 2)
               })
+
           result = {
               'lastUpdated': '$TIMESTAMP',
               'source': 'windsor_api_auto',
@@ -78,6 +109,7 @@ jobs:
           }
           print(json.dumps(result, indent=2, ensure_ascii=False))
           " > data.json
+
           echo "data.json zaktualizowany: $TIMESTAMP"
           cat data.json | head -5
 
