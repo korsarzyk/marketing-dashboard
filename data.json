@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-29T01:56:24Z",
+  "lastUpdated": "2026-04-29T07:58:45Z",
   "source": "windsor_api_auto",
   "account_id": "540019046643832",
   "metaAds": {
@@ -12,15 +12,6 @@
     "cpl": 0,
     "campaigns": [
       {
-        "name": "Nieznana",
-        "spend": 0.0,
-        "impressions": 0,
-        "clicks": 30,
-        "conversions": 0,
-        "ctr": 0,
-        "cpc": 0.0
-      },
-      {
         "name": "IG Reels Lead Gen - Zoom Architekci - Q2 2026",
         "spend": 238.16,
         "impressions": 9374,
@@ -28,6 +19,15 @@
         "conversions": 0,
         "ctr": 2.69,
         "cpc": 0.95
+      },
+      {
+        "name": "Nieznana",
+        "spend": 0.0,
+        "impressions": 0,
+        "clicks": 30,
+        "conversions": 0,
+        "ctr": 0,
+        "cpc": 0.0
       }
     ]
   }
